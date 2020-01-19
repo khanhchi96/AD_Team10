@@ -14,7 +14,6 @@ namespace AD_Team10.Controllers
     public class ItemController : Controller
     {
         private DBContext db = new DBContext();
-
         // GET: Item
         public ActionResult Index()
         {

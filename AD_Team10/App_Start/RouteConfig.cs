@@ -13,6 +13,7 @@ namespace AD_Team10
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            routes.MapMvcAttributeRoutes();
             routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
