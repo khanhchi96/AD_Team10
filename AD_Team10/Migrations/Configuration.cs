@@ -19,21 +19,22 @@
         {
 
             context.CollectionPoints.AddOrUpdate(c => c.CollectionPointID,
-                new CollectionPoint { CollectionPointName = "Stationery Store - Administration Building" },
-                new CollectionPoint { CollectionPointName = "Management School" },
-                new CollectionPoint { CollectionPointName = "Medical School" },
-                new CollectionPoint { CollectionPointName = "Engineering School" },
-                new CollectionPoint { CollectionPointName = "Science School" },
-                new CollectionPoint { CollectionPointName = "University Hospital" }
+                new CollectionPoint { CollectionPointID = 1, CollectionPointName = "Stationery Store - Administration Building" },
+                new CollectionPoint { CollectionPointID = 2, CollectionPointName = "Management School" },
+                new CollectionPoint { CollectionPointID = 3, CollectionPointName = "Medical School" },
+                new CollectionPoint { CollectionPointID = 4, CollectionPointName = "Engineering School" },
+                new CollectionPoint { CollectionPointID = 5, CollectionPointName = "Science School" },
+                new CollectionPoint { CollectionPointID = 6, CollectionPointName = "University Hospital" }
             );
 
             context.Departments.AddOrUpdate(d => d.DepartmentID,
-                new Department { DepartmentCode = "ENGL", DepartmentName = "English Department", CollectionPointID = 1 },
-                new Department { DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 }
+                new Department { DepartmentID = 1, DepartmentCode = "ENGL", DepartmentName = "English Department", CollectionPointID = 1 },
+                new Department { DepartmentID = 2, DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 }
             );
             context.DepEmployees.AddOrUpdate(d => d.DepEmployeeID,
                 new DepEmployee
                 {
+                    DepEmployeeID = 1,
                     DepartmentID = 1,
                     FirstName = "Bill",
                     LastName = "Gates",
@@ -44,12 +45,17 @@
                 });
 
             context.DepUsers.AddOrUpdate(d => d.DepUserID,
-                new DepUser { Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 });
+                new DepUser { DepUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 });
 
             context.StoreEmployees.AddOrUpdate(s => s.StoreEmployeeID,
-                new StoreEmployee { FirstName = "Esther", LastName = "Tan", Gender = "Female", Phone = "76548097", Email = "esthertan@gmail.com", Designation = "Clerk" });
+                new StoreEmployee { StoreEmployeeID = 1,  FirstName = "Esther", LastName = "Tan", Gender = "Female", Phone = "76548097", Email = "esthertan@gmail.com", Designation = "Clerk" },
+                new StoreEmployee { StoreEmployeeID = 2, FirstName = "Yibo", LastName = "Wang", Gender = "Male", Phone = "76548097", Email = "wangyibo@gmail.com", Designation = "Supervisor" },
+                new StoreEmployee { StoreEmployeeID = 3, FirstName = "Justin", LastName = "Bieber", Gender = "Male", Phone = "76548097", Email = "justinbieber@gmail.com", Designation = "Manager" }
+            );
             context.StoreUsers.AddOrUpdate(s => s.StoreUserID,
-                new StoreUser { Username = "esther.tan", Password = "12345678", Role = StoreRole.CLERK, StoreEmployeeID = 1 });
+                new StoreUser { StoreUserID = 1, Username = "esther.tan", Password = "12345678", Role = StoreRole.CLERK, StoreEmployeeID = 1 },
+                new StoreUser { StoreUserID = 2, Username = "wang.yibo", Password = "12345678", Role = StoreRole.SUPERVISOR, StoreEmployeeID = 2 },
+                new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
         }
     }
