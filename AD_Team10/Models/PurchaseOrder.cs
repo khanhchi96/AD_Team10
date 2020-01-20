@@ -17,7 +17,7 @@ namespace AD_Team10.Models
         [ForeignKey("Supplier")]
         public int SupplierID { get; set; }
         public DateTime OrderDate { get; set; }
-       
+        public DateTime CompletedDate { get; set; }
         public OrderStatus? OrderStatus { get; set; }
 
         public virtual Supplier Supplier { get; set; }
