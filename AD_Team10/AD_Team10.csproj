@@ -150,6 +150,10 @@
     <Compile Include="Migrations\202001181214205_Initial.designer.cs">
       <DependentUpon>202001181214205_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202001200119324_Initial1.cs" />
+    <Compile Include="Migrations\202001200119324_Initial1.designer.cs">
+      <DependentUpon>202001200119324_Initial1.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\AdjustmentVoucherDetail.cs" />
@@ -241,6 +245,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202001181214205_Initial.resx">
       <DependentUpon>202001181214205_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202001200119324_Initial1.resx">
+      <DependentUpon>202001200119324_Initial1.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

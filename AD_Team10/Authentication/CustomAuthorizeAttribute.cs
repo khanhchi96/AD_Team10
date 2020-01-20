@@ -28,7 +28,7 @@ namespace AD_Team10.Authentication
                     (new System.Web.Routing.RouteValueDictionary
                     (new
                     {
-                        controller = "Account",
+                        controller = "Home",
                         action = "Login",
                     }
                     ));
@@ -39,7 +39,7 @@ namespace AD_Team10.Authentication
                 (new System.Web.Routing.RouteValueDictionary
                  (new
                  {
-                     controller = "Account",
+                     controller = "Home",
                      action = "AccessDenied"
                  }
                  ));
