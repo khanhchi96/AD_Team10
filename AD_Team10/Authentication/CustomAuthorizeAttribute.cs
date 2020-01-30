@@ -18,6 +18,7 @@ namespace AD_Team10.Authentication
             return ((CurrentUser != null && !CurrentUser.IsInRole(Roles)) || CurrentUser == null) ? false : true;
         }
 
+
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             RedirectToRouteResult routeData = null;
@@ -29,7 +30,7 @@ namespace AD_Team10.Authentication
                     (new
                     {
                         controller = "Home",
-                        action = "Login",
+                        action = "Index",
                     }
                     ));
             }

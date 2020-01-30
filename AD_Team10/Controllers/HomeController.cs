@@ -15,7 +15,14 @@ namespace AD_Team10.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            if (System.Web.HttpContext.Current.User.GetType() == typeof(RolePrincipal))
+                return View();
+            else
+            {
+                CustomPrincipal user = (CustomPrincipal) System.Web.HttpContext.Current.User;
+                string controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
+                return RedirectToAction("Index", controller);
+            }
         }
 
         [HttpGet]
@@ -66,6 +73,48 @@ namespace AD_Team10.Controllers
             }
             ModelState.AddModelError("", "Something Wrong : Username or Password invalid");
             return View(loginView);
+
+            //if (ModelState.IsValid)
+            //{
+            //    CustomMembership customMembership = new CustomMembership
+            //    {
+            //        UserType = userType
+            //    };
+            //    CustomRole customRole = new CustomRole
+            //    {
+            //        UserType = userType
+            //    };
+            //    if (customMembership.ValidateUser(loginView.UserName, loginView.Password))
+            //    {
+            //        string controller = "";
+            //        var user = (CustomMembershipUser)customMembership.GetUser(loginView.UserName, false);
+            //        if (user != null)
+            //        {
+            //            CustomSerializeModel userModel = new CustomSerializeModel()
+            //            {
+            //                Username = user.Username,
+            //                FirstName = user.FirstName,
+            //                LastName = user.LastName,
+            //                RoleName = user.Role
+            //            };
+
+            //            string userData = JsonConvert.SerializeObject(userModel);
+            //            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket
+            //                (
+            //                1, loginView.UserName, DateTime.Now, DateTime.Now.AddMinutes(15), false, userData
+            //                );
+
+            //            string enTicket = FormsAuthentication.Encrypt(authTicket);
+            //            HttpCookie faCookie = new HttpCookie("Cookie1", enTicket);
+            //            Response.Cookies.Add(faCookie);
+            //            controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
+            //        }
+            //        return RedirectToAction("Index", controller);
+
+            //    }
+            //    }
+            //ModelState.AddModelError("", "Something Wrong : Username or Password invalid ^_^ ");
+            //return View(loginView);
         }
 
 
@@ -76,7 +125,7 @@ namespace AD_Team10.Controllers
             Response.Cookies.Add(cookie);
 
             FormsAuthentication.SignOut();
-            return RedirectToAction("Login", "Account", null);
+            return RedirectToAction("Index", "Home", null);
         }
 
         public ActionResult AccessDenied()

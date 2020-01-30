@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
+using AD_Team10.Authentication;
 namespace AD_Team10.Controllers.Department
 {
-    [Authorize(Roles = "REPRESENTATIVE")]
+    [CustomAuthorize(Roles = "REPRESENTATIVE")]
     public class RepresentativeController : Controller
     {
         public ActionResult Index()

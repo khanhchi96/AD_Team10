@@ -1,0 +1,17 @@
+﻿@using AD_Team10.ViewModels;
+@{
+    var report = (Report)ViewBag.report;
+}
+
+@if (report != null)
+{
+    @*<img src="@Url.Action("ShowChart", new { report = Json.Encode(report), type = "column"})" />
+
+    <img src="@Url.Action("ShowChart", new {  report = Json.Encode(report), type = "line"})" />*@
+
+    @Html.ActionLink("Forecast", "Forecast", "Clerk")
+}
+
+
+
+

@@ -1,0 +1,136 @@
+﻿@using AD_Team10.Models;
+
+@{
+    ViewBag.Title = "Create Adjustment Voucher";
+    var voucherDetails = (List<AdjustmentVoucherDetail>)ViewBag.voucher;
+    var itemList = ViewBag.itemList;
+}
+
+<h2>Create Adjustment Voucher</h2>
+<table class="table" id="voucherTable">
+    <thead>
+        <tr>
+            <th>Item Code</th>
+            <th>Description</th>
+            <th>Quantity Adjusted</th>
+            <th>Reason</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr class="tblRow">
+            <td class="itemCode"></td>
+            <td>
+                @Html.DropDownList("Item Name", new SelectList(itemList, "ItemID", "Description"),
+               "Choose item", new{ @class = "itemName"})
+                <span class="nameError"></span>
+            </td>
+            <td>
+                <select class="operator">
+                    <option>+</option>
+                    <option>-</option>
+                </select>
+                <input type="number" class="quantity" value="1" />
+            </td>
+            <td>
+                <select class="reason">
+                    <option>Lost item(s)</option>
+                    <option>Broken/expired item(s)</option>
+                    <option>Wrong check when receiving from suppliers</option>
+                    <option>Others</option>
+                </select>
+                <span class="otherReason"></span>
+                <span class="reasonError"></span>
+            </td>
+            <td> <a class="remove far fa-trash-alt" href="javascript:void(0)"></a></td>
+        </tr>
+    </tbody>
+</table>
+
+
+
+
+<input type="button" class="addItem" value="Add more item" />
+<input type="button" class="submitVoucher" value="Submit" />
+
+
+<div>
+    @Html.ActionLink("Back to List", "AdjustmentVoucher")
+</div>
+
+<script>
+
+    $(".addItem").on('click', function () {
+        var row = $('.tblRow').first().clone();
+        row.each(function () {
+            $(this).find('.itemCode').text("");
+            $(this).find('.quantity').val(1);
+            $(this).find('.otherReason').text("");
+            $(this).find('.error').text("");
+        })
+        $('tbody').append(row);
+    })
+
+        $('body').on("change", ".itemName", function () {
+            $(this).parent().siblings(".itemCode").text($(this).val());
+            $(this).siblings(".nameError").html("");
+        });
+
+    $("body").on("change", ".reason", function () {
+        $(this).siblings(".reasonError").html("");
+        if ($(this).val() == 'Others') {
+            $(this).siblings(".otherReason").html("</br>Specified: <input type='text'/>")
+        } else {
+            $(this).siblings(".otherReason").html("")
+        }
+    })
+
+    $("body").on("keydown", ".otherReason>input", function () {
+        $(this).parent().siblings(".reasonError").html("");
+    })
+
+    $("body").on("click", ".remove", function () {
+        if ($(".remove").length == 1) alert("Voucher must have at least 1 item")
+        else $(this).parent('td').parent('.tblRow').remove();
+    });
+
+     $(".submitVoucher").on("click", function () {
+         var newVoucherDetails = new Array();
+         var isValid = true;
+         $("#voucherTable TBODY TR").each(function () {
+             var row = $(this);
+             if (row.find(".itemName option:selected").text() == "Choose item") {
+                 row.find(".nameError").html("</br>You must choose one item");
+                 isValid = false;
+             }
+             else if (row.find(".reason option:selected").val() == 'Others' && row.find(".otherReason > input").val().trim() == "") {
+                 row.find(".reasonError").html("</br>You must specify the reason");
+                 isValid = false;
+             } else {
+                 var voucherDetail = {};
+                 voucherDetail.ItemID = row.find(".itemCode").text();
+                 voucherDetail.quantity = row.find(".operator").val() + row.find(".quantity").val();
+                 if (row.find(".reason").val() == "Others") {
+                     voucherDetail.reason = row.find(".otherReason > input").val();
+                 }else voucherDetail.reason = row.find(".reason").val()
+                 newVoucherDetails.push(voucherDetail);
+             }
+         });
+         if (isValid) ajax(newVoucherDetails);
+    });
+
+    function ajax(newVoucherDetails) {
+        $.ajax({
+                 type: "POST",
+                 url: "/Clerk/CreateVoucher",
+                 data: JSON.stringify(newVoucherDetails),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function () {
+                     var url = '@Url.Action("AdjustmentVoucher", "Clerk")';
+                     window.location.href = url;
+                 }
+             });
+    }
+
+</script>

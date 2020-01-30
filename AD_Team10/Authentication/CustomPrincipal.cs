@@ -8,7 +8,7 @@ namespace AD_Team10.Authentication
 {
     public class CustomPrincipal : IPrincipal
     {
-        public int Username { get; set; }
+        public string Username { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
@@ -20,6 +20,7 @@ namespace AD_Team10.Authentication
             get; private set;
         }
 
+        
         public bool IsInRole(string role)
         {
             if (Role.Equals(role))

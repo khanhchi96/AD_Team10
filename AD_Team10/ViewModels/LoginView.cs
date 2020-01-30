@@ -17,4 +17,13 @@ namespace AD_Team10.ViewModels
         [Display(Name = "Remember Me")]
         public bool RememberMe { get; set; }
     }
+
+    //public class CustomSerializeModel
+    //{
+    //    public string Username { get; set; }
+    //    public string FirstName { get; set; }
+    //    public string LastName { get; set; }
+    //    public string RoleName { get; set; }
+
+    //}
 }

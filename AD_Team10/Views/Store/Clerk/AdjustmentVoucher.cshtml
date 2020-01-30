@@ -1,0 +1,93 @@
+﻿@model PagedList.IPagedList<AD_Team10.Models.AdjustmentVoucher>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Adjustment Voucher";
+}
+
+<h2>Adjustment Voucher</h2>
+
+<p>
+    @Html.ActionLink("Create New Voucher", "CreateVoucher")
+</p>
+
+<div class="filter">
+    <span>Filter by: </span>
+    <select name="filterStatus" id="filterStatus">
+        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Pending" })">
+            Pending
+        </option>
+        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Approved" })">
+            Approved
+        </option>
+        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Rejected" })">
+            Rejected
+        </option>
+    </select>
+</div>
+
+@if (!Model.Any())
+{
+    if (ViewBag.status == null)
+    {
+        <p>No adjustment voucher has been created yet.</p>
+    }
+    else
+    {
+        <p>No adjustment voucher matches the condition.</p>
+    }
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().AdjustmentVoucherID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().AdjustmentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Status)
+            </th>
+            <th>Details</th>
+        </tr>
+
+        @foreach (var voucher in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelVoucher => voucher.AdjustmentVoucherID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelVoucher => voucher.AdjustmentDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelVoucher => voucher.Status)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "VoucherDetails", new { id = voucher.AdjustmentVoucherID })
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+<div class="pagedlist">
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    @Html.PagedListPager(Model, page => Url.Action("AdjustmentVoucher",
+        new { page }))
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#filterStatus').val("/Clerk/AdjustmentVoucher?status=" + '@ViewBag.status');
+    });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+    });
+</script>

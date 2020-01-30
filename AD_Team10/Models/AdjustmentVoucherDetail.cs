@@ -13,7 +13,7 @@ namespace AD_Team10.Models
         public int VoucherID { get; set; }
         [Key, Column(Order = 1), ForeignKey("Item")]
         public int ItemID { get; set; }
-        public string Quantity { get; set; }
+        public int Quantity { get; set; }
         public string Reason { get; set; }
 
         public virtual AdjustmentVoucher AdjustmentVoucher { get; set; }

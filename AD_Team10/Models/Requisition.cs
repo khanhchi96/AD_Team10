@@ -17,6 +17,7 @@ namespace AD_Team10.Models
         public DateTime RequisitionDate { get; set; }
         public DateTime CompletedDate { get; set; }
         public Status? Status { get; set; }
+        public string Remark { get; set; }
         [ForeignKey("Employee")]
         public int EmployeeID { get; set; }
 

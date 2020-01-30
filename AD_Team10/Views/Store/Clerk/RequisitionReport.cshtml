@@ -1,0 +1,119 @@
+﻿@using AD_Team10.Models;
+@{
+    ViewBag.Title = "RequisitionReport";
+    var departments = (List<Department>)ViewBag.departments;
+    var items = (List<Item>)ViewBag.items;
+
+}
+
+<h2>RequisitionReport</h2>
+
+From <input type="date" id="startDate" />
+    To <input type="date" id="endDate" />
+
+<div class="ui form">
+
+    <div class="inline field">
+        <label>Select Departments</label>
+        <select name="departments" multiple="" class="label ui selection fluid dropdown" id="departmentList">
+            <option value="">All</option>
+            @foreach (var d in departments)
+            {
+                <option value="@d.DepartmentID">@d.DepartmentName</option>
+            }
+
+        </select>
+    </div>
+    <div class="inline field">
+        <label>Select Items</label>
+        <select name="items" multiple="" class="label ui selection fluid dropdown" id="itemList">
+            <option value="">All</option>
+            @foreach (var i in items)
+            {
+                <option value="@i.ItemID">@i.Description</option>
+            }
+
+        </select>
+    </div>
+</div>
+
+<br><br>
+
+
+@*<button class="ui button">
+        Clear Filters
+    </button>*@
+
+<button class="generate">
+    Generate Report
+</button>
+<br />
+
+<div id="chart">
+    @Html.Partial("~/Views/Store/Clerk/_Report.cshtml");
+</div>
+<style>
+    body {
+        padding: 40px;
+    }
+
+    .ui.dropdown {
+        max-width: 800px;
+    }
+</style>
+<script>
+    $('.label.ui.dropdown')
+        .dropdown();
+
+    $('.no.label.ui.dropdown')
+        .dropdown({
+            useLabels: false
+        });
+
+    $('.ui.button').on('click', function () {
+        $('.ui.dropdown').dropdown('restore defaults')
+    })
+
+
+    $('.generate').on('click', function () {
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        var itemList = new Array();
+        var departmentList = new Array();
+        $('#itemList :selected').each(function () {
+            itemList.push($(this).val())
+        });
+
+        $('#departmentList :selected').each(function () {
+            departmentList.push($(this).val());
+        });
+        var report = {};
+        report.startDate = startDate;
+        report.endDate = endDate;
+        report.itemList = itemList;
+        report.departmentList = departmentList;
+
+
+        $.ajax({
+            type: "POST",
+            url: "/Clerk/RequisitionReport",
+            data: JSON.stringify(report),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                console.log("ok");
+                $("#chart").load("/Clerk/Report");
+                
+            }
+        });
+    })
+
+</script>
+
+
+
+
+
+
+
+
