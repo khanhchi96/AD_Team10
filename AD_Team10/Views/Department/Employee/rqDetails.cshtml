@@ -1,0 +1,65 @@
+﻿
+@{
+    ViewBag.Title = "rqDetails";
+}
+
+<h2>RequisitionID: @ViewBag.rqID</h2>
+<h2>Status: @ViewBag.Requisition.Status</h2>
+<h2>Details</h2>
+
+@{
+    var requisitionDetails = ViewBag.rqDetails;
+    var Requisition = ViewBag.Requisition;
+}
+
+@if (@Requisition.Status == 0)
+{
+<div>
+    @Html.ActionLink("Update", "updateRequisition", "Employee", new { requisitionId = ViewBag.rqID }, new {@class= "btn btn-primary"})
+</div>
+}
+
+<table class="table">
+    <tr>
+        <th>
+            Item
+        </th>
+        <th>
+            Quantity Requested
+        </th>
+        <th>
+            Quantity Received
+        </th>
+        <th>
+            Quantity Remaining
+        </th>
+
+    </tr>
+
+    @foreach (var rqDetail in requisitionDetails)
+    {
+        <tr>
+            <td>
+                @rqDetail.Item.Description
+            </td>
+            <td>
+                @rqDetail.Quantity
+            </td>
+            <td>
+                @rqDetail.QuantityReceived
+            </td>
+            <td>
+                @(rqDetail.Quantity - rqDetail.QuantityReceived)
+            </td>
+
+        </tr>
+    }
+
+</table>
+
+<div>
+    @Html.ActionLink("Back to List", "Index", new { id=ViewBag.employeeID},new { @class="btn btn-primary"})
+</div>
+
+
+

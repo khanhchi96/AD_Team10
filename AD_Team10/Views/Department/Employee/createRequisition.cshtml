@@ -1,0 +1,103 @@
+﻿@model AD_Team10.Models.Requisition
+@using AD_Team10.Models
+
+@{
+    ViewBag.Title = "createRequisition";
+    var items = ViewBag.items;
+    DepEmployee employee = ViewBag.employee;
+    var itemNames = new List<String>();
+    foreach (var item in items)
+    {
+        itemNames.Add(item.Description);
+    }
+
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Requisition</title>
+
+</head>
+<body>
+    <h2>Create Requisition</h2>
+    <form action="/Employee/CreateRequisition" method="post">
+                <div>
+                    @Html.HiddenFor(m => m.RequisitionDate, new { @Value = @DateTime.Now})
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.Status, new { @Value = Status.Pending})
+                </div>
+                <div>
+                    @Html.HiddenFor(m => m.EmployeeID, new { @Value = employee.DepEmployeeID})
+                </div>
+
+        <table id="tblRD" class="table">
+            <tr>
+                <th class="form-group">Select Item</th>
+                <th class="form-group">Quantity</th>
+                <th class="form-group"> </th>
+            </tr>
+
+            <tbody class="tbody">
+                <tr class="tblRow">
+                    <td class="form-group">
+                        @Html.DropDownList("ItemDescription", new SelectList(itemNames), "-- --", new { @class = "form-control" })
+                    </td>
+                    <td class="form-group">
+                        @Html.Editor("ItemQuantity", new { htmlAttributes = new { @type = "number", @min = "1", @step = "1", @Value = "1", @class="form-control"} })
+                    </td>
+                    <td class="form-group">
+                        <input type="button" id="remove" value="Remove" class="form-control" onclick="Remove(this)" />
+                    </td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <div class="form-group">
+            <input type="button" id="btnAdd" value="Add" class="btn btn-primary"/>
+            <input type="submit" id="btnSubmit" value="Submit" onclick="conf()" class="btn btn-primary" />
+
+        </div>
+
+    </form>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+
+    <script type="text/javascript">
+
+        $("#btnAdd").on('click', function () {
+            var row = $('.tblRow').first().clone();
+            row.each(function () {
+                $(this).find('#ItemDescription').val("");
+                $(this).find('#ItemQuantity').val(1);
+                $(this).find('#remove').html();
+            });
+
+            $('.tbody').append(row);
+        });
+
+        function conf()
+        {
+        var con=confirm("Do you want to submit for sure?");
+        }
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var table = $("#tblRD")[0];
+            table.deleteRow(row[0].rowIndex);
+        };
+
+    </script>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index",new {id=ViewBag.employeeID})
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,105 @@
+﻿@model List<AD_Team10.Models.RequisitionDetail>
+@using AD_Team10.Models
+
+@{
+    ViewBag.Title = "updateRequisition";
+}
+
+@{
+    var requisitionDetails = ViewBag.rqDetails;
+    var items = ViewBag.items;
+    var itemNames = new List<String>();
+    foreach (var item in items)
+    {
+        itemNames.Add(item.Description);
+    }
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create Requisition</title>
+
+</head>
+
+<body>
+    <h2>RequisitionID: @ViewBag.rqID</h2>
+    <h2>updateRequisition</h2>
+
+
+    @using (@Html.BeginForm("updateAndSave", "Employee", FormMethod.Post))
+    {
+        <table class="table" id="tblRD">
+            <tr>
+                <th></th>
+                <th></th>
+                <th>
+                    Item
+                </th>
+                <th>
+                    Quantity Requested
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+            <tbody class="tbody">
+            @for (int i = 0; i < Model.Count; i++)
+            {
+                <tr class="tblRow">
+                    <td>@Html.HiddenFor(model => model[i].RequisitionID)</td>
+                    <td>@Html.HiddenFor(model => model[i].QuantityReceived)</td>
+                    <td>@Html.DropDownListFor(model => model[i].ItemID, new SelectList(items, "ItemID", "Description", Model[i].ItemID),new { @class="Item",@Name="Item"})</td>
+                    <td>
+                        @Html.EditorFor(model => model[i].Quantity, new { htmlAttributes = new { @type = "number", @min = "1", @step = "1",@class="Quantity",@Name="Quantity"} })
+                    </td>
+                    <td>
+                        <input type="button" class="remove" value="Remove" onclick="Remove(this)" />
+                    </td>
+                </tr>
+            }
+
+                </tbody>
+            
+        </table>
+
+        <div>
+        <input type="hidden" name="requisitionId" value="@ViewBag.rqID" />
+        <input type="button" id="btnAdd" value="Add" class="btn btn-primary"/>
+        <input type="submit" id="btnSubmit" value="UpdateAndSave" onclick="conf()" class="btn btn-primary" />
+            </div>
+    }
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+
+    <script type="text/javascript">
+
+        $("#btnAdd").on('click', function () {
+            var row = $('.tblRow').first().clone();
+            row.each(function () {
+                $(this).find('.Item').val("");
+                $(this).find('.Quantity').val(1);
+                $(this).find('.remove').html();
+            });
+
+            $('.tbody').append(row);
+        });
+
+        function conf() {
+            var con = confirm("Do you want to update for sure?");
+        }
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var table = $("#tblRD")[0];
+            table.deleteRow(row[0].rowIndex);
+        };
+
+    </script>
+
+</body>
+</html>

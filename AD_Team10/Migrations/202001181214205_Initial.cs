@@ -133,7 +133,7 @@
                 c => new
                     {
                         RequisitionID = c.Int(nullable: false, identity: true),
-                        RequisitionDate = c.DateTime(nullable: false),
+                        RequisitionDate = c.DateTime(nullable:true),
                         Status = c.Int(),
                         EmployeeID = c.Int(nullable: false),
                     })

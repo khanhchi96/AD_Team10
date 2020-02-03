@@ -57,6 +57,37 @@
                 new StoreUser { StoreUserID = 2, Username = "wang.yibo", Password = "12345678", Role = StoreRole.SUPERVISOR, StoreEmployeeID = 2 },
                 new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
+            context.Items.AddOrUpdate(i => i.ItemID,
+                new Item { ItemID = 1, Description = "Pencil 2B", UnitOfMeasure = "dozen", ReorderLevel = 100, ReorderQuantity = 200, UnitsInStock = 150, CategoryID = 1 },
+                new Item { ItemID = 2, Description = "Pencil 4B", UnitOfMeasure = "dozen", ReorderLevel = 100, ReorderQuantity = 200, UnitsInStock = 150, CategoryID = 1 },
+                new Item { ItemID = 3, Description = "Pencil 6B", UnitOfMeasure = "dozen", ReorderLevel = 100, ReorderQuantity = 200, UnitsInStock = 150, CategoryID = 1 },
+                new Item { ItemID = 4, Description = "Eraser (hard)", UnitOfMeasure = "each", ReorderLevel = 40, ReorderQuantity = 60, UnitsInStock = 45, CategoryID = 2 },
+                new Item { ItemID = 5, Description = "Eraser (soft)", UnitOfMeasure = "each", ReorderLevel = 40, ReorderQuantity = 60, UnitsInStock = 50, CategoryID = 2 },
+                new Item { ItemID = 6, Description = "Envelope Brown(3'x6')", UnitOfMeasure = "each", ReorderLevel = 600, ReorderQuantity = 400, UnitsInStock = 700, CategoryID = 3 },
+                new Item { ItemID = 7, Description = "Envelope Brown(5'x7')", UnitOfMeasure = "each", ReorderLevel = 600, ReorderQuantity = 400, UnitsInStock = 400, CategoryID = 3 });
+
+            context.Categories.AddOrUpdate(c => c.CategoryId,
+                new Category { CategoryId = 1, CategoryName = "Pen" },
+                new Category { CategoryId = 2, CategoryName = "Eraser" },
+                new Category { CategoryId = 3, CategoryName = "Envelope" });
+
+            context.Requisitions.AddOrUpdate(r => r.RequisitionID,
+                new Requisition { RequisitionID = 1, RequisitionDate = new DateTime(2019, 09, 10), Status = Status.Completed, EmployeeID = 1 },
+                new Requisition { RequisitionID = 2, RequisitionDate = new DateTime(2019, 09, 30), Status = Status.Incompleted, EmployeeID = 1 },
+                new Requisition { RequisitionID = 3, RequisitionDate = new DateTime(2019, 10, 5), Status = Status.Pending, EmployeeID = 1});
+
+            context.RequisitionDetails.AddOrUpdate(rd => new { rd.RequisitionID, rd.ItemID },
+                new RequisitionDetail { RequisitionID = 1, ItemID = 1, Quantity = 2, QuantityReceived = 2 },
+                new RequisitionDetail { RequisitionID = 1, ItemID = 2, Quantity = 1, QuantityReceived = 1 },
+                new RequisitionDetail { RequisitionID = 1, ItemID = 5, Quantity = 3, QuantityReceived = 3 },
+                new RequisitionDetail { RequisitionID = 2, ItemID = 1, Quantity = 2, QuantityReceived = 2 },
+                new RequisitionDetail { RequisitionID = 2, ItemID = 4, Quantity = 3, QuantityReceived = 1 },
+                new RequisitionDetail { RequisitionID = 2, ItemID = 6, Quantity = 2, QuantityReceived = 2 },
+                new RequisitionDetail { RequisitionID = 3, ItemID = 3, Quantity = 2, QuantityReceived = 0 },
+                new RequisitionDetail { RequisitionID = 3, ItemID = 6, Quantity = 10, QuantityReceived = 0 },
+                new RequisitionDetail { RequisitionID = 3, ItemID = 7, Quantity = 5, QuantityReceived = 0 });
+
+
         }
     }
 }

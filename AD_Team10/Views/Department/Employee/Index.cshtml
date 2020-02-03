@@ -3,5 +3,63 @@
     ViewBag.Title = "Index";
 }
 
-<h2>This is Employee page</h2>
+<h2> Employee Requisitions</h2>
 
+@{
+    var rquisitions = ViewBag.Rqs;
+}
+
+<p>
+    @Html.ActionLink("Create New Requisition", "CreateRequisition","Employee",new { employeeID=ViewBag.employeeID},new {@class="btn btn-primary"})
+</p>
+<table class="table">
+    <tr>
+        <th>
+            ID
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Status
+        </th>
+        <th>
+            View
+        </th>
+        <th>
+            Delete
+        </th>
+        
+    </tr>
+
+    @foreach (var item in ViewBag.Rqs)
+    {
+        <tr>
+            <td>
+                @item.RequisitionID
+            </td>
+            <td>
+                @item.RequisitionDate.ToShortDateString()
+            </td>
+            <td>
+                @item.Status
+            </td>
+            <td>
+                @Html.ActionLink("Details", "rqDetails","Employee",new {requisitionId= @item.RequisitionID},null) 
+            </td>
+            @if (item.Status == 0)
+            {
+            <td>
+                @Html.ActionLink("Delete", "DeleteRequisition", "Employee", new { requisitionId = @item.RequisitionID }, null)
+            </td>
+            }
+            @if(item.Status!=0)
+            {
+            <td>
+            </td>
+            }
+
+        </tr>
+    }
+
+</table>

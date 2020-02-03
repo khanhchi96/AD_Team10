@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using AD_Team10.ViewModels;
 using System.Web.Security;
 using AD_Team10.Models;
+using AD_Team10.DAL;
 using Newtonsoft.Json;
 using AD_Team10.Authentication;
 
@@ -15,7 +16,7 @@ namespace AD_Team10.Controllers
     {
         public ActionResult Index()
         {
-            return View();
+            return View("~/Views/Home/Index.cshtml");
         }
 
         [HttpGet]
@@ -47,6 +48,7 @@ namespace AD_Team10.Controllers
                 {
                     string controller = "";
                     var user = (CustomMembershipUser)customMembership.GetUser(loginView.UserName, false);
+                    
                     if (user != null)
                     {
 
@@ -60,6 +62,32 @@ namespace AD_Team10.Controllers
                         HttpCookie faCookie = new HttpCookie("Cookie1", enTicket);
                         Response.Cookies.Add(faCookie);
                         controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
+
+                        DBContext db = new DBContext();
+                        int employeeID=0;
+                        switch (controller)
+                        {
+                            case "Employee":
+                            case "Representative":
+                            case "Head":
+                                
+                                var DepUser = (from depUser in db.DepUsers
+                                               where depUser.Username == user.Username
+                                               select depUser).FirstOrDefault();
+                                employeeID = DepUser.DepEmployeeID;
+                                break;
+
+                            case "Clerk":
+                            case "Manager":
+                            case "Supervisor":
+                               
+                                var StoreUser = (from storeUser in db.StoreUsers
+                                                 where storeUser.Username == user.Username
+                                                 select storeUser).FirstOrDefault();
+                                employeeID = StoreUser.StoreEmployeeID;
+                                break;
+                        }
+                        return RedirectToAction("Index", controller, new { id = employeeID });
                     }
                     return RedirectToAction("Index", controller);
                 }

@@ -14,7 +14,7 @@ namespace AD_Team10.Models
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RequisitionID { get; set; }
-        public DateTime RequisitionDate { get; set; }
+        public DateTime? RequisitionDate { get; set; }
         public Status? Status { get; set; }
         [ForeignKey("Employee")]
         public int EmployeeID { get; set; }
