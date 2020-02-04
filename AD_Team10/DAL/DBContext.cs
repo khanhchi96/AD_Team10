@@ -33,6 +33,7 @@ namespace AD_Team10.DAL
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            Database.SetInitializer<DBContext>(new DropCreateDatabaseIfModelChanges<DBContext>());
         }
     }
 }
