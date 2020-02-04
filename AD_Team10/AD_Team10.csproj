@@ -131,7 +131,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\StoreClerkController.cs" />
     <Compile Include="DAL\DBContext.cs" />
+    <Compile Include="DataService\PurchaseOrderService.cs" />
+    <Compile Include="DataService\RequisitionService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -157,6 +160,7 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\SupplierItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelectListModel\OrderStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -201,6 +205,17 @@
     <Content Include="Views\Item\Details.cshtml" />
     <Content Include="Views\Item\Edit.cshtml" />
     <Content Include="Views\Item\Index.cshtml" />
+    <Content Include="Views\StoreClerk\Index.cshtml" />
+    <Content Include="Views\StoreClerk\GetPendingList.cshtml" />
+    <Content Include="Views\StoreClerk\ViewDetails.cshtml" />
+    <Content Include="Views\StoreClerk\ViewRequisitionHistory.cshtml" />
+    <Content Include="Views\StoreClerk\ViewRetrievalList.cshtml" />
+    <Content Include="Views\StoreClerk\UpdateRequisitionDetails.cshtml" />
+    <Content Include="Views\StoreClerk\GetPendingOrderList.cshtml" />
+    <Content Include="Views\StoreClerk\CreateNewOrder.cshtml" />
+    <Content Include="Views\StoreClerk\ViewOrderDetails.cshtml" />
+    <Content Include="Views\StoreClerk\ViewOrderHistory.cshtml" />
+    <Content Include="Views\StoreClerk\UpdatePurchaseOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

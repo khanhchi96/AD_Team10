@@ -57,6 +57,12 @@
                 new StoreUser { StoreUserID = 2, Username = "wang.yibo", Password = "12345678", Role = StoreRole.SUPERVISOR, StoreEmployeeID = 2 },
                 new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
+            //context.Requisitions.AddOrUpdate(
+            //    new Requisition { RequisitionID = 1, EmployeeID = 1 });
+
+            //context.RequisitionDetails.AddOrUpdate(
+            //    new RequisitionDetail { ItemID = 1, RequisitionID = 1 });
+
         }
     }
 }

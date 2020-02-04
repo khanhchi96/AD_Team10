@@ -14,9 +14,15 @@ namespace AD_Team10
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             routes.MapRoute(
+                name: "StoreClerk",
+                url: "StoreClerk/{action}/{id}",
+                defaults: new { controller = "StoreClerk", action = "Index", id = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
-                defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+                defaults: new { controller = "Item", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

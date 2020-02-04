@@ -1,0 +1,30 @@
+﻿
+
+@{
+    ViewBag.Title = "StoreClerk";
+}
+
+<h2>Index</h2>
+
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="requisitionMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        Requisition
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+        <li>@Html.ActionLink("Pending", "GetPendingList")</li>
+        <li>@Html.ActionLink("History", "ViewRequisitionHistory")</li>
+        <li>@Html.ActionLink("Retrieval List", "ViewRetrievalList")</li>
+    </ul>
+</div>
+<div class="dropdown">
+    <button class="btn btn-default dropdown-toggle" type="button" id="purchaseOrderMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+        PurchaseOrder
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+        <li>@Html.ActionLink("Pending", "GetPendingOrderList")</li>
+        <li>@Html.ActionLink("History", "ViewOrderHistory")</li>
+    </ul>
+</div>
+

@@ -14,6 +14,7 @@ namespace AD_Team10.Models
         [Key, Column(Order = 1), ForeignKey("Item")]
         public int ItemID { get; set; }
         public int Quantity { get; set; }
+        public int QuantityDelivered { get; set; }
 
         public virtual Requisition Requisition { get; set; }
         public virtual Item Item { get; set; }

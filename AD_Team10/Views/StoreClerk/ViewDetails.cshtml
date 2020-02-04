@@ -1,0 +1,214 @@
+﻿@model Tuple<AD_Team10.Models.Requisition, List<AD_Team10.Models.RequisitionDetail>>
+@{
+    ViewBag.Title = "ViewPendingDetails";
+    int num = 0;
+    string requisitionId = Model.Item1.RequisitionID.ToString();
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<h3 align="center">REQUISITION NO. @Html.DisplayFor(model => model.Item1.RequisitionID)</h3>
+<hr />
+<div class="detailDiv">
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Department:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Department.DepartmentName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Employee.Department.DepartmentCode):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Department.DepartmentCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Status):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Status)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                Employee Name:
+            </dt>
+
+            <dd>
+                @{
+                    string nameValue = Model.Item1.Employee.ToString();
+                }
+                @Html.DisplayFor(model => nameValue)
+            </dd>
+
+            <dt>
+                Employee Phone:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Phone)
+            </dd>
+
+            <dt>
+                Employee Email:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Email)
+            </dd>
+
+            <dt>
+                Time:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.RequisitionDate)
+            </dd>
+        </dl>
+    </div>
+</div>
+@if (Model.Item1.Status == AD_Team10.Models.Status.Completed)
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr class="bg-primary">
+                <th>Item No.</th>
+                <th>Description</th>
+                <th>Quantity Requested</th>
+                <th>Quantity Delivered</th>
+            </tr>
+        </thead>
+        @*<tbody id="SetRequisitionDetailList">
+                <tr id="LoadingStatus"></tr>
+            </tbody>*@
+        @foreach (var item in Model.Item2)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @(num + 1)
+                    </td>
+                    <td>
+                        @item.Item.Description
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.QuantityDelivered
+                    </td>
+                </tr>
+            </tbody>
+            num++;
+        }
+
+    </table>
+}
+else
+{
+    <table class="table">
+        <thead class="thead-dark">
+            <tr class="bg-primary">
+                <th>Item No.</th>
+                <th>Description</th>
+                <th>Quantity Requested</th>
+                <th>Quantity Delivered</th>
+                <th>Quantity Remaining</th>
+                @*<th>Update</th>*@
+            </tr>
+        </thead>
+        @foreach (var item in Model.Item2)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @(num + 1)
+                    </td>
+                    <td>
+                        @item.Item.Description
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.QuantityDelivered
+                    </td>
+                    <td>
+                        @(item.Quantity - item.QuantityDelivered)
+                    </td>
+                    @*<td>
+                            <button type="button" class="btn btn-danger">@Html.ActionLink("Update", "UpdateRequisitionDetails", new { id_item = item.ItemID, id_requisition = item.RequisitionID })</button>
+                            <a class="btn btn-danger" href="/StoreClerk/UpdateRequisitionDetails?id_item=@item.ItemID&id_requisition=@item.RequisitionID" role="button">Update</a>
+                        </td>*@
+                </tr>
+            </tbody>
+            num++;
+        }
+
+    </table>
+
+    <div align="right">
+        <a class="btn btn-warning" href="/StoreClerk/UpdateRequisitionDetails?id_requisition=@Model.Item1.RequisitionID" role="button">Update</a>
+    </div>
+}
+
+
+@*<div class="modal fade" id="UpdateModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a href="#" class="close" data-dismiss="modal">&times;</a>
+                    <h4 id="ModalTitle">Update Requisition Details</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="form">
+                        <fieldset id="SubmitForm">
+                            @Html.HiddenFor(m=>m)
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<style>
+    .detailDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+</style>
+
+@*<script>
+        //$("#LoadingStatus").html("Loading....");
+
+        $.get("/StoreClerk/GetRequisitionDetailsList", null, DataBind);
+
+        function DataBind(requisitionDetailsList) {
+            var SetData = $("#SetRequisitionDetailList");
+            var num = 1;
+            for (var i = 0; i < requisitionDetailsList.length; i++) {
+                var data = "<tr class='row_" + i + "'>" +
+                    "<td>" + num + "</td>" +
+                    "<td>" + requisitionDetailsList[i].Item.Description + "</td>" +
+                    "<td>" + requisitionDetailsList[i].Quantity + "</td>" +
+                    "<td>" + requisitionDetailsList[i].QuantityDelivered + "</td>" +
+                    "</tr>";
+                SetData.append(data);
+                //$("#LoadingStatus").html(" ");
+                num++;
+            }
+        }
+    </script>*@
+
