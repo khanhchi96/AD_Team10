@@ -82,10 +82,12 @@
                 new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
             context.Categories.AddOrUpdate(c => c.CategoryId,
-                new Category { CategoryId = 1, CategoryName = "Clip" });
+                new Category { CategoryId = 1, CategoryName = "Clip" },
+                new Category { CategoryId = 2, CategoryName = "Pencil" });
             context.Items.AddOrUpdate(i => i.ItemID,
                 new Item { ItemID = 1, Description = "Clip 3/4", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 160 },
-                new Item { ItemID = 2, Description = "Clip 1/2", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 120 });
+                new Item { ItemID = 2, Description = "Clip 1/2", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 120 },
+                new Item { ItemID = 3, Description = "2B Pencil", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 2, UnitsInStock = 120 });
             context.Requisitions.AddOrUpdate(r => r.RequisitionID,
                 new Requisition
                 {
@@ -142,6 +144,14 @@
                     CompletedDate = DateTime.Parse("2019-01-20"),
                     EmployeeID = 3,
                     Status = Status.Completed
+                },
+                new Requisition
+                {
+                    RequisitionID = 8,
+                    RequisitionDate = DateTime.Parse("2019-01-18"),
+                    CompletedDate = DateTime.Parse("2019-01-20"),
+                    EmployeeID = 2,
+                    Status = Status.Completed
                 });
 
             context.RequisitionDetails.AddOrUpdate(r => new { r.RequisitionID, r.ItemID },
@@ -158,6 +168,13 @@
                     ItemID = 2,
                     Quantity = 7,
                     QuantityReceived = 7
+                },
+                new RequisitionDetail
+                {
+                    RequisitionID = 1,
+                    ItemID = 3,
+                    Quantity = 10,
+                    QuantityReceived = 10
                 },
                 new RequisitionDetail
                 {
@@ -182,6 +199,13 @@
                 },
                 new RequisitionDetail
                 {
+                    RequisitionID = 3,
+                    ItemID = 3,
+                    Quantity = 4,
+                    QuantityReceived = 4
+                },
+                new RequisitionDetail
+                {
                     RequisitionID = 4,
                     ItemID = 1,
                     Quantity = 8,
@@ -203,6 +227,13 @@
                 },
                 new RequisitionDetail
                 {
+                    RequisitionID = 5,
+                    ItemID = 3,
+                    Quantity = 5,
+                    QuantityReceived = 5
+                },
+                new RequisitionDetail
+                {
                     RequisitionID = 6,
                     ItemID = 1,
                     Quantity = 7,
@@ -221,8 +252,91 @@
                     ItemID = 2,
                     Quantity = 7,
                     QuantityReceived = 7
+                },
+                new RequisitionDetail
+                {
+                    RequisitionID = 8,
+                    ItemID = 2,
+                    Quantity = 10,
+                    QuantityReceived = 10
+                },
+                new RequisitionDetail
+                {
+                    RequisitionID = 8,
+                    ItemID = 3,
+                    Quantity = 5,
+                    QuantityReceived = 5
                 }
                 );
+
+            context.Suppliers.AddOrUpdate(s => s.SupplierID,
+                new Supplier { SupplierID = 1, SupplierCode = "ALPA", SupplierName = "ALPHA Office Supplies" });
+
+            context.SupplierItems.AddOrUpdate(s => new { s.SupplierID, s.ItemID },
+                new SupplierItem { SupplierID = 1, ItemID = 1, Price = 20 },
+                new SupplierItem { SupplierID = 1, ItemID = 2, Price = 50 },
+                new SupplierItem { SupplierID = 1, ItemID = 3, Price = 40 });
+            context.PurchaseOrders.AddOrUpdate(p => p.PurchaseOrderID,
+                new PurchaseOrder {
+                    PurchaseOrderID = 1,
+                    OrderDate = DateTime.Parse("2019-12-01"),
+                    SupplierID = 1,
+                    CompletedDate = DateTime.Parse("2019-12-07"),
+                    OrderStatus = OrderStatus.Completed
+                },
+                new PurchaseOrder
+                {
+                    PurchaseOrderID = 2,
+                    OrderDate = DateTime.Parse("2019-12-07"),
+                    SupplierID = 1,
+                    CompletedDate = DateTime.Parse("2019-12-14"),
+                    OrderStatus = OrderStatus.Completed
+                },
+                new PurchaseOrder
+                {
+                    PurchaseOrderID = 3,
+                    OrderDate = DateTime.Parse("2019-12-15"),
+                    SupplierID = 1,
+                    CompletedDate = DateTime.Parse("2019-12-21"),
+                    OrderStatus = OrderStatus.Completed
+                }
+                );
+
+            context.PurchaseOrderDetails.AddOrUpdate(p => new { p.OrderID, p.ItemID },
+                new PurchaseOrderDetail {
+                    OrderID = 1,
+                    ItemID = 1,
+                    Quantity = 120,
+                    QuantityReceived = 120,
+                },
+                new PurchaseOrderDetail
+                {
+                    OrderID = 1,
+                    ItemID = 2,
+                    Quantity = 140,
+                    QuantityReceived = 140,
+                },
+                new PurchaseOrderDetail
+                {
+                    OrderID = 2,
+                    ItemID = 1,
+                    Quantity = 150,
+                    QuantityReceived = 150,
+                },
+                new PurchaseOrderDetail
+                {
+                    OrderID = 2,
+                    ItemID = 3,
+                    Quantity = 120,
+                    QuantityReceived = 120,
+                },
+                new PurchaseOrderDetail
+                {
+                    OrderID = 3,
+                    ItemID = 3,
+                    Quantity = 180,
+                    QuantityReceived = 180,
+                });
         }
     }
 }

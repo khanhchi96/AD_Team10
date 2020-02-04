@@ -1,0 +1,62 @@
+﻿@using AD_Team10.Authentication;
+@{ 
+    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+}
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="info">
+        <div class="logo">
+            @Html.ActionLink("LU", "Index", "Clerk", new { @class = "short-name" })
+            @Html.ActionLink("Logic University", "Index", "Clerk", new { @class = "full-name" })
+        </div>
+
+        <div class="staff-info">
+            <div class="designation">
+                CLERK
+            </div>
+            <div class="staff-profile">
+                <span class="staff-name">
+                    Welcome, @(user.MiddleName == null ? (user.FirstName + " " + user.LastName)
+                                               : (user.FirstName + " " + user.MiddleName + " " + user.LastName))
+                </span>
+                    <span class="log-out">
+                    @Html.ActionLink("Log out", "LogOut", "Home")
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Requisitions <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("View Requisition", "Requisition", "Clerk")</li>
+                        <li>@Html.ActionLink("Create Requisition", "CreateRequisition", "Clerk")</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Purchase Orders <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("View Purchase Order", "PurchaseOrder", "Clerk")</li>
+                        <li>@Html.ActionLink("Create Purchase Order", "CreatePurchaseOrder", "Clerk")</li>
+                    </ul>
+                </li>
+                <li class="non-dropdown">@Html.ActionLink("Inventory", "Inventory", "Clerk")</li>
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Adjustment Voucher <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("View Adjustment Voucher", "AdjustmentVoucher", "Clerk")</li>
+                        <li>@Html.ActionLink("Create Adjustment Voucher", "CreateVoucher", "Clerk")</li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Trend Analysis <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("Department Requisition Report", "RequisitionReport", "Clerk")</li>
+                        <li>@Html.ActionLink("Purchase Order Report", "OrderReport", "Clerk")</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

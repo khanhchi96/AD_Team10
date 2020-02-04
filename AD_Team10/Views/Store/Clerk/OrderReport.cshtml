@@ -1,7 +1,6 @@
 ﻿@using AD_Team10.Models;
 @{
-    ViewBag.Title = "RequisitionReport";
-    var departments = (List<Department>)ViewBag.departments;
+    ViewBag.Title = "OrderReport";
     var categories = (List<Category>)ViewBag.categories;
 
 }
@@ -11,35 +10,22 @@
 </div>
 
 <div class="container-fluid body">
-    <h3>REQUISITION REPORT</h3>
+    <h3>ORDER REPORT</h3>
     <div class="filter-option">
         <div class="filter">
-    Comparison period
-    <select id="timeRange">
-        <option value="3" selected="selected">Last 3 months</option>
-        <option value="6">Last 6 months</option>
-        <option value="9">Last 9 months</option>
-        <option value="12">Last 12 months</option>
-    </select>
-            </div>
-        <div class="filter">
-    Choose month <input type="month" id="endDate" min="2019-01" />
-    </div>
-        </div>
-
-    <div class="ui form">
-
-        <div class="inline field">
-            <label>Select Departments</label>
-            <select name="departments" multiple="" class="label ui selection fluid dropdown" id="departmentList">
-                <option value="">All</option>
-                @foreach (var d in departments)
-                {
-                    <option value="@d.DepartmentID">@d.DepartmentName</option>
-                }
-
+            Comparison period
+            <select id="timeRange">
+                <option value="3" selected="selected">Last 3 months</option>
+                <option value="6">Last 6 months</option>
+                <option value="9">Last 9 months</option>
+                <option value="12">Last 12 months</option>
             </select>
         </div>
+        <div class="filter">
+            Choose month <input type="month" id="endDate" min="2019-01" />
+        </div>
+    </div>
+    <div class="ui form">
         <div class="inline field">
             <label>Select Categories</label>
             <select name="categories" multiple="" class="label ui selection fluid dropdown" id="categoryList">
@@ -59,13 +45,13 @@
     @*<button class="ui button">
             Clear Filters
         </button>*@
-
+    <div>
     <button class="generate submit">
         Generate Report
     </button>
-    <br />
+    </div>
 
-    <div id="chart">
+    <div id="report">
         @Html.Partial("~/Views/Store/Clerk/_Report.cshtml")
     </div>
 </div>
@@ -106,25 +92,20 @@
             categoryList.push($(this).val())
         });
 
-        $('#departmentList :selected').each(function () {
-            departmentList.push($(this).val());
-        });
         var report = {};
         report.startDate = startDate.toISOString();
         report.endDate = endDate.toISOString();
         report.categoryList = categoryList;
-        report.departmentList = departmentList;
 
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("RequisitionReport", "Clerk")',
+            url: "@Url.Action("OrderReport", "Clerk")",
             data: JSON.stringify(report),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function () {
-                console.log("ok");
-                $("#chart").load("@Url.Action("ShowReqReport", "Clerk")");
+                $("#report").load("@Url.Action("ShowOrderReport", "Clerk")");
 
             }
         });

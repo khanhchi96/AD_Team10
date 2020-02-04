@@ -1,93 +1,152 @@
 ﻿@model PagedList.IPagedList<AD_Team10.Models.AdjustmentVoucher>
 @using PagedList.Mvc;
+@using AD_Team10.Models;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Adjustment Voucher";
+    var statusList = (List<string>)ViewBag.statusList;
+    var clerkList = (List<StoreEmployee>)ViewBag.clerkList;
 }
 
-<h2>Adjustment Voucher</h2>
-
-<p>
-    @Html.ActionLink("Create New Voucher", "CreateVoucher")
-</p>
-
-<div class="filter">
-    <span>Filter by: </span>
-    <select name="filterStatus" id="filterStatus">
-        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Pending" })">
-            Pending
-        </option>
-        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Approved" })">
-            Approved
-        </option>
-        <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = "Rejected" })">
-            Rejected
-        </option>
-    </select>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
 </div>
 
-@if (!Model.Any())
-{
-    if (ViewBag.status == null)
+<div class="container-fluid body">
+    <h3>ADJUSTMENT VOUCHER</h3>
+
+
+
+    <div class="filter-option">
+        <div class="create">
+            <span class="glyphycon glyphicon-plus plus-sign"></span>
+            <div class="create-link">
+                @Html.ActionLink("Create New Voucher", "CreateVoucher")
+            </div>
+        </div>
+        <button id="clear">Clear</button>
+        <div class="filter">
+            <span>Filter by clerk: </span>
+            <select name="filterClerk" id="filterClerk">
+                @foreach (var c in clerkList)
+                {
+                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = ViewBag.status, clerk = c.StoreEmployeeID.ToString()})">@c.ToString()</option>
+                }
+            </select>
+        </div>
+
+        <div class="filter">
+            <span>Filter by status: </span>
+            <select name="filterStatus" id="filterStatus">
+                @foreach (var s in statusList)
+                {
+                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = s, clerk = ViewBag.clerk })">@s</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (!Model.Any())
     {
-        <p>No adjustment voucher has been created yet.</p>
+        if (ViewBag.status == null)
+        {
+            <p>No adjustment voucher has been created yet.</p>
+        }
+        else
+        {
+            <p>No adjustment voucher matches the condition.</p>
+        }
     }
     else
     {
-        <p>No adjustment voucher matches the condition.</p>
-    }
-}
-else
-{
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(Model => Model.First().AdjustmentVoucherID)
-            </th>
-            <th>
-                @Html.DisplayNameFor(Model => Model.First().AdjustmentDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(Model => Model.First().Status)
-            </th>
-            <th>Details</th>
-        </tr>
-
-        @foreach (var voucher in Model)
-        {
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelVoucher => voucher.AdjustmentVoucherID)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelVoucher => voucher.AdjustmentDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelVoucher => voucher.Status)
-                </td>
-                <td>
-                    @Html.ActionLink("Details", "VoucherDetails", new { id = voucher.AdjustmentVoucherID })
-                </td>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().AdjustmentVoucherID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().AdjustmentDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().Clerk)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().Status)
+                </th>
+                <th>Details</th>
             </tr>
-        }
 
-    </table>
-}
+            @foreach (var voucher in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelVoucher => voucher.AdjustmentVoucherID)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelVoucher => voucher.AdjustmentDate)
+                    </td>
 
-<div class="pagedlist">
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+                    @if (voucher.Clerk.MiddleName == null)
+                    {
+                        <td>
+                            @Html.DisplayFor(modelVoucher => voucher.Clerk.FirstName) @Html.DisplayFor(modelVoucher => voucher.Clerk.LastName)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                            @Html.DisplayFor(modelVoucher => voucher.Clerk.FirstName) @Html.DisplayFor(modelVoucher => voucher.Clerk.MiddleName) @Html.DisplayFor(modelVoucher => voucher.Clerk.LastName)
+                        </td>
+                    }
 
-    @Html.PagedListPager(Model, page => Url.Action("AdjustmentVoucher",
-        new { page }))
+                    <td>
+                        @Html.DisplayFor(modelVoucher => voucher.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "VoucherDetails", new { id = voucher.AdjustmentVoucherID }, new { @class = "view-detail" })
+                    </td>
+                </tr>
+            }
+
+        </table>
+    }
+
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("AdjustmentVoucher",
+            new { page }))
+    </div>
 </div>
-
 <script>
-    $(document).ready(function () {
-        $('#filterStatus').val("/Clerk/AdjustmentVoucher?status=" + '@ViewBag.status');
+    @*$(document).ready(function () {
+        $('#filterStatus').val("@Url.Action("AdjustmentVoucher", "Clerk", new { status = @ViewBag.status })");
+
     });
 
     $('#filterStatus').on('change', function () {
         location.href = this.value;
+    });*@
+
+    $(document).ready(function () {
+        var selectedItem = sessionStorage.getItem("SelectedVoucher");
+        $('#filterStatus').val(selectedItem);
+        $('#filterClerk').val(selectedItem);
     });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedVoucher", this.value);
+    });
+
+    $('#filterClerk').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedVoucher", this.value);
+    });
+
+        $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedVoucher", "");
+        location.href = '@Url.Action("AdjustmentVoucher", "Clerk")';
+    })
 </script>

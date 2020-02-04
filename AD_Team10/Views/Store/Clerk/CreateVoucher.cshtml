@@ -6,9 +6,12 @@
     var itemList = ViewBag.itemList;
 }
 
-<h2>Create Adjustment Voucher</h2>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+<div class="container-fluid body"> 
+<h3>NEW ADJUSTMENT VOUCHER</h3>
 <table class="table" id="voucherTable">
-    <thead>
         <tr>
             <th>Item Code</th>
             <th>Description</th>
@@ -16,14 +19,21 @@
             <th>Reason</th>
             <th></th>
         </tr>
-    </thead>
-    <tbody>
+    <tbody id="tbody">
         <tr class="tblRow">
             <td class="itemCode"></td>
             <td>
                 @Html.DropDownList("Item Name", new SelectList(itemList, "ItemID", "Description"),
-               "Choose item", new{ @class = "itemName"})
-                <span class="nameError"></span>
+                "Choose item", new{ @class = "itemName"})
+                 <span class="nameError"></span>
+                @*<select class="ui fluid search selection dropdown itemName">
+                    <option value="">Choose Item</option>
+                    @foreach (var i in itemList)
+                    {
+                        <option value="@i.ItemID">@i.Description</option>
+                    }
+
+                </select>*@
             </td>
             <td>
                 <select class="operator">
@@ -39,49 +49,54 @@
                     <option>Wrong check when receiving from suppliers</option>
                     <option>Others</option>
                 </select>
-                <span class="otherReason"></span>
+                <br />
+                <span class="otherReason">
+                    Specified: <input type='text' />
+                </span>
                 <span class="reasonError"></span>
             </td>
-            <td> <a class="remove far fa-trash-alt" href="javascript:void(0)"></a></td>
+            <td> <a class="remove glyphicon glyphicon-trash" href="javascript:void(0)"></a></td>
         </tr>
     </tbody>
 </table>
 
+<div class="create">
+    <span class="glyphycon glyphicon-plus plus-sign"></span>
+    <div class="create-link">
+        <a href="javascript:void(0)" class="addItem">Add more item</a>
+    </div>
+</div>
+<input type="button" class="submitVoucher submit" value="Submit" />
 
-
-
-<input type="button" class="addItem" value="Add more item" />
-<input type="button" class="submitVoucher" value="Submit" />
-
-
-<div>
+    
+<div class="back-to-list">
     @Html.ActionLink("Back to List", "AdjustmentVoucher")
 </div>
-
+    </div>
 <script>
 
     $(".addItem").on('click', function () {
-        var row = $('.tblRow').first().clone();
+        var row = $('.tblRow').first().clone(true, true);
         row.each(function () {
             $(this).find('.itemCode').text("");
             $(this).find('.quantity').val(1);
             $(this).find('.otherReason').text("");
             $(this).find('.error').text("");
         })
-        $('tbody').append(row);
+        $('#tbody').append(row);
     })
 
         $('body').on("change", ".itemName", function () {
-            $(this).parent().siblings(".itemCode").text($(this).val());
+            $(this).parent().siblings(".itemCode").text($(this).find('option:selected').val());
             $(this).siblings(".nameError").html("");
         });
 
     $("body").on("change", ".reason", function () {
         $(this).siblings(".reasonError").html("");
         if ($(this).val() == 'Others') {
-            $(this).siblings(".otherReason").html("</br>Specified: <input type='text'/>")
+            $(this).siblings(".otherReason").show();
         } else {
-            $(this).siblings(".otherReason").html("")
+            $(this).siblings(".otherReason").hide();
         }
     })
 
@@ -97,7 +112,7 @@
      $(".submitVoucher").on("click", function () {
          var newVoucherDetails = new Array();
          var isValid = true;
-         $("#voucherTable TBODY TR").each(function () {
+         $("#voucherTable #tbody TR").each(function () {
              var row = $(this);
              if (row.find(".itemName option:selected").text() == "Choose item") {
                  row.find(".nameError").html("</br>You must choose one item");
@@ -122,12 +137,13 @@
     function ajax(newVoucherDetails) {
         $.ajax({
                  type: "POST",
-                 url: "/Clerk/CreateVoucher",
+                 url: "@Url.Action("CreateVoucher", "Clerk")",
                  data: JSON.stringify(newVoucherDetails),
                  contentType: "application/json; charset=utf-8",
                  dataType: "json",
-                 success: function () {
-                     var url = '@Url.Action("AdjustmentVoucher", "Clerk")';
+                 success: function (data) {
+                     var url = '@Url.Action("VoucherDetails", "Clerk")' + "/" +data;
+                     console.log(url);
                      window.location.href = url;
                  }
              });

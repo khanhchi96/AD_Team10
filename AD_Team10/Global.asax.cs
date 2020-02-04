@@ -9,6 +9,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using AD_Team10.ViewModels;
+using System.Web.Http;
+using AD_Team10.App_Start;
 
 namespace AD_Team10
 {
@@ -16,7 +18,10 @@ namespace AD_Team10
     {
         protected void Application_Start()
         {
+            GlobalConfiguration.Configuration.Formatters.JsonFormatter.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            GlobalConfiguration.Configuration.Formatters.Remove(GlobalConfiguration.Configuration.Formatters.XmlFormatter);
             AreaRegistration.RegisterAllAreas();
+            GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
@@ -37,6 +42,7 @@ namespace AD_Team10
                 principal.FirstName = serializeModel.FirstName;
                 principal.LastName = serializeModel.LastName;
                 principal.Role = serializeModel.Role;
+                principal.UserID = serializeModel.UserID;
 
                 HttpContext.Current.User = principal;
             }

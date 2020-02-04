@@ -13,7 +13,7 @@ namespace AD_Team10.Migrations
         
         string IMigrationMetadata.Id
         {
-            get { return "202001181214205_Initial"; }
+            get { return "202002030721521_Initial"; }
         }
         
         string IMigrationMetadata.Source

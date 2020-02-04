@@ -1,10 +1,121 @@
-﻿
-@{
-    ViewBag.Title = "Index";
+﻿@using AD_Team10.Models;
+@{ 
+    var requisitionList = (List<Requisition>)ViewBag.requisitionList;
+    var voucherList = (List<AdjustmentVoucher>)ViewBag.voucherList;
+    var orderList = (List<PurchaseOrder>)ViewBag.orderList;
+    var stockList = (List<Item>)ViewBag.stock;
 }
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-<h2>This is Clerk page</h2>
-<p>
-    @Html.ActionLink("Logout", "Logout", "Home")
-</p>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>NEW REQUISITION</h3>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Department</th>
+                    <th>Collection Point</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                @foreach(var r in requisitionList)
+                {
+                    <tr>
+                        <td>@r.RequisitionID</td>
+                        <td>@r.RequisitionDate.ToString("dd/MM/yyyy")</td>
+                        <td>@r.Employee.Department.DepartmentName</td>
+                        <td>@r.Employee.Department.CollectionPoint.CollectionPointName</td>
+                        <td>@r.Status.ToString()</td>
+                        <td>
+                            @Html.ActionLink("View", "RequisitionDetail", "Clerk", new { id = r.RequisitionID }, new { @class = "view-detail" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "Requisition", "Clerk", new { @class = "view-more"})
+        </div>
+        <div class="col-lg-4 dashboard-panel-4">
+            <h3>ADJUSTMENT VOUCHER STATUS</h3>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Status</th>
+                    <th>Clerk Name</th>
+                    <th>Details</th>
+                </tr>
+                @foreach (var v in voucherList)
+                {
+                    <tr>
+                        <td>@v.AdjustmentVoucherID</td>
+                        <td>@v.AdjustmentDate.ToString("dd/MM/yyyy")</td>
+                        <td>@(v.Clerk.MiddleName == null ? (v.Clerk.FirstName + " " + v.Clerk.LastName)
+                                                         : (v.Clerk.FirstName + " " + v.Clerk.MiddleName + " " + v.Clerk.LastName))</td>
+                        <td>
+                            @Html.ActionLink("View", "VoucherDetails", "Clerk", new { id = v.AdjustmentVoucherID }, new { @class = "view-detail" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "AdjustmentVoucher", "Clerk", new { @class = "view-more" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 dashboard-panel-6">
+            <h3>NEW PURCHASE ORDER</h3>
+            <table class="table">
+                <tr>
+                    <th>ID</th>
+                    <th>Time</th>
+                    <th>Supplier</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                @foreach (var o in orderList)
+                {
+                    <tr>
+                        <td>@o.PurchaseOrderID</td>
+                        <td>@o.OrderDate.ToString("dd/MM/yyyy")</td>
+                        <td>@o.Supplier.SupplierName</td>
+                        <td>@o.OrderStatus.ToString()</td>
+                        <td>
+                            @Html.ActionLink("View", "PurchaseOrderDetail", "Clerk", new { id = o.PurchaseOrderID }, new { @class = "view-detail" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "PurchaseOrder", "Clerk", new { @class = "view-more" })
 
+        </div>
+        <div class="col-lg-6 dashboard-panel-6">
+            <h3>STOCK ALERT</h3>
+            <table class="table">
+                <tr>
+                    <th>Item Code</th>
+                    <th>Unit</th>
+                    <th>Quantity on hand</th>
+                    <th>Reorder Level</th>
+                    <th>Reorder Quantity</th>
+                </tr>
+                @foreach (var s in stockList)
+                {
+                    <tr>
+                        <td>@s.ItemID</td>
+                        <td>@s.UnitOfMeasure</td>
+                        <td class="@(s.UnitsInStock < s.ReorderLevel ? "red" : "green")">
+                            @s.UnitsInStock
+                        </td>
+                        <td>@s.ReorderLevel</td>
+                        <td>@s.ReorderQuantity</td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "Inventory", "Clerk", new { @class = "view-more" })
+        </div>
+    </div>
+    
+
+</div>

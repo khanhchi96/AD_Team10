@@ -4,12 +4,17 @@
     ViewBag.Title = "Adjustment Voucher Details";
 }
 
-<h2>Adjustment Voucher Details</h2>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+<h3>ADJUSTMENT VOUCHER DETAILS</h3>
 
 <div>
     <h4>Adjustment Voucher No @Html.DisplayFor(model => model.AdjustmentVoucherID)</h4>
     <hr />
-    <table>
+    <table class="table">
         <tr>
             <th> Item No </th>
             <th> Item Description </th>
@@ -32,7 +37,7 @@
                 }
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
-            <td class="reason">
+            <td>
                 @Html.DisplayFor(modelItem => item.Reason)
             </td>
         </tr>
@@ -42,10 +47,4 @@
 <p>
     @Html.ActionLink("Back to List", "AdjustmentVoucher")
 </p>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script>
-    $('document').ready(function () {
-        $(".reason").html($(".reason").text());
-    })
-</script>
+</div>

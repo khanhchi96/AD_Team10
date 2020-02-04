@@ -4,124 +4,128 @@
 
 @{
     ViewBag.Title = "Inventory";
-    string stockLevel = (string)ViewBag.stockLevel;
-    string sort = (string)ViewBag.sort;
     string searchStr = (string)ViewBag.searchStr;
 }
 
-<h2>Inventory</h2>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-<div class="filter">
-    <div class="search">
-        <b>Search:</b>
-        <input id="searchBox" value="@searchStr" placeholder="Search" />
+<div class="container-fluid body">
+    <h3>INVENTORY</h3>
+    <div class="filter-option">
+        <div class="search">
+            <input id="searchBox" value="@searchStr" placeholder="Search" />
+        </div>
+        <button id="clear">Clear</button>
+        <div class="sort">
+            <span>Sort by: </span>
+            <select name="sortOrder" id="sortOrder">
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "stockAsc", searchStr = searchStr})">
+                    Stock number low to high
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "stockDesc", searchStr = searchStr})">
+                    Stock high to low
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "reorderAsc", searchStr = searchStr})">
+                    Reorder level low to high
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "reorderDesc", searchStr = searchStr})">
+                    Reorder level high to low
+                </option>
+            </select>
+        </div>
+
+        <div class="filter">
+            <span>Filter by: </span>
+            <select name="stockLevel" id="stockLevel">
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "low", sort = ViewBag.sort, searchStr = searchStr})">
+                    Low Stock
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "enough", sort = ViewBag.sort, searchStr = searchStr})">
+                    Enough Stock
+                </option>
+            </select>
+        </div>
     </div>
-
-    <span>Filter by: </span>
-
-    <select name="stockLevel" id="stockLevel">
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "low", sort = sort, searchStr = searchStr})">
-            Low Stock
-        </option>
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "enough", sort = sort, searchStr = searchStr})">
-            Enough Stock
-        </option>
-    </select>
-
-    <select name="sortOrder" id="sortOrder">
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = stockLevel, sort = "stockAsc", searchStr = searchStr})">
-            Stock number low to high
-        </option>
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = stockLevel, sort = "stockDesc", searchStr = searchStr})">
-            Stock high to low
-        </option>
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = stockLevel, sort = "reorderAsc", searchStr = searchStr})">
-            Reorder level low to high
-        </option>
-        <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = stockLevel, sort = "reorderDesc", searchStr = searchStr})">
-            Reorder level high to low
-        </option>
-    </select>
-</div>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().UnitOfMeasure)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().UnitsInStock)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().ReorderLevel)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.First().ReorderQuantity)
-        </th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
+    <table class="table" id="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnitOfMeasure)
-            </td>
-            <td class=" @(item.UnitsInStock < item.ReorderLevel ? "red" : "green")">
-                @Html.DisplayFor(modelItem => item.UnitsInStock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReorderLevel)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ReorderQuantity)
-            </td>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().UnitOfMeasure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderQuantity)
+            </th>
         </tr>
-    }
 
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                </td>
+                <td class=" @(item.UnitsInStock < item.ReorderLevel ? "red" : "green")">
+                    @Html.DisplayFor(modelItem => item.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderQuantity)
+                </td>
+            </tr>
+        }
 
-<div class="pagedlist">
-    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </table>
 
-    @Html.PagedListPager(Model, page => Url.Action("AdjustmentVoucher",
-        new { page }))
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Inventory",
+            new { page }))
+    </div>
 </div>
 
-<style>
-    .green {
-        color: green;
-    }
-
-    .red {
-        color: red;
-    }
-</style>
 <script>
     $(document).ready(function () {
         onLoad();
-            $('#stockLevel').val("/Clerk/Inventory?stockLevel=" + '@ViewBag.stockLevel' + "&sort=" + '@ViewBag.sort');
-            $('#sortOrder').val("/Clerk/Inventory?stockLevel=" + '@ViewBag.stockLevel' + "&sort=" + '@ViewBag.sort');
-        });
+        var selectedItem = sessionStorage.getItem("SelectedItem");
+        $('#stockLevel').val(selectedItem);
+        $('#sortOrder').val(selectedItem);
+    });
+
+    $('#stockLevel').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedItem", this.value);
+    });
 
     $('#sortOrder').on('change', function () {
         location.href = this.value;
-    });
-    $('#stockLevel').on('change', function () {
-        location.href = this.value;
+        sessionStorage.setItem("SelectedItem", this.value);
     });
 
-
+    $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedItem", "");
+        location.href = '@Url.Action("Inventory", "Clerk")';
+    })
     function onLoad() {
         var searchBox = document.getElementById("searchBox");
         searchBox.addEventListener("keypress", function (e) {
@@ -148,7 +152,7 @@
                 document.close();
             }
         }
-        ajax.open("POST", "/Clerk/Inventory", true);
+        ajax.open("POST", "@Url.Action("Inventory", "Clerk")", true);
         ajax.setRequestHeader("Content-type", "application/json; charset=UTF-8");
         ajax.send(JSON.stringify(data));
     }

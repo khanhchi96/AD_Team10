@@ -15,6 +15,7 @@ namespace AD_Team10.Authentication
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Role { get; set; }
+        public int UserID { get; set; }
 
         #endregion
 
@@ -24,6 +25,7 @@ namespace AD_Team10.Authentication
             FirstName = user.StoreEmployee.FirstName;
             LastName = user.StoreEmployee.LastName;
             Role = user.Role.ToString();
+            UserID = user.StoreUserID;
         }
 
         public CustomMembershipUser(DepUser user) : base("CustomMembership", user.Username, user.DepEmployeeID, user.DepEmployee.Email, string.Empty, string.Empty, true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now)
@@ -32,6 +34,7 @@ namespace AD_Team10.Authentication
             FirstName = user.DepEmployee.FirstName;
             LastName = user.DepEmployee.LastName;
             Role = user.Role.ToString();
+            UserID = user.DepEmployeeID;
         }
     }
 }
