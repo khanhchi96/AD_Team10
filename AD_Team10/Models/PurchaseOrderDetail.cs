@@ -14,10 +14,7 @@ namespace AD_Team10.Models
         [Key, Column(Order = 1), ForeignKey("Item")]
         public int ItemID { get; set; }
         public int Quantity { get; set; }
-<<<<<<< HEAD
         public int QuantityReceived { get; set; }
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         public float Price { get; set; }
 
         public virtual PurchaseOrder PurchaseOrder { get; set; }
