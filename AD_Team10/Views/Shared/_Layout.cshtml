@@ -6,7 +6,6 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-<<<<<<< HEAD
     @Styles.Render("~/ Content/fontawesome")
     @*<script src="https://kit.fontawesome.com/1adf121cc7.js" crossorigin="anonymous"></script>*@
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
@@ -18,46 +17,18 @@
     <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>*@
 </head>
 <body style="margin-top: 110px">
-=======
-</head>
-<body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Logic University", "Index", "Home", new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                </ul>
-            </div>
-        </div>
-    </div>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-<<<<<<< HEAD
             <p>&copy; @DateTime.Now.Year - Logic University</p>
-=======
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         </footer>
     </div>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-<<<<<<< HEAD
-
-  
-
+    
     <script>
         $("li>a").on("click", function () {
             localStorage.setItem("currentUrl", $(this).attr("href"));
@@ -78,7 +49,3 @@
     </script>    
 </body >
 </html >
-=======
-</body>
-</html>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
