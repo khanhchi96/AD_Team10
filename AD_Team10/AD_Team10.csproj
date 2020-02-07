@@ -35,10 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-<<<<<<< HEAD
     <PlatformTarget>AnyCPU</PlatformTarget>
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -50,22 +47,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <Reference Include="ClosedXML, Version=0.94.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\ClosedXML.0.94.2\lib\net46\ClosedXML.dll</HintPath>
     </Reference>
     <Reference Include="DocumentFormat.OpenXml, Version=2.10.0.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
       <HintPath>..\packages\DocumentFormat.OpenXml.2.10.0\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
     </Reference>
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="ExcelNumberFormat, Version=1.0.3.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
       <HintPath>..\packages\ExcelNumberFormat.1.0.3\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
@@ -78,8 +71,6 @@
     <Reference Include="MathNet.Numerics, Version=4.9.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MathNet.Numerics.4.9.0\lib\net461\MathNet.Numerics.dll</HintPath>
     </Reference>
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -87,7 +78,6 @@
       <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.3\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-<<<<<<< HEAD
     <Reference Include="NumSharp.Core, Version=0.20.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\packages\NumSharp.0.20.5\lib\netstandard2.0\NumSharp.Core.dll</HintPath>
     </Reference>
@@ -136,13 +126,6 @@
       <HintPath>..\packages\System.Threading.Tasks.Dataflow.4.8.0\lib\netstandard2.0\System.Threading.Tasks.Dataflow.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DataVisualization" />
-=======
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Security" />
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -152,15 +135,12 @@
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="System.Web.Http, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.4\lib\net45\System.Web.Http.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Http.WebHost, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.4\lib\net45\System.Web.Http.WebHost.dll</HintPath>
     </Reference>
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Reference Include="System.Web.Mvc, Version=5.2.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
@@ -207,10 +187,7 @@
       <Private>True</Private>
       <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
     </Reference>
-<<<<<<< HEAD
     <Reference Include="WindowsBase" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -221,25 +198,18 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-<<<<<<< HEAD
     <Compile Include="App_Start\WebApiConfig.cs" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Compile Include="Authentication\CustomAuthorizeAttribute.cs" />
     <Compile Include="Authentication\CustomMembership.cs" />
     <Compile Include="Authentication\CustomMembershipUser.cs" />
     <Compile Include="Authentication\CustomPrincipal.cs" />
     <Compile Include="Authentication\CustomRole.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\AdjustmentVouchersController.cs" />
     <Compile Include="Controllers\Department\ActingHeadController.cs" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Compile Include="Controllers\Department\EmployeeController.cs" />
     <Compile Include="Controllers\Department\HeadController.cs" />
     <Compile Include="Controllers\Department\RepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-<<<<<<< HEAD
     <Compile Include="Controllers\Mobile\MobileController.cs" />
     <Compile Include="Controllers\Store\ClerkController.cs" />
     <Compile Include="Controllers\Store\ManagerController.cs" />
@@ -248,25 +218,13 @@
     <Compile Include="CustomMobileModels\CustomDisbursementList.cs" />
     <Compile Include="CustomMobileModels\CustomItem.cs" />
     <Compile Include="CustomMobileModels\CustomPurchaseOrder.cs" />
-=======
-    <Compile Include="Controllers\ItemController.cs" />
-    <Compile Include="Controllers\Store\ClerkController.cs" />
-    <Compile Include="Controllers\Store\ManagerController.cs" />
-    <Compile Include="Controllers\Store\SupervisorController.cs" />
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-<<<<<<< HEAD
     <Compile Include="Migrations\202002060600381_initial.cs" />
     <Compile Include="Migrations\202002060600381_initial.designer.cs">
       <DependentUpon>202002060600381_initial.cs</DependentUpon>
-=======
-    <Compile Include="Migrations\202001181214205_Initial.cs" />
-    <Compile Include="Migrations\202001181214205_Initial.designer.cs">
-      <DependentUpon>202001181214205_Initial.cs</DependentUpon>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
@@ -281,46 +239,34 @@
     <Compile Include="Models\PurchaseOrderDetail.cs" />
     <Compile Include="Models\Requisition.cs" />
     <Compile Include="Models\RequisitionDetail.cs" />
-<<<<<<< HEAD
     <Compile Include="Models\RetrievalList.cs" />
     <Compile Include="Models\RetrievalListDetail.cs" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Compile Include="Models\StoreEmployee.cs" />
     <Compile Include="Models\StoreUser.cs" />
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\SupplierItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\LoginView.cs" />
-<<<<<<< HEAD
     <Compile Include="ViewModels\ModelInput.cs" />
     <Compile Include="ViewModels\ModelOutput.cs" />
     <Compile Include="ViewModels\OrderReport.cs" />
     <Compile Include="ViewModels\RequisitionReport.cs" />
     <Compile Include="ViewModels\ReportByCategory.cs" />
     <Compile Include="ViewModels\ReportByTimeSeries.cs" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
-<<<<<<< HEAD
     <Content Include="Content\PagedList.css" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-<<<<<<< HEAD
     <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
     <Content Include="Scripts\jquery-3.3.1.min.js" />
@@ -348,14 +294,6 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-<<<<<<< HEAD
-=======
-    <Content Include="Views\Item\Create.cshtml" />
-    <Content Include="Views\Item\Delete.cshtml" />
-    <Content Include="Views\Item\Details.cshtml" />
-    <Content Include="Views\Item\Edit.cshtml" />
-    <Content Include="Views\Item\Index.cshtml" />
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Content Include="Views\Home\Login.cshtml" />
     <Content Include="Views\Home\AccessDenied.cshtml" />
     <Content Include="Views\Store\Clerk\Index.cshtml" />
@@ -364,7 +302,6 @@
     <Content Include="Views\Department\Employee\Index.cshtml" />
     <Content Include="Views\Department\Head\Index.cshtml" />
     <Content Include="Views\Department\Representative\Index.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Store\Clerk\Inventory.cshtml" />
     <Content Include="Views\Store\Clerk\AdjustmentVoucher.cshtml" />
     <Content Include="Views\Store\Clerk\CreateVoucher.cshtml" />
@@ -403,8 +340,6 @@
     <Content Include="Views\Department\Head\SuccessfulAssignActingHead.cshtml" />
     <Content Include="Views\Department\Head\SucessfulAssignRep.cshtml" />
     <Content Include="Views\Department\Head\SuccessfulCancelActingHead.cshtml" />
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -418,31 +353,21 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-<<<<<<< HEAD
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-=======
-    <None Include="packages.config" />
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
     <EmbeddedResource Include="Migrations\202002060600381_initial.resx">
       <DependentUpon>202002060600381_initial.cs</DependentUpon>
-=======
-    <EmbeddedResource Include="Migrations\202001181214205_Initial.resx">
-      <DependentUpon>202001181214205_Initial.cs</DependentUpon>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
-<<<<<<< HEAD
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\</OutputPath>
@@ -482,8 +407,6 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
