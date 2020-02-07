@@ -22,12 +22,8 @@ namespace AD_Team10.Models
         public string Designation { get; set; }
 
         public virtual Department Department { get; set; }
-
-<<<<<<< HEAD
-        public override string ToString()
-=======
+        
         public override String ToString()
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         {
             if (MiddleName != null) return FirstName + MiddleName + LastName;
             else return FirstName + LastName;
