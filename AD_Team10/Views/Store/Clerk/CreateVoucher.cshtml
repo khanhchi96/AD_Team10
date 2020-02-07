@@ -1,0 +1,152 @@
+﻿@using AD_Team10.Models;
+
+@{
+    ViewBag.Title = "Create Adjustment Voucher";
+    var voucherDetails = (List<AdjustmentVoucherDetail>)ViewBag.voucher;
+    var itemList = ViewBag.itemList;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+<div class="container-fluid body"> 
+<h3>NEW ADJUSTMENT VOUCHER</h3>
+<table class="table" id="voucherTable">
+        <tr>
+            <th>Item Code</th>
+            <th>Description</th>
+            <th>Quantity Adjusted</th>
+            <th>Reason</th>
+            <th></th>
+        </tr>
+    <tbody id="tbody">
+        <tr class="tblRow">
+            <td class="itemCode"></td>
+            <td>
+                @Html.DropDownList("Item Name", new SelectList(itemList, "ItemID", "Description"),
+                "Choose item", new{ @class = "itemName"})
+                 <span class="nameError"></span>
+                @*<select class="ui fluid search selection dropdown itemName">
+                    <option value="">Choose Item</option>
+                    @foreach (var i in itemList)
+                    {
+                        <option value="@i.ItemID">@i.Description</option>
+                    }
+
+                </select>*@
+            </td>
+            <td>
+                <select class="operator">
+                    <option>+</option>
+                    <option>-</option>
+                </select>
+                <input type="number" class="quantity" value="1" />
+            </td>
+            <td>
+                <select class="reason">
+                    <option>Lost item(s)</option>
+                    <option>Broken/expired item(s)</option>
+                    <option>Wrong check when receiving from suppliers</option>
+                    <option>Others</option>
+                </select>
+                <br />
+                <span class="otherReason">
+                    Specified: <input type='text' />
+                </span>
+                <span class="reasonError"></span>
+            </td>
+            <td> <a class="remove" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i></a></td>
+        </tr>
+    </tbody>
+</table>
+
+<div class="create">
+    <span class="glyphycon glyphicon-plus plus-sign"></span>
+    <div class="create-link">
+        <a href="javascript:void(0)" class="addItem">Add more item</a>
+    </div>
+</div>
+<input type="button" class="submitVoucher submit" value="Submit" />
+
+    
+<div class="back-to-list">
+    @Html.ActionLink("Back to List", "AdjustmentVoucher")
+</div>
+    </div>
+<script>
+
+    $(".addItem").on('click', function () {
+        var row = $('.tblRow').first().clone(true, true);
+        row.each(function () {
+            $(this).find('.itemCode').text("");
+            $(this).find('.quantity').val(1);
+            $(this).find('.otherReason').text("");
+            $(this).find('.error').text("");
+        })
+        $('#tbody').append(row);
+    })
+
+        $('body').on("change", ".itemName", function () {
+            $(this).parent().siblings(".itemCode").text($(this).find('option:selected').val());
+            $(this).siblings(".nameError").html("");
+        });
+
+    $("body").on("change", ".reason", function () {
+        $(this).siblings(".reasonError").html("");
+        if ($(this).val() == 'Others') {
+            $(this).siblings(".otherReason").show();
+        } else {
+            $(this).siblings(".otherReason").hide();
+        }
+    })
+
+    $("body").on("keydown", ".otherReason>input", function () {
+        $(this).parent().siblings(".reasonError").html("");
+    })
+
+    $("body").on("click", ".remove", function () {
+        if ($(".remove").length == 1) alert("Voucher must have at least 1 item")
+        else $(this).parent('td').parent('.tblRow').remove();
+    });
+
+     $(".submitVoucher").on("click", function () {
+         var newVoucherDetails = new Array();
+         var isValid = true;
+         $("#voucherTable #tbody TR").each(function () {
+             var row = $(this);
+             if (row.find(".itemName option:selected").text() == "Choose item") {
+                 row.find(".nameError").html("</br>You must choose one item");
+                 isValid = false;
+             }
+             else if (row.find(".reason option:selected").val() == 'Others' && row.find(".otherReason > input").val().trim() == "") {
+                 row.find(".reasonError").html("</br>You must specify the reason");
+                 isValid = false;
+             } else {
+                 var voucherDetail = {};
+                 voucherDetail.ItemID = row.find(".itemCode").text();
+                 voucherDetail.quantity = row.find(".operator").val() + row.find(".quantity").val();
+                 if (row.find(".reason").val() == "Others") {
+                     voucherDetail.reason = row.find(".otherReason > input").val();
+                 }else voucherDetail.reason = row.find(".reason").val()
+                 newVoucherDetails.push(voucherDetail);
+             }
+         });
+         if (isValid) ajax(newVoucherDetails);
+    });
+
+    function ajax(newVoucherDetails) {
+        $.ajax({
+                 type: "POST",
+                 url: "@Url.Action("CreateVoucher", "Clerk")",
+                 data: JSON.stringify(newVoucherDetails),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function (data) {
+                     var url = '@Url.Action("VoucherDetails", "Clerk")' + "/" +data;
+                     console.log(url);
+                     window.location.href = url;
+                 }
+             });
+    }
+
+</script>

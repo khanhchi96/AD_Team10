@@ -1,0 +1,20 @@
+﻿
+@{
+    var actingHead = ViewBag.actingHead;
+    var start = ViewBag.startDate;
+    var end = ViewBag.endDate;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>ASSIGN ACTING HEAD</h3>
+
+            <p>You have successfully assigned <b>@actingHead</b> as the acting head from @start to @end.</p>
+        </div>
+    </div>
+</div>

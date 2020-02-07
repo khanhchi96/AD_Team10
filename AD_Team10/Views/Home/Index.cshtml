@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div>
+    @Html.ActionLink(
+    "Department Login",
+    "Login",
+    "Home",
+    new { userType = "Department"},
+    null)
+
+    @Html.ActionLink(
+    "Store Login",
+    "Login",
+    "Home",
+    new { userType = "Store"},
+    null)
+</div>

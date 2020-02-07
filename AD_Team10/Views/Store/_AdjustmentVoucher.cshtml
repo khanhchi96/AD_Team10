@@ -1,0 +1,68 @@
+﻿@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
+
+@if (Model == null || !Model.Any())
+{
+    <p> There is no pending adjustment voucher</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>
+                Clerk
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdjustmentDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remark)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+        <tr>
+            @if (item.Clerk.MiddleName == null)
+            {
+                <td>
+                    @Html.DisplayFor(modelItem => item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                </td>
+            }
+            else
+            {
+                <td>
+                    @Html.DisplayFor(modelItem=> item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.MiddleName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.AdjustmentDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remark)
+            </td>
+            <td>
+                <a href=@Url.Action("ApproveVoucher", new { voucherId = item.AdjustmentVoucherID}) class="approve action">
+                    Approve
+                </a>
+
+                <a href=@Url.Action("RejectVoucher", new { voucherId = item.AdjustmentVoucherID}) class="reject action">
+                    Reject
+                </a>
+
+                <a href=@Url.Action("Details", new { voucherId = item.AdjustmentVoucherID})>
+                    Detail
+                </a>
+
+            </td>
+        </tr>
+        }
+
+    </table>
+}

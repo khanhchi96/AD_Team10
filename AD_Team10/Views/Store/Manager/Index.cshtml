@@ -1,0 +1,24 @@
+﻿@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/_SupervisorManagerNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>ADJUSTMENT VOUCHER</h3>
+    <div id="body">
+        @Html.Partial("~/Views/Store/_AdjustmentVoucher.cshtml", Model)
+    </div>
+</div>
+    <script>
+    $(".action").click(function (e) {
+
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    $("#body").load("@Url.Action("Partial", "Manager")");
+                }
+            });
+        });
+    </script>

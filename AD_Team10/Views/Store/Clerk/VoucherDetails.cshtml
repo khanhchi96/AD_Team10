@@ -1,0 +1,20 @@
+﻿@model AD_Team10.Models.AdjustmentVoucher
+
+@{
+    ViewBag.Title = "Adjustment Voucher Details";
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+<h3>ADJUSTMENT VOUCHER DETAILS</h3>
+
+<div>
+   @Html.Partial("~/Views/Store/_AdjustmentVoucherDetail.cshtml", Model)
+</div>
+<p>
+    @Html.ActionLink("Back to List", "AdjustmentVoucher")
+</p>
+</div>

@@ -1,0 +1,36 @@
+﻿
+@{
+    var actingHead = ViewBag.actingHead;
+    var start = ViewBag.startDate;
+    var end = ViewBag.endDate;
+    var actingHeadID = ViewBag.actingHeadID;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>CANCEL ACTING HEAD</h3>
+            <p></p>
+
+            @if (actingHeadID != 0)
+            {
+                <b>Current Acting Head:</b>
+                <div>@actingHead (@start - @end)</div>
+
+                using (Html.BeginForm("SuccessfulCancelActingHead", "Head", FormMethod.Post))
+                {
+                    <p></p>
+                    <p><input type="submit" name="cancel" value="Confirm Cancel" /></p>
+                }
+            }
+            else
+            {
+                @actingHead
+            }
+        </div>
+    </div>
+</div>

@@ -1,0 +1,159 @@
+﻿@model PagedList.IPagedList<AD_Team10.Models.Item>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Inventory";
+    string searchStr = (string)ViewBag.searchStr;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>INVENTORY</h3>
+    <div class="filter-option">
+        <div class="search">
+            <input id="searchBox" value="@searchStr" placeholder="Search" />
+        </div>
+        <button id="clear">Clear</button>
+        <div class="sort">
+            <span>Sort by: </span>
+            <select name="sortOrder" id="sortOrder">
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "stockAsc", searchStr = searchStr})">
+                    Stock number low to high
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "stockDesc", searchStr = searchStr})">
+                    Stock high to low
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "reorderAsc", searchStr = searchStr})">
+                    Reorder level low to high
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = ViewBag.stockLevel, sort = "reorderDesc", searchStr = searchStr})">
+                    Reorder level high to low
+                </option>
+            </select>
+        </div>
+
+        <div class="filter">
+            <span>Filter by: </span>
+            <select name="stockLevel" id="stockLevel">
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "low", sort = ViewBag.sort, searchStr = searchStr})">
+                    Low Stock
+                </option>
+                <option value="@Url.Action("Inventory", "Clerk", new { stockLevel = "enough", sort = ViewBag.sort, searchStr = searchStr})">
+                    Enough Stock
+                </option>
+            </select>
+        </div>
+    </div>
+    <table class="table" id="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().UnitOfMeasure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().UnitsInStock)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderQuantity)
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                </td>
+                <td class=" @(item.UnitsInStock < item.ReorderLevel ? "red" : "green")">
+                    @Html.DisplayFor(modelItem => item.UnitsInStock)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderQuantity)
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Inventory",
+            new { page }))
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        onLoad();
+        var selectedItem = sessionStorage.getItem("SelectedItem");
+        $('#stockLevel').val(selectedItem);
+        $('#sortOrder').val(selectedItem);
+    });
+
+    $('#stockLevel').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedItem", this.value);
+    });
+
+    $('#sortOrder').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedItem", this.value);
+    });
+
+    $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedItem", "");
+        location.href = '@Url.Action("Inventory", "Clerk")';
+    })
+    function onLoad() {
+        var searchBox = document.getElementById("searchBox");
+        searchBox.addEventListener("keypress", function (e) {
+            var key = e.which || e.keyCode;
+            if (key === 13) {
+                var data = { searchStr: searchBox.value };
+                doPOST(data);
+            }
+
+        });
+        if (window.location.href.indexOf('page_y') != -1) {
+            var match = window.location.href.split('?')[1].split("&")[0].split("=");
+            document.getElementsByTagName("body")[0].scrollTop = match[1];
+        }
+    }
+
+
+    function doPOST(data) {
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState == 4) {
+                document.open();
+                document.write(ajax.response);
+                document.close();
+            }
+        }
+        ajax.open("POST", "@Url.Action("Inventory", "Clerk")", true);
+        ajax.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+        ajax.send(JSON.stringify(data));
+    }
+</script>

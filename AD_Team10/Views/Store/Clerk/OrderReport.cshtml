@@ -1,0 +1,122 @@
+﻿@using AD_Team10.Models;
+@{
+    ViewBag.Title = "OrderReport";
+    var categories = (List<Category>)ViewBag.categories;
+
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>ORDER REPORT</h3>
+    <div class="filter-option">
+        <div class="filter">
+            Comparison period
+            <select id="timeRange">
+                <option value="3" selected="selected">Last 3 months</option>
+                <option value="6">Last 6 months</option>
+                <option value="9">Last 9 months</option>
+                <option value="12">Last 12 months</option>
+            </select>
+        </div>
+        <div class="filter">
+            Choose month <input type="month" id="endDate" min="2019-01" />
+        </div>
+    </div>
+    <div class="ui form">
+        <div class="inline field">
+            <label>Select Categories</label>
+            <select name="categories" multiple="" class="label ui selection fluid dropdown" id="categoryList">
+                <option value="">All</option>
+                @foreach (var c in categories)
+                {
+                    <option value="@c.CategoryId">@c.CategoryName</option>
+                }
+
+            </select>
+        </div>
+    </div>
+
+    <br><br>
+
+
+    @*<button class="ui button">
+            Clear Filters
+        </button>*@
+    <div>
+    <button class="generate submit">
+        Generate Report
+    </button>
+    </div>
+
+    <div id="report">
+        @Html.Partial("~/Views/Store/Clerk/_Report.cshtml")
+    </div>
+</div>
+<script>
+
+    $(document).ready(function () {
+        var d = new Date();
+        var m = d.getMonth() + 1;
+        var month;
+        if (m < 10) month = "0" + m;
+        else month = m.toString();
+        var year = d.getFullYear();
+        $("#endDate").val(year + "-" + month);
+    })
+
+    $('.label.ui.dropdown')
+        .dropdown();
+
+    $('.no.label.ui.dropdown')
+        .dropdown({
+            useLabels: false
+        });
+
+    $('.ui.button').on('click', function () {
+        $('.ui.dropdown').dropdown('restore defaults')
+    })
+
+
+    $('.generate').on('click', function () {
+        var range = $("#timeRange :selected").val();
+        var date1 = new Date($('#endDate').val());
+        var startDate = new Date(date1.setMonth(date1.getMonth() - range + 1));
+        var date2 = new Date($('#endDate').val());
+        var endDate = new Date(date2.setMonth(date2.getMonth() + 1));
+        var categoryList = new Array();
+        var departmentList = new Array();
+        $('#categoryList :selected').each(function () {
+            categoryList.push($(this).val())
+        });
+
+        var report = {};
+        report.startDate = startDate.toISOString();
+        report.endDate = endDate.toISOString();
+        report.categoryList = categoryList;
+
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("OrderReport", "Clerk")",
+            data: JSON.stringify(report),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function () {
+                $("#report").load("@Url.Action("ShowOrderReport", "Clerk")");
+
+            }
+        });
+    })
+
+</script>
+
+
+
+
+
+
+
+
