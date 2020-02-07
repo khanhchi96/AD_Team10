@@ -3,14 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+<<<<<<< HEAD
 using AD_Team10.Models;
 using AD_Team10.DAL;
+=======
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
 
 namespace AD_Team10.Controllers.Department
 {
     [Authorize(Roles = "HEAD")]
     public class HeadController : Controller
     {
+<<<<<<< HEAD
         private DBContext db = new DBContext();
 
         public ActionResult Index()
@@ -489,6 +493,11 @@ namespace AD_Team10.Controllers.Department
         public Requisition FindRequisitionByReqID(int reqID)
         {
             return db.Requisitions.Where(x => x.RequisitionID == reqID).First();
+=======
+        public ActionResult Index()
+        {
+            return View("~/Views/Department/Head/Index.cshtml");
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         }
     }
 }

@@ -1,7 +1,10 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+<<<<<<< HEAD
     background-color: #f1f1f1 !important;
+=======
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -23,6 +26,7 @@ select,
 textarea {
     max-width: 280px;
 }
+<<<<<<< HEAD
 
 div, p, span, a, input, select, option, h1, h2, h3, h4, h5, h6, button{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif!important;
@@ -305,3 +309,5 @@ h3, h4{
     width: 64.67%;
 }
 /*Steph*/
+=======
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b

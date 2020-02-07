@@ -14,6 +14,7 @@ namespace AD_Team10.ViewModels
         [Required]
         [Display(Name = "Password")]
         public string Password { get; set; }
+<<<<<<< HEAD
         public string UserType { get; set; }
     }
 
@@ -25,4 +26,9 @@ namespace AD_Team10.ViewModels
     //    public string RoleName { get; set; }
 
     //}
+=======
+        [Display(Name = "Remember Me")]
+        public bool RememberMe { get; set; }
+    }
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
 }

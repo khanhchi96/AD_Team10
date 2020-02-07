@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+<<<<<<< HEAD
 using AD_Team10.Models;
 using AD_Team10.DAL;
 
@@ -34,6 +35,16 @@ namespace AD_Team10.Controllers.Department
 
             ViewBag.role = currentRole;
 
+=======
+
+namespace AD_Team10.Controllers.Department
+{
+    [Authorize(Roles = "EMPLOYEE")]
+    public class EmployeeController : Controller
+    {
+        public ActionResult Index()
+        {
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
             return View("~/Views/Department/Employee/Index.cshtml");
         }
     }

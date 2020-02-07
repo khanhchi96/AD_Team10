@@ -18,11 +18,14 @@ namespace AD_Team10.Models
         public string Gender { get; set; }
         public string Email { get; set; }
         public string Designation { get; set; }
+<<<<<<< HEAD
 
         public override string ToString()
         {
             if (MiddleName != null) return FirstName + " " + MiddleName + " " + LastName;
             else return FirstName + " " + LastName;
         }
+=======
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     }
 }

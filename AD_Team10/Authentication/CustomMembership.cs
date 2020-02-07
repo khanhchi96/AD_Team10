@@ -41,12 +41,36 @@ namespace AD_Team10.Authentication
             }
         }
 
+<<<<<<< HEAD
+=======
+        /// <summary>  
+        ///   
+        /// </summary>  
+        /// <param name="username"></param>  
+        /// <param name="password"></param>  
+        /// <param name="email"></param>  
+        /// <param name="passwordQuestion"></param>  
+        /// <param name="passwordAnswer"></param>  
+        /// <param name="isApproved"></param>  
+        /// <param name="providerUserKey"></param>  
+        /// <param name="status"></param>  
+        /// <returns></returns>  
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         public override MembershipUser CreateUser(string username, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
         {
             throw new NotImplementedException();
         }
 
+<<<<<<< HEAD
  
+=======
+        /// <summary>  
+        ///   
+        /// </summary>  
+        /// <param name="username"></param>  
+        /// <param name="userIsOnline"></param>  
+        /// <returns></returns>  
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         public override MembershipUser GetUser(string username, bool userIsOnline)
         {
             using (DBContext dbContext = new DBContext())

@@ -17,6 +17,10 @@
 
         protected override void Seed(AD_Team10.DAL.DBContext context)
         {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
             context.CollectionPoints.AddOrUpdate(c => c.CollectionPointID,
                 new CollectionPoint { CollectionPointID = 1, CollectionPointName = "Stationery Store - Administration Building" },
                 new CollectionPoint { CollectionPointID = 2, CollectionPointName = "Management School" },
@@ -41,6 +45,7 @@
                     Email = "billgates@gmail.com",
                     Designation = "Lecturer",
                     Phone = "99996666"
+<<<<<<< HEAD
                 },
                 new DepEmployee
                 {
@@ -81,6 +86,12 @@
                 new DepUser { DepUserID = 2, Username = "wang.yibo", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 2 },
                 new DepUser { DepUserID = 3, Username = "angela.baby", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 3 },
                 new DepUser { DepUserID = 4, Username = "amy.santiago", Password = "12345678", Role = DepartmentRole.HEAD, DepEmployeeID = 4 });
+=======
+                });
+
+            context.DepUsers.AddOrUpdate(d => d.DepUserID,
+                new DepUser { DepUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 });
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
 
             context.StoreEmployees.AddOrUpdate(s => s.StoreEmployeeID,
                 new StoreEmployee { StoreEmployeeID = 1,  FirstName = "Esther", LastName = "Tan", Gender = "Female", Phone = "76548097", Email = "esthertan@gmail.com", Designation = "Clerk" },
@@ -92,6 +103,7 @@
                 new StoreUser { StoreUserID = 2, Username = "wang.yibo", Password = "12345678", Role = StoreRole.SUPERVISOR, StoreEmployeeID = 2 },
                 new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
+<<<<<<< HEAD
             context.Categories.AddOrUpdate(c => c.CategoryId,
                 new Category { CategoryId = 1, CategoryName = "Clip" },
                 new Category { CategoryId = 2, CategoryName = "Pencil" });
@@ -417,3 +429,8 @@
     }
 }
 
+=======
+        }
+    }
+}
+>>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
