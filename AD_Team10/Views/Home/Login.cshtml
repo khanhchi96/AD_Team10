@@ -7,11 +7,9 @@
 <h2>Login</h2>
 
 
-<<<<<<< HEAD
+
 @using (Html.BeginForm(null, null, FormMethod.Post))
-=======
-@using (Html.BeginForm(null, null, new { userType = ViewBag.UserType }, FormMethod.Post))
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
+
 {
     <h2>@ViewBag.UserType</h2>
     @Html.AntiForgeryToken()
@@ -36,21 +34,7 @@
             </div>
         </div>
 
-<<<<<<< HEAD
             @Html.HiddenFor(model => model.UserType, new { @Value = ViewBag.UserType })
-
-        
-=======
-        <div class="form-group">
-            @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.RememberMe)
-                    @Html.ValidationMessageFor(model => model.RememberMe, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
@@ -63,10 +47,3 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-<<<<<<< HEAD
-=======
-
-<script src="~/Scripts/jquery-1.10.2.min.js"></script>
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
