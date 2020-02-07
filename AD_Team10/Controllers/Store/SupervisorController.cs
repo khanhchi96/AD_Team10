@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-<<<<<<< HEAD
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -61,20 +60,5 @@ namespace AD_Team10.Controllers.Store
             }
             return View("~/Views/Store/Supervisor/VoucherDetails.cshtml", adjustmentVoucher);
         }
-
-=======
-using System.Web;
-using System.Web.Mvc;
-
-namespace AD_Team10.Controllers.Store
-{
-    [Authorize(Roles = "SUPERVISOR")]
-    public class SupervisorController : Controller
-    {
-        public ActionResult Index()
-        {
-            return View("~/Views/Store/Supervisor/Index.cshtml");
-        }
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     }
 }
