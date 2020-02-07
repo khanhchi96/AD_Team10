@@ -15,7 +15,7 @@ namespace AD_Team10.Controllers
     {
         public ActionResult Index()
         {
-<<<<<<< HEAD
+
             if (System.Web.HttpContext.Current.User.GetType() == typeof(RolePrincipal))
                 return View();
             else
@@ -24,9 +24,6 @@ namespace AD_Team10.Controllers
                 string controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
                 return RedirectToAction("Index", controller);
             }
-=======
-            return View();
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         }
 
         [HttpGet]
@@ -41,29 +38,17 @@ namespace AD_Team10.Controllers
         }
 
         [HttpPost]
-<<<<<<< HEAD
         public ActionResult Login(LoginView loginView)
-=======
-        public ActionResult Login(LoginView loginView, string userType)
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         {
             if (ModelState.IsValid)
             {
                 CustomMembership customMembership = new CustomMembership
                 {
-<<<<<<< HEAD
                     UserType = loginView.UserType
                 };
                 CustomRole customRole = new CustomRole
                 {
                     UserType = loginView.UserType
-=======
-                    UserType = userType
-                };
-                CustomRole customRole = new CustomRole
-                {
-                    UserType = userType
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
                 };
 
                 if (customMembership.ValidateUser(loginView.UserName, loginView.Password))
@@ -99,11 +84,7 @@ namespace AD_Team10.Controllers
             Response.Cookies.Add(cookie);
 
             FormsAuthentication.SignOut();
-<<<<<<< HEAD
             return RedirectToAction("Index", "Home", null);
-=======
-            return RedirectToAction("Login", "Account", null);
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         }
 
         public ActionResult AccessDenied()
