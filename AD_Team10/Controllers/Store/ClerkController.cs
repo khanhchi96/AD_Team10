@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-<<<<<<< HEAD
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -614,21 +613,5 @@ namespace AD_Team10.Controllers.Store
                 chart.Series[departments[i]].Points.DataBindXY(xValues, yValues);
             }
         }
-
-
-=======
-using System.Web;
-using System.Web.Mvc;
-
-namespace AD_Team10.Controllers.Store
-{
-    [Authorize(Roles = "CLERK")]
-    public class ClerkController : Controller
-    {
-        public ActionResult Index()
-        {
-            return View("~/Views/Store/Clerk/Index.cshtml");
-        }
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
     }
 }
