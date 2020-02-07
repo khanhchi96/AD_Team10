@@ -29,6 +29,8 @@ namespace AD_Team10.DAL
         public DbSet<StoreUser> StoreUsers { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<SupplierItem> SupplierItems { get; set; }
+        public DbSet<RetrievalList> RetrievalLists { get; set; }
+        public DbSet<RetrievalListDetail> RetrievalListDetails { get; set; }
   
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

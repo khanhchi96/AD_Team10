@@ -3,7 +3,7 @@
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class Initial : DbMigration
+    public partial class initial : DbMigration
     {
         public override void Up()
         {
@@ -156,15 +156,19 @@
                 c => new
                     {
                         RequisitionID = c.Int(nullable: false, identity: true),
+                        ApprovalDate = c.DateTime(nullable: false),
                         RequisitionDate = c.DateTime(nullable: false),
                         CompletedDate = c.DateTime(nullable: false),
                         Status = c.Int(),
                         Remark = c.String(),
                         EmployeeID = c.Int(nullable: false),
+                        RetrievalListID = c.Int(nullable: false),
                     })
                 .PrimaryKey(t => t.RequisitionID)
                 .ForeignKey("dbo.DepEmployees", t => t.EmployeeID, cascadeDelete: true)
-                .Index(t => t.EmployeeID);
+                .ForeignKey("dbo.RetrievalLists", t => t.RetrievalListID, cascadeDelete: true)
+                .Index(t => t.EmployeeID)
+                .Index(t => t.RetrievalListID);
             
             CreateTable(
                 "dbo.DepEmployees",
@@ -208,6 +212,35 @@
                 .PrimaryKey(t => t.CollectionPointID);
             
             CreateTable(
+                "dbo.RetrievalLists",
+                c => new
+                    {
+                        RetrievalListID = c.Int(nullable: false, identity: true),
+                        StartDate = c.DateTime(nullable: false),
+                        EndDate = c.DateTime(nullable: false),
+                    })
+                .PrimaryKey(t => t.RetrievalListID)
+                .Index(t => new { t.StartDate, t.EndDate });
+            
+            CreateTable(
+                "dbo.RetrievalListDetails",
+                c => new
+                    {
+                        RetrievalListID = c.Int(nullable: false),
+                        DepartmentID = c.Int(nullable: false),
+                        ItemID = c.Int(nullable: false),
+                        Quantity = c.Int(nullable: false),
+                        QuantityReceived = c.Int(nullable: false),
+                    })
+                .PrimaryKey(t => new { t.RetrievalListID, t.DepartmentID, t.ItemID })
+                .ForeignKey("dbo.Departments", t => t.DepartmentID, cascadeDelete: true)
+                .ForeignKey("dbo.Items", t => t.ItemID, cascadeDelete: true)
+                .ForeignKey("dbo.RetrievalLists", t => t.RetrievalListID, cascadeDelete: true)
+                .Index(t => t.RetrievalListID)
+                .Index(t => t.DepartmentID)
+                .Index(t => t.ItemID);
+            
+            CreateTable(
                 "dbo.DepUsers",
                 c => new
                     {
@@ -243,6 +276,10 @@
             DropForeignKey("dbo.DepUsers", "DepEmployeeID", "dbo.DepEmployees");
             DropForeignKey("dbo.AdjustmentVoucherDetails", "ItemID", "dbo.Items");
             DropForeignKey("dbo.RequisitionDetails", "RequisitionID", "dbo.Requisitions");
+            DropForeignKey("dbo.Requisitions", "RetrievalListID", "dbo.RetrievalLists");
+            DropForeignKey("dbo.RetrievalListDetails", "RetrievalListID", "dbo.RetrievalLists");
+            DropForeignKey("dbo.RetrievalListDetails", "ItemID", "dbo.Items");
+            DropForeignKey("dbo.RetrievalListDetails", "DepartmentID", "dbo.Departments");
             DropForeignKey("dbo.Requisitions", "EmployeeID", "dbo.DepEmployees");
             DropForeignKey("dbo.DepEmployees", "DepartmentID", "dbo.Departments");
             DropForeignKey("dbo.Departments", "CollectionPointID", "dbo.CollectionPoints");
@@ -257,8 +294,12 @@
             DropForeignKey("dbo.AdjustmentVouchers", "StoreEmployeeID", "dbo.StoreEmployees");
             DropIndex("dbo.StoreUsers", new[] { "StoreEmployeeID" });
             DropIndex("dbo.DepUsers", new[] { "DepEmployeeID" });
+            DropIndex("dbo.RetrievalListDetails", new[] { "ItemID" });
+            DropIndex("dbo.RetrievalListDetails", new[] { "DepartmentID" });
+            DropIndex("dbo.RetrievalListDetails", new[] { "RetrievalListID" });
             DropIndex("dbo.Departments", new[] { "CollectionPointID" });
             DropIndex("dbo.DepEmployees", new[] { "DepartmentID" });
+            DropIndex("dbo.Requisitions", new[] { "RetrievalListID" });
             DropIndex("dbo.Requisitions", new[] { "EmployeeID" });
             DropIndex("dbo.RequisitionDetails", new[] { "ItemID" });
             DropIndex("dbo.RequisitionDetails", new[] { "RequisitionID" });
@@ -273,6 +314,8 @@
             DropIndex("dbo.AdjustmentVoucherDetails", new[] { "VoucherID" });
             DropTable("dbo.StoreUsers");
             DropTable("dbo.DepUsers");
+            DropTable("dbo.RetrievalListDetails");
+            DropTable("dbo.RetrievalLists");
             DropTable("dbo.CollectionPoints");
             DropTable("dbo.Departments");
             DropTable("dbo.DepEmployees");

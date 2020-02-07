@@ -212,6 +212,10 @@ h3, h4{
     margin-bottom: 8px;
 }
 
+.otherReason{
+    display: none;
+}
+
 #stockLevel, #sortOrder, #searchBox, #filterClerk, #filterStatus,
 .itemName, .quantity, .operator, .reason, .otherReason>input, #timeRange, #endDate{
     border: none;

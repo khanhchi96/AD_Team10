@@ -204,21 +204,26 @@
     <Compile Include="Authentication\CustomMembershipUser.cs" />
     <Compile Include="Authentication\CustomPrincipal.cs" />
     <Compile Include="Authentication\CustomRole.cs" />
+    <Compile Include="Controllers\AdjustmentVouchersController.cs" />
     <Compile Include="Controllers\Department\EmployeeController.cs" />
     <Compile Include="Controllers\Department\HeadController.cs" />
     <Compile Include="Controllers\Department\RepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\Mobile\RequisitionController.cs" />
+    <Compile Include="Controllers\Mobile\MobileController.cs" />
     <Compile Include="Controllers\Store\ClerkController.cs" />
     <Compile Include="Controllers\Store\ManagerController.cs" />
     <Compile Include="Controllers\Store\SupervisorController.cs" />
+    <Compile Include="CustomMobileModels\CustomDepartment.cs" />
+    <Compile Include="CustomMobileModels\CustomDisbursementList.cs" />
+    <Compile Include="CustomMobileModels\CustomItem.cs" />
+    <Compile Include="CustomMobileModels\CustomPurchaseOrder.cs" />
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002030721521_Initial.cs" />
-    <Compile Include="Migrations\202002030721521_Initial.designer.cs">
-      <DependentUpon>202002030721521_Initial.cs</DependentUpon>
+    <Compile Include="Migrations\202002060600381_initial.cs" />
+    <Compile Include="Migrations\202002060600381_initial.designer.cs">
+      <DependentUpon>202002060600381_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
@@ -233,6 +238,8 @@
     <Compile Include="Models\PurchaseOrderDetail.cs" />
     <Compile Include="Models\Requisition.cs" />
     <Compile Include="Models\RequisitionDetail.cs" />
+    <Compile Include="Models\RetrievalList.cs" />
+    <Compile Include="Models\RetrievalListDetail.cs" />
     <Compile Include="Models\StoreEmployee.cs" />
     <Compile Include="Models\StoreUser.cs" />
     <Compile Include="Models\Supplier.cs" />
@@ -312,6 +319,17 @@
     </Content>
     <Content Include="Views\Store\Clerk\OrderReport.cshtml" />
     <Content Include="Views\Store\Clerk\_ClerkNavigation.cshtml" />
+    <Content Include="Views\AdjustmentVouchers\Create.cshtml" />
+    <Content Include="Views\AdjustmentVouchers\Delete.cshtml" />
+    <Content Include="Views\AdjustmentVouchers\Details.cshtml" />
+    <Content Include="Views\AdjustmentVouchers\Edit.cshtml" />
+    <Content Include="Views\AdjustmentVouchers\Index.cshtml" />
+    <Content Include="Views\Store\_AdjustmentVoucher.cshtml" />
+    <Content Include="Views\Store\_AdjustmentVoucherDetail.cshtml" />
+    <Content Include="Views\Store\Manager\VoucherDetails.cshtml" />
+    <Content Include="Views\Store\Supervisor\VoucherDetails.cshtml" />
+    <Content Include="Views\Store\_SupervisorManagerNavigation.cshtml" />
+    <Content Include="Views\Shared\_BasicInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -332,8 +350,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002030721521_Initial.resx">
-      <DependentUpon>202002030721521_Initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002060600381_initial.resx">
+      <DependentUpon>202002060600381_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -16,6 +16,8 @@ namespace AD_Team10.Models
         [Display(Name = "Requisition ID")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int RequisitionID { get; set; }
+        [Display(Name = "Approval Date")]
+        public DateTime ApprovalDate { get; set; }
         [Display(Name = "Requisition Date")]
         public DateTime RequisitionDate { get; set; }
         [Display(Name = "Completed Date")]
@@ -24,9 +26,12 @@ namespace AD_Team10.Models
         public string Remark { get; set; }
         [ForeignKey("Employee")]
         public int EmployeeID { get; set; }
+        [ForeignKey("RetrievalList")]
+        public int RetrievalListID { get; set; }
 
         public virtual DepEmployee Employee { get; set; }
-    
+        public virtual RetrievalList RetrievalList { get; set; }
+
         public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
     }
 }

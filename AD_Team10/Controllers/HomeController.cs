@@ -37,17 +37,17 @@ namespace AD_Team10.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(LoginView loginView, string userType)
+        public ActionResult Login(LoginView loginView)
         {
             if (ModelState.IsValid)
             {
                 CustomMembership customMembership = new CustomMembership
                 {
-                    UserType = userType
+                    UserType = loginView.UserType
                 };
                 CustomRole customRole = new CustomRole
                 {
-                    UserType = userType
+                    UserType = loginView.UserType
                 };
 
                 if (customMembership.ValidateUser(loginView.UserName, loginView.Password))

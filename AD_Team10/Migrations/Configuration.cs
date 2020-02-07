@@ -88,69 +88,113 @@
                 new Item { ItemID = 1, Description = "Clip 3/4", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 160 },
                 new Item { ItemID = 2, Description = "Clip 1/2", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 120 },
                 new Item { ItemID = 3, Description = "2B Pencil", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 2, UnitsInStock = 120 });
+            
+            context.RetrievalLists.AddOrUpdate(r => r.RetrievalListID,
+                new RetrievalList { RetrievalListID = 1, StartDate = DateTime.Parse("2019-10-05"), EndDate = DateTime.Parse("2019-10-11") },
+                new RetrievalList { RetrievalListID = 2, StartDate = DateTime.Parse("2019-10-12"), EndDate = DateTime.Parse("2019-10-18") },
+                new RetrievalList { RetrievalListID = 3, StartDate = DateTime.Parse("2019-10-19"), EndDate = DateTime.Parse("2019-10-25") },
+                new RetrievalList { RetrievalListID = 4, StartDate = DateTime.Parse("2019-10-26"), EndDate = DateTime.Parse("2019-11-01") },
+                new RetrievalList { RetrievalListID = 5, StartDate = DateTime.Parse("2019-11-02"), EndDate = DateTime.Parse("2019-11-08") },
+                new RetrievalList { RetrievalListID = 6, StartDate = DateTime.Parse("2019-11-09"), EndDate = DateTime.Parse("2019-11-15") },
+                new RetrievalList { RetrievalListID = 7, StartDate = DateTime.Parse("2019-11-16"), EndDate = DateTime.Parse("2019-11-22") },
+                new RetrievalList { RetrievalListID = 8, StartDate = DateTime.Parse("2019-11-23"), EndDate = DateTime.Parse("2019-11-29") },
+                new RetrievalList { RetrievalListID = 9, StartDate = DateTime.Parse("2019-11-30"), EndDate = DateTime.Parse("2019-12-06") },
+                new RetrievalList { RetrievalListID = 10, StartDate = DateTime.Parse("2019-12-07"), EndDate = DateTime.Parse("2019-12-13") },
+                new RetrievalList { RetrievalListID = 11, StartDate = DateTime.Parse("2019-12-14"), EndDate = DateTime.Parse("2019-12-20") },
+                new RetrievalList { RetrievalListID = 12, StartDate = DateTime.Parse("2019-12-21"), EndDate = DateTime.Parse("2019-11-27") },
+                new RetrievalList { RetrievalListID = 13, StartDate = DateTime.Parse("2019-12-28"), EndDate = DateTime.Parse("2020-01-03") },
+                new RetrievalList { RetrievalListID = 14, StartDate = DateTime.Parse("2020-01-04"), EndDate = DateTime.Parse("2020-01-10") },
+                new RetrievalList { RetrievalListID = 15, StartDate = DateTime.Parse("2020-01-11"), EndDate = DateTime.Parse("2020-01-17") },
+                new RetrievalList { RetrievalListID = 16, StartDate = DateTime.Parse("2020-01-18"), EndDate = DateTime.Parse("2020-01-24") },
+                new RetrievalList { RetrievalListID = 17, StartDate = DateTime.Parse("2020-01-25"), EndDate = DateTime.Parse("2020-01-31") },
+                new RetrievalList { RetrievalListID = 18, StartDate = DateTime.Parse("2020-02-01"), EndDate = DateTime.Parse("2020-02-07") },
+                new RetrievalList { RetrievalListID = 19, StartDate = DateTime.Parse("2020-02-08"), EndDate = DateTime.Parse("2020-02-14") },
+                new RetrievalList { RetrievalListID = 20, StartDate = DateTime.Parse("2020-02-15"), EndDate = DateTime.Parse("2020-02-21") },
+                new RetrievalList { RetrievalListID = 21, StartDate = DateTime.Parse("2020-02-22"), EndDate = DateTime.Parse("2020-02-28") },
+                new RetrievalList { RetrievalListID = 22, StartDate = DateTime.Parse("2020-02-29"), EndDate = DateTime.Parse("2020-03-06") },
+                new RetrievalList { RetrievalListID = 23, StartDate = DateTime.Parse("2020-03-07"), EndDate = DateTime.Parse("2020-03-14") },
+                new RetrievalList { RetrievalListID = 24, StartDate = DateTime.Parse("2020-03-15"), EndDate = DateTime.Parse("2019-03-21") }
+            );
+
             context.Requisitions.AddOrUpdate(r => r.RequisitionID,
                 new Requisition
                 {
                     RequisitionID = 1,
                     RequisitionDate = DateTime.Parse("2019-10-22"),
+                    ApprovalDate = DateTime.Parse("2019-10-23"),
                     CompletedDate = DateTime.Parse("2019-10-28"),
                     EmployeeID = 1,
+                    RetrievalListID = 4,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 2,
                     RequisitionDate = DateTime.Parse("2019-11-11"),
+                    ApprovalDate = DateTime.Parse("2019-11-12"),
                     CompletedDate = DateTime.Parse("2019-11-18"),
                     EmployeeID = 2,
+                    RetrievalListID = 7,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 3,
                     RequisitionDate = DateTime.Parse("2019-12-22"),
+                    ApprovalDate = DateTime.Parse("2019-12-23"),
                     CompletedDate = DateTime.Parse("2019-12-30"),
                     EmployeeID = 3,
+                    RetrievalListID = 13,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 4,
                     RequisitionDate = DateTime.Parse("2020-01-01"),
+                    ApprovalDate = DateTime.Parse("2020-01-02"),
                     CompletedDate = DateTime.Parse("2019-01-06"),
                     EmployeeID = 1,
+                    RetrievalListID = 13,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 5,
-                    RequisitionDate = DateTime.Parse("2019-01-10"),
-                    CompletedDate = DateTime.Parse("2019-01-13"),
+                    RequisitionDate = DateTime.Parse("2020-01-10"),
+                    ApprovalDate = DateTime.Parse("2020-01-11"),
+                    CompletedDate = DateTime.Parse("2020-01-13"),
                     EmployeeID = 3,
+                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 6,
-                    RequisitionDate = DateTime.Parse("2019-01-14"),
-                    CompletedDate = DateTime.Parse("2019-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-01-14"),
+                    ApprovalDate = DateTime.Parse("2020-01-15"),
+                    CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 2,
+                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 7,
-                    RequisitionDate = DateTime.Parse("2019-01-16"),
-                    CompletedDate = DateTime.Parse("2019-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-01-16"),
+                    ApprovalDate = DateTime.Parse("2020-01-17"),
+                    CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 3,
+                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
                 {
                     RequisitionID = 8,
-                    RequisitionDate = DateTime.Parse("2019-01-18"),
-                    CompletedDate = DateTime.Parse("2019-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-01-18"),
+                    ApprovalDate = DateTime.Parse("2020-01-19"),
+                    CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 2,
+                    RetrievalListID = 16,
                     Status = Status.Completed
                 });
 

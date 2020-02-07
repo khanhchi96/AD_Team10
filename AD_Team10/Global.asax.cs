@@ -39,8 +39,10 @@ namespace AD_Team10
                 CustomPrincipal principal = new CustomPrincipal(authTicket.Name);
 
                 principal.Username = serializeModel.Username;
+                principal.Password = serializeModel.Password;
                 principal.FirstName = serializeModel.FirstName;
                 principal.LastName = serializeModel.LastName;
+                principal.MiddleName = serializeModel.MiddleName;
                 principal.Role = serializeModel.Role;
                 principal.UserID = serializeModel.UserID;
 

@@ -23,7 +23,7 @@ namespace AD_Team10.Models
 
         public virtual Department Department { get; set; }
 
-        public override String ToString()
+        public override string ToString()
         {
             if (MiddleName != null) return FirstName + MiddleName + LastName;
             else return FirstName + LastName;

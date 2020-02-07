@@ -1,0 +1,36 @@
+﻿@model AD_Team10.Models.AdjustmentVoucher
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/_SupervisorManagerNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <div>
+        @Html.Partial("~/Views/Store/_AdjustmentVoucherDetail.cshtml", Model)
+    </div>
+
+    <a href=@Url.Action("ApproveVoucher", new { voucherId = Model.AdjustmentVoucherID}) class="approve action">
+        Approve
+    </a>
+
+    <a href=@Url.Action("RejectVoucher", new { voucherId = Model.AdjustmentVoucherID}) class="reject action">
+        Reject
+    </a>
+</div>
+    <script>
+
+    $(".action").click(function (e) {
+
+            e.preventDefault();
+            $.ajax({
+                url: $(this).attr("href"),
+                success: function () {
+                    window.location.href = "@Url.Action("Index", "Supervisor")";
+                }
+
+            });
+
+        });
+    </script>
+
+

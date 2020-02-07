@@ -6,8 +6,17 @@
     //if (ViewBag.reqReport != null) { report = (RequisitionReport)ViewBag.reqReport; }
     //else if (ViewBag.orderReport != null) { report = (OrderReport)ViewBag.orderReport; }
     //else { report = null; }
-    var diff = 0;
-    if (ViewBag.diff != null) { diff = (int)ViewBag.diff; }
+    int[] catSize = new int[0];
+    int[] rowSpan = new int[0];
+    if (ViewBag.catSize != null) {
+        catSize = (int[])ViewBag.catSize;
+        rowSpan = new int[catSize.Length];
+        rowSpan[0] = 0;
+        for (int i = 1; i < catSize.Length; i++)
+        {
+            rowSpan[i] = rowSpan[i - 1] + catSize[i-1];
+        }
+    }
 }
 
 @if (report != null)
@@ -25,19 +34,27 @@
 
             @for (int j = 0; j < Model.Rows.Count; j++)
             {
-                <tr>
+            <tr>
 
-
-                    @if (j % diff == 0)
+                @if (rowSpan.Contains(j))
+                {
+                    var index = Array.FindIndex(rowSpan, row => row == j);
+                    if (@catSize[index] > 1)
                     {
-                        <td rowspan="@diff">@Model.Rows[j].ItemArray[0].ToString()</td>
+                        <td rowspan=@catSize[index]>@Model.Rows[j].ItemArray[0].ToString()</td>
+                    }
+                    else
+                    {
+                        <td>@Model.Rows[j].ItemArray[0].ToString()</td>
                     }
 
-                    @for (int i = 1; i < Model.Rows[j].ItemArray.Length; i++)
-                    {
-                        <td>@Model.Rows[j].ItemArray[i].ToString()</td>
-                    }
-                </tr>
+                }
+
+                @for (int i = 1; i < Model.Rows[j].ItemArray.Length; i++)
+                {
+                    <td>@Model.Rows[j].ItemArray[i].ToString()</td>
+                }
+            </tr>
             }
         </tbody>
     </table>

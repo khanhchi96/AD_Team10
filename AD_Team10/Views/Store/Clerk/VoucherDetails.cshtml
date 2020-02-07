@@ -12,37 +12,7 @@
 <h3>ADJUSTMENT VOUCHER DETAILS</h3>
 
 <div>
-    <h4>Adjustment Voucher No @Html.DisplayFor(model => model.AdjustmentVoucherID)</h4>
-    <hr />
-    <table class="table">
-        <tr>
-            <th> Item No </th>
-            <th> Item Description </th>
-            <th> Quantity Adjusted </th>
-            <th> Reason</th>
-        </tr>
-     @foreach (var item in Model.AdjustmentVoucherDetails)
-     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.ItemID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.Description)
-            </td>
-            <td>
-                @if(item.Quantity > 0)
-                {
-                    <span>+</span>
-                }
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Reason)
-            </td>
-        </tr>
-     }
-    </table>
+   @Html.Partial("~/Views/Store/_AdjustmentVoucherDetail.cshtml", Model)
 </div>
 <p>
     @Html.ActionLink("Back to List", "AdjustmentVoucher")

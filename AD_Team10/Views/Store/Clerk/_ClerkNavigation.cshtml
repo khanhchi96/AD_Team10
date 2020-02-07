@@ -1,29 +1,8 @@
-﻿@using AD_Team10.Authentication;
-@{ 
-    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
-}
+﻿
 <div class="navbar navbar-inverse navbar-fixed-top">
-    <div class="info">
-        <div class="logo">
-            @Html.ActionLink("LU", "Index", "Clerk", new { @class = "short-name" })
-            @Html.ActionLink("Logic University", "Index", "Clerk", new { @class = "full-name" })
-        </div>
-
-        <div class="staff-info">
-            <div class="designation">
-                CLERK
-            </div>
-            <div class="staff-profile">
-                <span class="staff-name">
-                    Welcome, @(user.MiddleName == null ? (user.FirstName + " " + user.LastName)
-                                               : (user.FirstName + " " + user.MiddleName + " " + user.LastName))
-                </span>
-                    <span class="log-out">
-                    @Html.ActionLink("Log out", "LogOut", "Home")
-                </span>
-            </div>
-        </div>
-    </div>
+    
+        @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
+    
     <div class="container">
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">

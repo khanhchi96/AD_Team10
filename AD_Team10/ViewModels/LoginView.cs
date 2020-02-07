@@ -14,8 +14,7 @@ namespace AD_Team10.ViewModels
         [Required]
         [Display(Name = "Password")]
         public string Password { get; set; }
-        [Display(Name = "Remember Me")]
-        public bool RememberMe { get; set; }
+        public string UserType { get; set; }
     }
 
     //public class CustomSerializeModel

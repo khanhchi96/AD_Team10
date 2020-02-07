@@ -189,9 +189,11 @@ namespace AD_Team10.Controllers.Store
                 reqReport.DepartmentList = db.Departments.Select(d => d.DepartmentID).ToList();
             GetRequisitionData(reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt);
-            DataTable dt = GetTable(categories, out int diff, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+            
+
             ViewBag.report = reqReport;
-            ViewBag.diff = diff;
+            ViewBag.catSize = catSize;
             ViewBag.tableName = "Department requisition quantity by category from " + tablePeriod;
             return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
         }
@@ -202,46 +204,53 @@ namespace AD_Team10.Controllers.Store
             if (orderReport.CategoryList == null)
                 orderReport.CategoryList = db.Categories.Select(c => c.CategoryId).ToList();
             GetOrderData(orderReport, out string[] categories, out ReportByTimeSeries[] timeDt);
-            DataTable dt = GetTable(categories, out int diff, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
+            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
             ViewBag.report = orderReport;
-            ViewBag.diff = diff;
+            ViewBag.catSize = catSize;
             ViewBag.tableName = "Purchase order quantity by category from " + tablePeriod;
             return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
         }
 
-        public DataTable GetTable(string[] categories, out int numberOfRecords, out string tablePeriod,
+        public DataTable GetTable(string[] categories, out int[] catSize, out string tablePeriod,
                                     ReportByTimeSeries[] timeDt, string start, string end)
         {
             DateTime startDate = Convert.ToDateTime(start);
             DateTime endDate = Convert.ToDateTime(end);
-            numberOfRecords = ((endDate.Year - startDate.Year) * 12) + endDate.Month - startDate.Month;
-
+            catSize = new int[categories.Length];
             string[][] months = new string[categories.Length][];
             double[][] quantity = new double[categories.Length][];
+            List<Dictionary<string, double[]>> itemDataByMonth = new List<Dictionary<string, double[]>>();
+
             for (int i = 0; i < categories.Length; i++)
             {
-                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues);
+                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
+                    out Dictionary<string, double[]> dic);
                 months[i] = xValues;
                 quantity[i] = yValues;
-            }
-
-            tablePeriod = months[0][0] + " - " + months[0][months[0].Length - 1 - PREDICT_SIZE];
+                itemDataByMonth.Add(dic);
+                catSize[i] = dic.Count();
+            }             
+            tablePeriod = months[0][0] + " - " + months[0][months[0].Length - 1];
             DataTable dt = new DataTable("MyTable");
             dt.Columns.Add(new DataColumn("Category", typeof(string)));
-            dt.Columns.Add(new DataColumn("Quantity", typeof(double)));
-            dt.Columns.Add(new DataColumn("Month", typeof(string)));
-
-            for (int i = 0; i < categories.Length; i++)
+            dt.Columns.Add(new DataColumn("Item", typeof(string)));
+            for(int i=0; i<months[0].Length; i++)
             {
-                for (int j = 0; j < numberOfRecords; j++)
+                dt.Columns.Add(new DataColumn(months[0][i], typeof(double)));
+            }
+            for (int i = 0; i < itemDataByMonth.Count(); i++)
+            {
+                for(int j=0; j<itemDataByMonth[i].Count(); j++)
                 {
                     DataRow row = dt.NewRow();
                     row["Category"] = categories[i];
-                    row["Quantity"] = quantity[i][j];
-                    row["Month"] = months[i][j];
-                    dt.Rows.Add(row);
+                    row["Item"] = itemDataByMonth[i].ElementAt(j).Key;
+                    for(int k=0; k<months[0].Length; k++)
+                    {
+                        row[months[0][k]] = itemDataByMonth[i].ElementAt(j).Value[k];
+                    }
+                    dt.Rows.Add(row); 
                 }
-
             }
             return dt;
         }
@@ -251,26 +260,36 @@ namespace AD_Team10.Controllers.Store
             RequisitionReport reqReport = GetReqReport(report);
             GetRequisitionData(reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt);
-            DataTable dt = GetTable(categories, out int diff, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
             string fileName = "Requisition " + tablePeriod.Replace('/', '-');
-            ExportData(dt, fileName);
+            ExportData(dt, fileName, catSize, categories);
         }
 
         public void ExportOrderDataTable(string report)
         {
             OrderReport orderReport = GetOrderReport(report);
             GetOrderData(orderReport, out string[] categories, out ReportByTimeSeries[] timeDt);
-            DataTable dt = GetTable(categories, out int diff, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
+            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
             DateTime endDate = Convert.ToDateTime(orderReport.EndDate);
             string fileName = "PurchaseOrder " + tablePeriod.Replace('/', '-');
-            ExportData(dt, fileName);
+            ExportData(dt, fileName, catSize, categories);
         }
 
-        public void ExportData(DataTable dt, string fileName)
+        public void ExportData(DataTable dt, string fileName, int[] catSize, string[] categories)
         {
             HttpResponse response = System.Web.HttpContext.Current.Response;
             XLWorkbook wbook = new XLWorkbook();
-            wbook.Worksheets.Add(dt, "tab1");
+            var ws = wbook.Worksheets.Add("Sheet 1");
+            var tableWithData = ws.Cell(1, 1).InsertTable(dt.AsEnumerable(), false);
+            int startMerge = 2;
+            
+            for(int i=0; i<catSize.Length; i++)
+            {
+                int endMerge = startMerge + catSize[i] - 1;
+                ws.Cell("A" + startMerge).Value = categories[i];
+                ws.Range("A" + startMerge + ":A" + endMerge).Merge();
+                startMerge = (endMerge + 1);
+            }
             response.Clear();
             response.ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             response.AddHeader("content-disposition", "attachment;filename=\"" + fileName + ".xlsx\"");
@@ -442,25 +461,24 @@ namespace AD_Team10.Controllers.Store
 
             if (totalVariable == 0) return null;
 
-            for (int i = 0; i < (data.Length - totalVariable + 1); i++)
-            {
-                bool isAllZero = true;
-                for (int j = 0; j < totalVariable; j++)
-                {
-                    if (data[i + j] > 0) isAllZero = false;
-                }
-                if (isAllZero) data[i] = 0.00001;
-            }
             double[][] xValues = new double[data.Count() - totalVariable][];
             double[] yValues = new double[data.Count() - totalVariable];
             for (int i = 0; i < data.Count() - totalVariable; i++)
             {
                 xValues[i] = new double[totalVariable];
+                int numZero = 0;
                 for (int j = 0; j < totalVariable; j++)
                 {
                     xValues[i][j] = data[i + j];
+                    if (data[i + j] == 0) numZero++;
                 }
                 yValues[i] = data[i + totalVariable];
+                if (yValues[i] == 0) numZero++;
+                if (numZero > 1)
+                {
+                    xValues[i] = xValues[i].Select(r => r + 1).ToArray();
+                    yValues[i] = yValues[i] + 1;
+                }             
             }
 
             double[] c = Fit.MultiDim(
@@ -499,15 +517,8 @@ namespace AD_Team10.Controllers.Store
         {
             for (int i = 0; i < categories.Length; i++)
             {
-                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues);
-                double[] data = yValues.Take(yValues.Length - PREDICT_SIZE).ToArray();
-                double[] predictedQuantity = Predict(data);
-
-                for (int j = PREDICT_SIZE; j >= 1; j--)
-                {
-
-                    yValues[yValues.Length - j] = predictedQuantity[j - 1];
-                }
+                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
+                    out Dictionary<string, double[]> dic);
                 chart.Series.Add(new Series(categories[i]));
                 //chart.Series[categories[i]].IsValueShownAsLabel = true;
                 chart.Series[categories[i]].ChartType = chartType;
@@ -520,7 +531,7 @@ namespace AD_Team10.Controllers.Store
         }
 
         public void GetTimeRange(ReportByTimeSeries[] timeDt, string category, DateTime startDate, DateTime endDate,
-            out string[] xValues, out double[] yValues)
+            out string[] xValues, out double[] yValues, out Dictionary<string, double[]> dic)
         {
             var query = timeDt.Where(r => r.Key.Category == category)
                           .OrderBy(r => r.Key.Year).ThenBy(r => r.Key.Month);
@@ -542,6 +553,49 @@ namespace AD_Team10.Controllers.Store
             {
                 int keyIndex = Array.FindIndex(xValues, e => e.Equals(x[j]));
                 yValues[keyIndex] = y[j];
+            }
+            var item = db.Items.Where(t => t.Category.CategoryName.Equals(category))
+                               .Select(t => t.Description).ToList();
+
+            dic = new Dictionary<string, double[]>();
+            for (int j = 0; j < item.Count(); j++)
+            {
+
+                double[] itemQuantity = new double[xValues.Length];
+
+                for (int k = 0; k < (itemQuantity.Length); k++)
+                {
+                    string[] s = xValues[k].Replace("(predicted)", "").Split('/');
+                    int? month = Convert.ToInt32(s[0]);
+                    int? year = Convert.ToInt32(s[1]);
+                    string itemName = item[j];
+                    var query2 = db.RequisitionDetails.Where(r =>
+                               SqlFunctions.DatePart("month", r.Requisition.RequisitionDate) == month
+                               && SqlFunctions.DatePart("year", r.Requisition.RequisitionDate) == year
+                               && r.Item.Description.Equals(itemName)).ToList();
+                    double qty = 0;
+                    if (query2 != null) qty = query2.Select(r => r.Quantity).Sum();
+                    itemQuantity[k] = qty;
+                }
+
+                double[] data = itemQuantity.Take(itemQuantity.Length - PREDICT_SIZE).ToArray();
+                double[] predictedQuantity = Predict(data);
+                for (int l = PREDICT_SIZE; l >= 1; l--)
+                {
+
+                    itemQuantity[itemQuantity.Length - l] = predictedQuantity[l - 1];
+                }
+                dic.Add(item[j], itemQuantity);
+            }
+
+            for (int i = PREDICT_SIZE; i >= 1; i--)
+            {
+                double sum = 0;
+                for(int j=0; j < dic.Count(); j++)
+                {
+                    sum += dic.ElementAt(j).Value[yValues.Length - i];
+                }
+                yValues[yValues.Length - i] = sum;
             }
         }
 
