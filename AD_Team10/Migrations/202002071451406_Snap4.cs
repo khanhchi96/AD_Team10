@@ -48,7 +48,6 @@
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(7,42,60,60,7.00)");
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(7,78,80,80,2.00)");
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(8,62,50,50,6.00)");
-            Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(8,52,50,50,3.00)");
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(9,22,50,50,3.00)");
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(9,54,50,50,12.30)");
             Sql("INSERT INTO PurchaseOrderDetails(OrderID,ItemID,Quantity,QuantityReceived,Price) Values(10,63,50,50,8.50)");
