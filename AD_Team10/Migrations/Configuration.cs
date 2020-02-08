@@ -124,7 +124,6 @@
                     ApprovalDate = DateTime.Parse("2019-10-23"),
                     CompletedDate = DateTime.Parse("2019-10-28"),
                     EmployeeID = 1,
-                    RetrievalListID = 4,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -134,7 +133,6 @@
                     ApprovalDate = DateTime.Parse("2019-11-12"),
                     CompletedDate = DateTime.Parse("2019-11-18"),
                     EmployeeID = 2,
-                    RetrievalListID = 7,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -144,7 +142,6 @@
                     ApprovalDate = DateTime.Parse("2019-12-23"),
                     CompletedDate = DateTime.Parse("2019-12-30"),
                     EmployeeID = 3,
-                    RetrievalListID = 13,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -154,7 +151,6 @@
                     ApprovalDate = DateTime.Parse("2020-01-02"),
                     CompletedDate = DateTime.Parse("2019-01-06"),
                     EmployeeID = 1,
-                    RetrievalListID = 13,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -164,7 +160,6 @@
                     ApprovalDate = DateTime.Parse("2020-01-11"),
                     CompletedDate = DateTime.Parse("2020-01-13"),
                     EmployeeID = 3,
-                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -174,7 +169,6 @@
                     ApprovalDate = DateTime.Parse("2020-01-15"),
                     CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 2,
-                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -184,7 +178,6 @@
                     ApprovalDate = DateTime.Parse("2020-01-17"),
                     CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 3,
-                    RetrievalListID = 15,
                     Status = Status.Completed
                 },
                 new Requisition
@@ -194,7 +187,6 @@
                     ApprovalDate = DateTime.Parse("2020-01-19"),
                     CompletedDate = DateTime.Parse("2020-01-20"),
                     EmployeeID = 2,
-                    RetrievalListID = 16,
                     Status = Status.Completed
                 });
 
