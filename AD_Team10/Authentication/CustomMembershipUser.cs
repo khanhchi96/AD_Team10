@@ -24,19 +24,21 @@ namespace AD_Team10.Authentication
         public CustomMembershipUser(StoreUser user) : base("CustomMembership", user.Username, user.StoreEmployeeID, user.StoreEmployee.Email, string.Empty, string.Empty, true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now)
         {
             Username = user.Username;
+            Password = user.Password;
             FirstName = user.StoreEmployee.FirstName;
             LastName = user.StoreEmployee.LastName;
             Role = user.Role.ToString();
             UserID = user.StoreUserID;
         }
 
-        public CustomMembershipUser(DepUser user) : base("CustomMembership", user.Username, user.DepEmployeeID, user.DepEmployee.Email, string.Empty, string.Empty, true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now)
+        public CustomMembershipUser(DeptUser user) : base("CustomMembership", user.Username, user.DeptEmployeeID, user.DeptEmployee.Email, string.Empty, string.Empty, true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now)
         {
             Username = user.Username;
-            FirstName = user.DepEmployee.FirstName;
-            LastName = user.DepEmployee.LastName;
+            Password = user.Password;
+            FirstName = user.DeptEmployee.FirstName;
+            LastName = user.DeptEmployee.LastName;
             Role = user.Role.ToString();
-            UserID = user.DepEmployeeID;
+            UserID = user.DeptEmployeeID;
         }
     }
 }

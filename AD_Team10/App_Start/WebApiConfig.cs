@@ -13,6 +13,12 @@ namespace AD_Team10.App_Start
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
+                name: "Api1",
+                routeTemplate: "api/{controller}/{action}/{departmentId}/{itemId}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+            config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{action}/{id}",
                 defaults: new { id = RouteParameter.Optional }

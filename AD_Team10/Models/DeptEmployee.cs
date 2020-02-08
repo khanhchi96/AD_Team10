@@ -6,10 +6,10 @@ using System.Web;
 
 namespace AD_Team10.Models
 {
-    public class DepEmployee
+    public class DeptEmployee
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DepEmployeeID { get; set; }
+        public int DeptEmployeeID { get; set; }
         [ForeignKey("Department")]
         public int DepartmentID { get; set; }
         public string FirstName { get; set; }
@@ -25,8 +25,8 @@ namespace AD_Team10.Models
 
         public override string ToString()
         {
-            if (MiddleName != null) return FirstName + MiddleName + LastName;
-            else return FirstName + LastName;
+            if (MiddleName != null) return FirstName + " " + MiddleName + " " + LastName;
+            else return FirstName + " " + LastName;
         }
     }
 }

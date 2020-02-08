@@ -214,16 +214,20 @@
     <Compile Include="Controllers\Store\ManagerController.cs" />
     <Compile Include="Controllers\Store\SupervisorController.cs" />
     <Compile Include="CustomMobileModels\CustomDepartment.cs" />
+    <Compile Include="CustomMobileModels\CustomDeptEmployee.cs" />
     <Compile Include="CustomMobileModels\CustomDisbursementList.cs" />
     <Compile Include="CustomMobileModels\CustomItem.cs" />
     <Compile Include="CustomMobileModels\CustomPurchaseOrder.cs" />
+    <Compile Include="CustomMobileModels\CustomRequisition.cs" />
+    <Compile Include="CustomMobileModels\CustomRetrievalList.cs" />
+    <Compile Include="CustomMobileModels\CustomRetrievalListDetail.cs" />
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002060600381_initial.cs" />
-    <Compile Include="Migrations\202002060600381_initial.designer.cs">
-      <DependentUpon>202002060600381_initial.cs</DependentUpon>
+    <Compile Include="Migrations\202002080327376_initial.cs" />
+    <Compile Include="Migrations\202002080327376_initial.designer.cs">
+      <DependentUpon>202002080327376_initial.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
@@ -231,8 +235,8 @@
     <Compile Include="Models\Category.cs" />
     <Compile Include="Models\CollectionPoint.cs" />
     <Compile Include="Models\Department.cs" />
-    <Compile Include="Models\DepEmployee.cs" />
-    <Compile Include="Models\DepUser.cs" />
+    <Compile Include="Models\DeptEmployee.cs" />
+    <Compile Include="Models\DeptUser.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\PurchaseOrder.cs" />
     <Compile Include="Models\PurchaseOrderDetail.cs" />
@@ -350,8 +354,8 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002060600381_initial.resx">
-      <DependentUpon>202002060600381_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002080327376_initial.resx">
+      <DependentUpon>202002080327376_initial.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

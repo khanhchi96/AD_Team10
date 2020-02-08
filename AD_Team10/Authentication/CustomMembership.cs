@@ -31,7 +31,7 @@ namespace AD_Team10.Authentication
                 }
                 else if (UserType == "Department")
                 {
-                    var user = (from us in dbContext.DepUsers
+                    var user = (from us in dbContext.DeptUsers
                                 where string.Compare(username, us.Username, StringComparison.OrdinalIgnoreCase) == 0
                                 && string.Compare(password, us.Password, StringComparison.OrdinalIgnoreCase) == 0
                                 select us).FirstOrDefault();
@@ -63,7 +63,7 @@ namespace AD_Team10.Authentication
                 }
                 else if (UserType == "Department")
                 {
-                    var user = (from us in dbContext.DepUsers
+                    var user = (from us in dbContext.DeptUsers
                                 where string.Compare(username, us.Username, StringComparison.OrdinalIgnoreCase) == 0
                                 select us).FirstOrDefault();
 

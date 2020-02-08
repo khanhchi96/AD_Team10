@@ -31,10 +31,10 @@
                 new Department { DepartmentID = 1, DepartmentCode = "ENGL", DepartmentName = "English Department", CollectionPointID = 1 },
                 new Department { DepartmentID = 2, DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 }
             );
-            context.DepEmployees.AddOrUpdate(d => d.DepEmployeeID,
-                new DepEmployee
+            context.DeptEmployees.AddOrUpdate(d => d.DeptEmployeeID,
+                new DeptEmployee
                 {
-                    DepEmployeeID = 1,
+                    DeptEmployeeID = 1,
                     DepartmentID = 1,
                     FirstName = "Bill",
                     LastName = "Gates",
@@ -43,9 +43,9 @@
                     Designation = "Lecturer",
                     Phone = "99996666"
                 },
-                new DepEmployee
+                new DeptEmployee
                 {
-                    DepEmployeeID = 2,
+                    DeptEmployeeID = 2,
                     DepartmentID = 2,
                     FirstName = "Yibo",
                     LastName = "Wang",
@@ -54,9 +54,9 @@
                     Designation = "Lecturer",
                     Phone = "83198747"
                 },
-                new DepEmployee
+                new DeptEmployee
                 {
-                    DepEmployeeID = 3,
+                    DeptEmployeeID = 3,
                     DepartmentID = 1,
                     FirstName = "Angela",
                     LastName = "Baby",
@@ -64,12 +64,49 @@
                     Email = "angelababy@gmail.com",
                     Designation = "Lecturer",
                     Phone = "13889329"
+                },
+                new DeptEmployee
+                {
+                    DeptEmployeeID = 4,
+                    DepartmentID = 2,
+                    FirstName = "Selena",
+                    LastName = "Gomez",
+                    Gender = "Female",
+                    Email = "selenagomez@gmail.com",
+                    Designation = "Lecturer",
+                    Phone = "13889320"
+                },
+                new DeptEmployee
+                {
+                    DeptEmployeeID = 5,
+                    DepartmentID = 2,
+                    FirstName = "Kim",
+                    LastName = "Kadarshian",
+                    Gender = "Female",
+                    Email = "kimkadarshian@gmail.com",
+                    Designation = "Head",
+                    Phone = "13874320"
+                },
+                new DeptEmployee
+                {
+                    DeptEmployeeID = 6,
+                    DepartmentID = 1,
+                    FirstName = "Kylie",
+                    LastName = "Jenner",
+                    Gender = "Female",
+                    Email = "kyliejenner@gmail.com",
+                    Designation = "Head",
+                    Phone = "13889333"
                 });
 
-            context.DepUsers.AddOrUpdate(d => d.DepUserID,
-                new DepUser { DepUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 },
-                new DepUser { DepUserID = 2, Username = "wang.yibo", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 2 },
-                new DepUser { DepUserID = 3, Username = "angela.baby", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 3 });
+            context.DeptUsers.AddOrUpdate(d => d.DeptUserID,
+                new DeptUser { DeptUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DeptEmployeeID = 1 },
+                new DeptUser { DeptUserID = 2, Username = "wang.yibo", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DeptEmployeeID = 2 },
+                new DeptUser { DeptUserID = 3, Username = "angela.baby", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DeptEmployeeID = 3 },
+                new DeptUser { DeptUserID = 4, Username = "selena.gomez", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DeptEmployeeID = 4 },
+                new DeptUser { DeptUserID = 5, Username = "kim.kadarshian", Password = "12345678", Role = DepartmentRole.HEAD, DeptEmployeeID = 5 },
+                new DeptUser { DeptUserID = 6, Username = "kylie.jenner", Password = "12345678", Role = DepartmentRole.HEAD, DeptEmployeeID = 6 }
+                );
 
             context.StoreEmployees.AddOrUpdate(s => s.StoreEmployeeID,
                 new StoreEmployee { StoreEmployeeID = 1,  FirstName = "Esther", LastName = "Tan", Gender = "Female", Phone = "76548097", Email = "esthertan@gmail.com", Designation = "Clerk" },
@@ -120,82 +157,74 @@
                 new Requisition
                 {
                     RequisitionID = 1,
-                    RequisitionDate = DateTime.Parse("2019-10-22"),
-                    ApprovalDate = DateTime.Parse("2019-10-23"),
-                    CompletedDate = DateTime.Parse("2019-10-28"),
+                    RequisitionDate = DateTime.Parse("2020-02-01"),
+                    ApprovalDate = DateTime.Parse("2020-02-03"),
                     EmployeeID = 1,
-                    RetrievalListID = 4,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 2,
-                    RequisitionDate = DateTime.Parse("2019-11-11"),
-                    ApprovalDate = DateTime.Parse("2019-11-12"),
-                    CompletedDate = DateTime.Parse("2019-11-18"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 2,
-                    RetrievalListID = 7,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 3,
-                    RequisitionDate = DateTime.Parse("2019-12-22"),
-                    ApprovalDate = DateTime.Parse("2019-12-23"),
-                    CompletedDate = DateTime.Parse("2019-12-30"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 3,
-                    RetrievalListID = 13,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 4,
-                    RequisitionDate = DateTime.Parse("2020-01-01"),
-                    ApprovalDate = DateTime.Parse("2020-01-02"),
-                    CompletedDate = DateTime.Parse("2019-01-06"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 1,
-                    RetrievalListID = 13,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 5,
-                    RequisitionDate = DateTime.Parse("2020-01-10"),
-                    ApprovalDate = DateTime.Parse("2020-01-11"),
-                    CompletedDate = DateTime.Parse("2020-01-13"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 3,
-                    RetrievalListID = 15,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 6,
-                    RequisitionDate = DateTime.Parse("2020-01-14"),
-                    ApprovalDate = DateTime.Parse("2020-01-15"),
-                    CompletedDate = DateTime.Parse("2020-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 2,
-                    RetrievalListID = 15,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 7,
-                    RequisitionDate = DateTime.Parse("2020-01-16"),
-                    ApprovalDate = DateTime.Parse("2020-01-17"),
-                    CompletedDate = DateTime.Parse("2020-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 3,
-                    RetrievalListID = 15,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 },
                 new Requisition
                 {
                     RequisitionID = 8,
-                    RequisitionDate = DateTime.Parse("2020-01-18"),
-                    ApprovalDate = DateTime.Parse("2020-01-19"),
-                    CompletedDate = DateTime.Parse("2020-01-20"),
+                    RequisitionDate = DateTime.Parse("2020-02-08"),
+                    ApprovalDate = DateTime.Parse("2020-02-08"),
                     EmployeeID = 2,
-                    RetrievalListID = 16,
-                    Status = Status.Completed
+                    RetrievalListID = 19,
+                    Status = Status.Approved
                 });
 
             context.RequisitionDetails.AddOrUpdate(r => new { r.RequisitionID, r.ItemID },
@@ -203,115 +232,136 @@
                 {
                     RequisitionID = 1,
                     ItemID = 1,
-                    Quantity = 5,
-                    QuantityReceived = 5
+                    Quantity = 5
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 1,
                     ItemID = 2,
-                    Quantity = 7,
-                    QuantityReceived = 7
+                    Quantity = 7
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 1,
                     ItemID = 3,
-                    Quantity = 10,
-                    QuantityReceived = 10
+                    Quantity = 10
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 2,
                     ItemID = 1,
-                    Quantity = 3,
-                    QuantityReceived = 3
+                    Quantity = 3
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 3,
                     ItemID = 1,
-                    Quantity = 6,
-                    QuantityReceived = 6
+                    Quantity = 6
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 3,
                     ItemID = 2,
-                    Quantity = 5,
-                    QuantityReceived = 5
+                    Quantity = 5
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 3,
                     ItemID = 3,
-                    Quantity = 4,
-                    QuantityReceived = 4
+                    Quantity = 4
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 4,
                     ItemID = 1,
-                    Quantity = 8,
-                    QuantityReceived = 8
+                    Quantity = 8
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 4,
                     ItemID = 2,
-                    Quantity = 2,
-                    QuantityReceived = 2
+                    Quantity = 2
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 5,
                     ItemID = 1,
-                    Quantity = 9,
-                    QuantityReceived = 9
+                    Quantity = 9
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 5,
                     ItemID = 3,
-                    Quantity = 5,
-                    QuantityReceived = 5
+                    Quantity = 5
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 6,
                     ItemID = 1,
-                    Quantity = 7,
-                    QuantityReceived = 7
+                    Quantity = 7
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 7,
                     ItemID = 1,
-                    Quantity = 5,
-                    QuantityReceived = 5
+                    Quantity = 5
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 7,
                     ItemID = 2,
-                    Quantity = 7,
-                    QuantityReceived = 7
+                    Quantity = 7
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 8,
                     ItemID = 2,
-                    Quantity = 10,
-                    QuantityReceived = 10
+                    Quantity = 10
                 },
                 new RequisitionDetail
                 {
                     RequisitionID = 8,
                     ItemID = 3,
-                    Quantity = 5,
-                    QuantityReceived = 5
+                    Quantity = 5
                 }
                 );
+
+            context.RetrievalListDetails.AddOrUpdate(r => new { r.RetrievalListID, r.DepartmentID, r.ItemID },
+                new RetrievalListDetail
+                {
+                    RetrievalListID = 19,
+                    DepartmentID = 1,
+                    ItemID = 1,
+                    Quantity = 33
+                },
+                 new RetrievalListDetail
+                 {
+                     RetrievalListID = 19,
+                     DepartmentID = 1,
+                     ItemID = 2,
+                     Quantity = 21
+                 },
+                  new RetrievalListDetail
+                  {
+                      RetrievalListID = 19,
+                      DepartmentID = 1,
+                      ItemID = 3,
+                      Quantity = 19
+                  },
+                   new RetrievalListDetail
+                   {
+                       RetrievalListID = 19,
+                       DepartmentID = 2,
+                       ItemID = 1,
+                       Quantity = 10
+                   },
+                    new RetrievalListDetail
+                    {
+                        RetrievalListID = 19,
+                        DepartmentID = 2,
+                        ItemID = 3,
+                        Quantity = 5
+                    });
 
             context.Suppliers.AddOrUpdate(s => s.SupplierID,
                 new Supplier { SupplierID = 1, SupplierCode = "ALPA", SupplierName = "ALPHA Office Supplies" });
@@ -326,7 +376,7 @@
                     OrderDate = DateTime.Parse("2019-12-01"),
                     SupplierID = 1,
                     CompletedDate = DateTime.Parse("2019-12-07"),
-                    OrderStatus = OrderStatus.Completed
+                    OrderStatus = OrderStatus.Incompleted
                 },
                 new PurchaseOrder
                 {
@@ -334,7 +384,7 @@
                     OrderDate = DateTime.Parse("2019-12-07"),
                     SupplierID = 1,
                     CompletedDate = DateTime.Parse("2019-12-14"),
-                    OrderStatus = OrderStatus.Completed
+                    OrderStatus = OrderStatus.Incompleted
                 },
                 new PurchaseOrder
                 {
@@ -342,7 +392,7 @@
                     OrderDate = DateTime.Parse("2019-12-15"),
                     SupplierID = 1,
                     CompletedDate = DateTime.Parse("2019-12-21"),
-                    OrderStatus = OrderStatus.Completed
+                    OrderStatus = OrderStatus.Incompleted
                 }
                 );
 
@@ -351,35 +401,35 @@
                     OrderID = 1,
                     ItemID = 1,
                     Quantity = 120,
-                    QuantityReceived = 120,
+                    QuantityReceived = 20,
                 },
                 new PurchaseOrderDetail
                 {
                     OrderID = 1,
                     ItemID = 2,
                     Quantity = 140,
-                    QuantityReceived = 140,
+                    QuantityReceived = 40,
                 },
                 new PurchaseOrderDetail
                 {
                     OrderID = 2,
                     ItemID = 1,
                     Quantity = 150,
-                    QuantityReceived = 150,
+                    QuantityReceived = 90,
                 },
                 new PurchaseOrderDetail
                 {
                     OrderID = 2,
                     ItemID = 3,
                     Quantity = 120,
-                    QuantityReceived = 120,
+                    QuantityReceived = 100,
                 },
                 new PurchaseOrderDetail
                 {
                     OrderID = 3,
                     ItemID = 3,
                     Quantity = 180,
-                    QuantityReceived = 180,
+                    QuantityReceived = 120,
                 });
         }
     }

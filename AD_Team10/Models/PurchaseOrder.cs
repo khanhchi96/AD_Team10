@@ -22,9 +22,9 @@ namespace AD_Team10.Models
         [Display(Name = "Order Date")]
         public DateTime OrderDate { get; set; }
         [Display(Name = "Completed Date")]
-        public DateTime CompletedDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
         [Display(Name = "Status")]
-        public OrderStatus? OrderStatus { get; set; }
+        public OrderStatus OrderStatus { get; set; }
 
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }

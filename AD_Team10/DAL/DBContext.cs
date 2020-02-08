@@ -18,8 +18,8 @@ namespace AD_Team10.DAL
         public DbSet<Category> Categories { get; set; }
         public DbSet<CollectionPoint> CollectionPoints { get; set; }
         public DbSet<Department> Departments { get; set; }
-        public DbSet<DepEmployee> DepEmployees { get; set; }
-        public DbSet<DepUser> DepUsers { get; set; }
+        public DbSet<DeptEmployee> DeptEmployees { get; set; }
+        public DbSet<DeptUser> DeptUsers { get; set; }
         public DbSet<Item> Items { get; set; }
         public DbSet<PurchaseOrder> PurchaseOrders { get; set; }
         public DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using AD_Team10.Models;
 
 namespace AD_Team10.CustomMobileModels
 {
@@ -9,9 +10,8 @@ namespace AD_Team10.CustomMobileModels
     {
         public int DepartmentID { get; set; }
         public string DepartmentName { get; set; }
+        public int CollectionPointID { get; set; }
         public string CollectionPointName { get; set; }
-        public string RepName { get; set; }
-        public string RepEmail { get; set; }
-        public string RepPhone { get; set; }
+        public CustomDeptEmployee Representative { get; set; }
     }
 }

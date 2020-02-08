@@ -10,16 +10,16 @@ namespace AD_Team10.Models
     {
         EMPLOYEE, REPRESENTATIVE, HEAD
     }
-    public class DepUser
+    public class DeptUser
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DepUserID { get; set; }
+        public int DeptUserID { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public DepartmentRole Role { get; set; }
-        [ForeignKey("DepEmployee")]
-        public int DepEmployeeID { get; set; }
+        [ForeignKey("DeptEmployee")]
+        public int DeptEmployeeID { get; set; }
 
-        public virtual DepEmployee DepEmployee { get; set; }
+        public virtual DeptEmployee DeptEmployee { get; set; }
     }
 }
