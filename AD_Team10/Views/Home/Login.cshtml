@@ -4,45 +4,104 @@
     ViewBag.Title = "Login";
 }
 
-<h2>Login</h2>
+<style>
+    .navbar.navbar-inverse.navbar-fixed-top {
+        background-color: #f1f1f1 !important;
+        padding: 50px;
+        float: left;
+        font-size: 90px;
+        font-weight: 900;
+        padding-bottom: 20px !important;
+        color: #381272;
+        text-shadow: 2px 2px 4px #000000;
+    }
+
+    .navbar-inverse {
+        border-bottom-color: #381272 !important;
+        border-bottom-width: 20px !important;
+    }
+
+    .wrapper {
+        margin-top: 80px;
+        margin-bottom: 80px;
+    }
+
+    .form-signin {
+        max-width: 520px;
+        height: 450px;
+        padding: 15px 35px 40px;
+        margin: 0 auto;
+        background-color: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .user_login {
+        margin-top: 50px !important;
+        margin-bottom: 50px !important;
+    }
+
+    input[type="submit"] {
+        display: block;
+        width: 100%;
+        margin: auto;
+        background-color: #381272;
+        border: 1px solid #fff;
+        cursor: pointer;
+        color: white;
+        font-family: century gothic;
+        font-weight: 400;
+        font-size: 15px;
+        border-radius: 50%;
+        text-align: center;
+        padding: 15px !important;
+    }
+
+        input[type="submit"]:hover {
+            opacity: 0.8;
+        }
+
+        input[type="submit"]:active {
+            opacity: 0.6;
+        }
+</style>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    LU
+</div>
 
 
-@using (Html.BeginForm(null, null, FormMethod.Post))
-{
-    <h2>@ViewBag.UserType</h2>
-    @Html.AntiForgeryToken()
+<div class="wrapper">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-signin" }))
+    {
+        @Html.AntiForgeryToken()
+        <h3 style="font-family: century gothic; text-align:center;">Staionery System-@ViewBag.UserType User Login</h3>
 
-    <div class="form-horizontal">
-        <h4>LoginView</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group user_login">
+                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            <div class="form-group user_login">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-3" })
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
             </div>
-        </div>
-
             @Html.HiddenFor(model => model.UserType, new { @Value = ViewBag.UserType })
 
-        
-
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Log In" class="btn btn-default" />
-            </div>
+            <input type="submit" name="submit" value="LOG IN" />
         </div>
-    </div>
-}
+
+    }
+
+</div>
 
 <div>
     @Html.ActionLink("Back to List", "Index")

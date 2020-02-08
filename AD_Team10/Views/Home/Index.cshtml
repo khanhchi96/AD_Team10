@@ -2,18 +2,75 @@
     ViewBag.Title = "Home Page";
 }
 
-<div>
-    @Html.ActionLink(
-    "Department Login",
-    "Login",
-    "Home",
-    new { userType = "Department"},
-    null)
+<style>
 
-    @Html.ActionLink(
-    "Store Login",
-    "Login",
-    "Home",
-    new { userType = "Store"},
-    null)
+    .navbar.navbar-inverse.navbar-fixed-top {
+        background-color: #f1f1f1 !important;
+        padding: 50px;
+        float: left;
+        font-size: 90px;
+        font-weight: 900;
+        padding-bottom: 20px !important;
+        color: #381272;
+        text-shadow: 2px 2px 4px #000000;
+    }
+
+    .navbar-inverse {
+        border-bottom-color: #381272 !important;
+        border-bottom-width: 20px !important;
+    }
+
+    .welcome_info {
+        max-width: 100%;
+        overflow: hidden;
+        border-bottom-color: #c7c7c7 !important;
+        margin-top: 70px;
+    }
+
+    .choose_usertype {
+        margin-top: 100px;
+        text-align: center;
+    }
+
+    .user {
+        display: block;
+        width: 600px;
+        margin: auto;
+        margin-bottom: 80px !important;
+        background-color: #381272;
+    }
+
+    .user_link {
+        color: white;
+        font-size: 20px;
+    }
+</style>
+
+
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    LU
+</div>
+<div class="navbar welcome_info">
+    <h3>Welcome to the Logic University Stationery System</h3>
+</div>
+
+<div class="choose_usertype">
+    <div class="btn user">
+        @Html.ActionLink(
+        "Department User Login",
+        "Login",
+        "Home",
+        new { userType = "Department" },
+        new { @class = "user_link" })
+    </div>
+    <div class="btn user">
+        @Html.ActionLink(
+        "Store User Login",
+        "Login",
+        "Home",
+        new { userType = "Store" },
+        new { @class = "user_link" })
+    </div>
+
 </div>
