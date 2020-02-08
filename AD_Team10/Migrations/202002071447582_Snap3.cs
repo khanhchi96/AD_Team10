@@ -23,7 +23,7 @@
 
             //SupplierItems
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,1,0.60)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,2,2.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,2,2.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,3,0.40)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,4,2.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,5,1.35)");//5
@@ -32,21 +32,21 @@
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,8,0.45)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,9,0.25)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,10,0.55)");//10
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,11,0.15)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,12,0.35)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,11,0.15)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,12,0.35)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,13,0.25)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,14,0.45)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,14,0.45)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,15,0.30)");//15
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,16,0.35)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,17,0.80)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,18,0.50)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,18,0.50)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,19,0.60)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,20,2.80)");//20
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,21,2.85)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,22,3.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,23,2.65)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,22,3.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,23,2.65)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,24,4.15)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,25,2.00)");//25
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,25,2.00)");//25
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,26,1.65)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,27,1.85)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,28,1.65)");
@@ -55,28 +55,28 @@
 
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,31,0.70)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,32,0.90)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,33,0.90)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,34,0.90)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,35,4.80)");//35
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,33,0.90)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,34,0.90)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,35,4.80)");//35
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,36,4.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,37,4.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,38,4.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,39,18.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,40,29.00)");//40
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,41,90.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,42,7.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,41,90.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,42,7.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,43,7.30)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,44,8.40)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,44,8.40)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,45,9.25)");//45
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,46,9.60)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,46,9.60)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,47,9.95)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,48,10.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,49,10.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,50,4.50)");//50
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,51,3.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,52,3.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,52,3.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,53,3.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,54,12.30)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,54,12.30)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,55,12.30)");//55
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,56,12.30)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,57,15.20)");
@@ -86,9 +86,9 @@
 
 
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,61,6.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,62,6.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,63,8.50)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,64,12.49)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,62,6.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,63,8.50)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,64,12.49)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,65,12.90)");//65
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,66,7.60)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,67,9.40)");
@@ -97,16 +97,16 @@
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,70,1.75)");//70
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,71,2.60)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,72,3.80)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,73,1.80)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,73,1.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,74,5.90)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,75,3.30)");//75
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,76,2.20)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,77,2.40)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,78,2.00)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,76,2.20)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,77,2.40)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,78,2.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,79,1.50)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,80,3.80)");//80
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(5,80,3.80)");//80
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,81,5.00)");
-            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,82,15.55)");
+            Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(1,82,15.55)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,83,4.00)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,84,2.80)");
             Sql("INSERT INTO SupplierItems(SupplierID,ItemID,Price) Values(9,85,2.00)");//85
