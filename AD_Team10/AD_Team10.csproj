@@ -217,6 +217,8 @@
     <Compile Include="CustomMobileModels\CustomItem.cs" />
     <Compile Include="CustomMobileModels\CustomPurchaseOrder.cs" />
     <Compile Include="DAL\DBContext.cs" />
+    <Compile Include="DataService\RepresentativeService.cs" />
+    <Compile Include="DataService\RequisitionService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -366,6 +368,10 @@
     <Content Include="Views\Department\Head\SuccessfulAssignActingHead.cshtml" />
     <Content Include="Views\Department\Head\SuccessfulCancelActingHead.cshtml" />
     <Content Include="Views\Department\Head\SuccessfulAssignRep.cshtml" />
+    <Content Include="Views\Department\Representative\ChangeLocation.cshtml" />
+    <Content Include="Views\Department\Representative\GetPendingList.cshtml" />
+    <Content Include="Views\Department\Representative\UpdateRequisitionDetails.cshtml" />
+    <Content Include="Views\Department\Representative\ViewDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
