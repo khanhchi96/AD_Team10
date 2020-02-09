@@ -1,4 +1,4 @@
-﻿@model AD_Team10.Models.Category
+﻿@model AD_Team10.Models.Item
 
 @{
     ViewBag.Title = "Delete";
@@ -12,12 +12,54 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.CategoryName)
+            @Html.DisplayNameFor(model => model.Category.CategoryId)
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.CategoryName)
+            @Html.DisplayFor(model => model.Category.CategoryId)
         </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ItemID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ItemID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitOfMeasure)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitOfMeasure)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitsInStock)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.UnitsInStock)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderLevel)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReorderLevel)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ReorderQuantity)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ReorderQuantity)
+        </dd>
+
 
     </dl>
 

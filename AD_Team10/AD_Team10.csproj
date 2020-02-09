@@ -173,6 +173,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\PagedList.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -224,16 +225,14 @@
     <Content Include="Views\Suppliers\Details.cshtml" />
     <Content Include="Views\Suppliers\Edit.cshtml" />
     <Content Include="Views\Suppliers\Index.cshtml" />
-    <Content Include="Views\Departments\Create.cshtml" />
-    <Content Include="Views\Departments\Delete.cshtml" />
     <Content Include="Views\Departments\Details.cshtml" />
-    <Content Include="Views\Departments\Edit.cshtml" />
     <Content Include="Views\Departments\Index.cshtml" />
     <Content Include="Views\Categories\Create.cshtml" />
     <Content Include="Views\Categories\Delete.cshtml" />
     <Content Include="Views\Categories\Details.cshtml" />
     <Content Include="Views\Categories\Edit.cshtml" />
     <Content Include="Views\Categories\Index.cshtml" />
+    <Content Include="Views\Shared\_BasicInfo.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

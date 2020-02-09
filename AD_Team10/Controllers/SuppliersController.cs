@@ -11,6 +11,7 @@ using AD_Team10.Models;
 
 namespace AD_Team10.Controllers
 {
+    [Authorize(Roles = "CLERK")]
     public class SuppliersController : Controller
     {
         private DBContext db = new DBContext();

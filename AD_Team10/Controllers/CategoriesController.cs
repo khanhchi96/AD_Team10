@@ -11,14 +11,17 @@ using AD_Team10.Models;
 
 namespace AD_Team10.Controllers
 {
+    [Authorize(Roles = "CLERK")]
     public class CategoriesController : Controller
     {
+      
         private DBContext db = new DBContext();
 
         // GET: Categories
         public ActionResult Index()
         {
-            return View(db.Categories.ToList());
+            var ItemCategories = db.Items.Include(d => d.Category);
+            return View(ItemCategories.ToList());
         }
 
         // GET: Categories/Details/5
@@ -28,33 +31,35 @@ namespace AD_Team10.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            Item ItemCategory = db.Items.Find(id);
+            if (ItemCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(ItemCategory);
         }
 
         // GET: Categories/Create
         public ActionResult Create()
         {
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CategoryName");
             return View();
         }
 
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CategoryId,CategoryName")] Category category)
+        public ActionResult Create([Bind(Include = "ItemID,Description,UnitOfMeasure,UnitsInStock,ReorderLevel,ReorderQuantity,CategoryID")] Models.Item ItemCategory)
         {
             if (ModelState.IsValid)
             {
-                db.Categories.Add(category);
+                db.Items.Add(ItemCategory);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CategoryName", ItemCategory.CategoryID);
+            return View(ItemCategory);
         }
 
         // GET: Categories/Edit/5
@@ -64,26 +69,28 @@ namespace AD_Team10.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            Item ItemCategory = db.Items.Find(id);
+            if (ItemCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CategoryName", ItemCategory.CategoryID);
+            return View(ItemCategory);
         }
 
       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CategoryId,CategoryName")] Category category)
+        public ActionResult Edit([Bind(Include = "ItemID,Description,UnitOfMeasure,UnitsInStock,ReorderLevel,ReorderQuantity,CategoryName")] Models.Item ItemCategory)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(category).State = EntityState.Modified;
+                db.Entry(ItemCategory).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(category);
+            ViewBag.CategoryID = new SelectList(db.Categories, "CategoryId", "CategoryName", ItemCategory.CategoryID);
+            return View(ItemCategory);
         }
 
         // GET: Categories/Delete/5
@@ -93,12 +100,12 @@ namespace AD_Team10.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = db.Categories.Find(id);
-            if (category == null)
+            Item ItemCategory = db.Items.Find(id);
+            if (ItemCategory == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(ItemCategory);
         }
 
         // POST: Categories/Delete/5
@@ -106,8 +113,8 @@ namespace AD_Team10.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = db.Categories.Find(id);
-            db.Categories.Remove(category);
+            Item ItemCategory = db.Items.Find(id);
+            db.Items.Remove(ItemCategory);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    background-color: #f1f1f1 !important;
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -21,4 +22,280 @@ input,
 select,
 textarea {
     max-width: 280px;
+}
+
+div, p, span, a, input, select, option, h1, h2, h3, h4, h5, h6, button {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+}
+
+h3, h4 {
+    text-align: center;
+}
+
+.container-fluid.body {
+    background-color: #fff;
+}
+
+.body {
+    padding-top: 30px;
+    padding-bottom: 30px;
+}
+
+.navbar.navbar-inverse.navbar-fixed-top {
+    background-color: #f1f1f1 !important;
+}
+
+.navbar-inverse {
+    border-color: #c7c7c7;
+}
+
+.info {
+    border-bottom: 1px solid #c7c7c7;
+    overflow: hidden;
+    padding: 0 30px;
+}
+
+    .info > div {
+        width: 50%;
+        float: left;
+        overflow: hidden;
+    }
+
+.logo {
+    max-width: 400px;
+    padding: 15px 10px;
+    overflow: hidden;
+}
+
+    .logo > a {
+        float: left;
+    }
+
+.short-name {
+    background-color: #381272;
+    padding: 16px 5px 8px 5px;
+    font-size: 25px;
+    text-align: center;
+    color: white;
+    width: 48px;
+}
+
+    .short-name:hover, .short-name:active, .short-name:visited {
+        color: white;
+        text-decoration: none;
+    }
+
+.full-name:hover, .full-name:active, .full-name:visited {
+    color: black;
+    text-decoration: none;
+}
+
+.full-name {
+    margin-top: 18px;
+    margin-left: 10px;
+    font-weight: 500;
+    font-size: 17px;
+    color: #000;
+}
+
+
+.staff-info > div {
+    float: right;
+    position: absolute;
+    right: 30px;
+}
+
+.designation {
+    background-color: #cc9216;
+    color: white;
+    text-align: center;
+    padding: 7px 20px;
+    font-weight: 500;
+    font-size: 16px
+}
+
+.staff-profile {
+    margin-top: 40px;
+    text-align: right;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.staff-name {
+    margin-right: 20px;
+}
+
+.navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #cc9216;
+}
+
+.navbar-nav > li > .dropdown-menu {
+    border: none;
+}
+
+.nav > li > a {
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #000;
+}
+
+.green {
+    color: green;
+}
+
+.red {
+    color: red;
+}
+
+.view-more {
+    font-size: 14px;
+    font-style: italic;
+    color: #381272;
+    float: right;
+}
+
+.row > div {
+    margin-bottom: 30px;
+    background-color: white;
+    padding: 20px;
+}
+
+    .row > div:nth-child(2n) {
+        margin-left: 3%;
+    }
+
+.table > tbody > tr > th {
+    background-color: #381272;
+    color: white
+}
+
+.table > tbody > tr > th, .table > tbody > tr > td {
+    text-align: center;
+}
+
+.view-detail {
+    padding: 3px 15px;
+    background-color: #cc9216;
+    color: white;
+    border-radius: 5px;
+}
+
+.dashboard-panel-6 {
+    width: 48.5%;
+}
+
+.dashboard-panel-8 {
+    width: 64.67%;
+}
+
+.dashboard-panel-4 {
+    width: 32.33%;
+}
+
+/*.pagination > li:nth-child(2n+1) > a {
+    background-color: #000;
+    border-color: #000 ;
+}
+
+.pagination > li:nth-child(2n) > a {
+    color: #000;
+}*/
+
+.filter-option {
+    overflow: hidden;
+    margin-bottom: 10px;
+    margin-top: 30px;
+}
+
+.filter, .sort, #clear {
+    float: right;
+    margin-left: 5px;
+    margin-bottom: 8px;
+}
+
+.otherReason {
+    display: none;
+}
+
+    #stockLevel, #sortOrder, #searchBox, #filterClerk, #filterStatus,
+    .itemName, .quantity, .operator, .reason, .otherReason > input, #timeRange, #endDate {
+        border: none;
+        background-color: #f1f1f1;
+        height: 25px
+    }
+
+
+    .itemName, .quantity, .operator, .reason, .otherReason > input {
+        padding: 0 5px;
+        height: 30px;
+    }
+
+.otherReason {
+    margin-top: 10px;
+}
+
+    .otherReason > input {
+        margin-top: 10px;
+        width: calc(100% - 40px);
+        max-width: 225px;
+    }
+
+.quantity {
+    max-width: 80px;
+}
+
+#clear {
+    padding: 4px 15px;
+    background-color: #cc9216;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+#searchBox, .create {
+    float: left;
+}
+
+.create {
+    overflow: hidden;
+    padding: 6px 10px 0 10px;
+    background-color: #028a0f;
+    border-radius: 3px;
+}
+
+.plus-sign {
+    font-size: 35px !important;
+    font-weight: 700 !important;
+    color: #fff !important;
+}
+
+.create-link {
+    position: relative;
+    float: right;
+}
+
+    .create-link > a, .create-link > a:hover, .create-link > a:visited, .create-link > a:active {
+        color: #fff;
+        text-transform: uppercase;
+        margin-left: 5px;
+        font-weight: 500;
+    }
+
+.submit {
+    float: right;
+    background-color: #c72338;
+    padding: 5px 20px;
+    font-size: 20px;
+    color: #fff;
+    border-color: transparent;
+    border-radius: 5px;
+    text-transform: uppercase;
+    margin-top: 50px;
+}
+
+.back-to-list {
+    margin-top: 70px;
 }
