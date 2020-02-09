@@ -131,17 +131,16 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ItemController.cs" />
+    <Compile Include="Controllers\RepresentativeController.cs" />
     <Compile Include="Controllers\StoreClerkController.cs" />
     <Compile Include="DAL\DBContext.cs" />
     <Compile Include="DataService\PurchaseOrderService.cs" />
+    <Compile Include="DataService\RepresentativeService.cs" />
     <Compile Include="DataService\RequisitionService.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202001181214205_Initial.cs" />
-    <Compile Include="Migrations\202001181214205_Initial.designer.cs">
-      <DependentUpon>202001181214205_Initial.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Migrations\202002060600381_initial.cs" />
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\AdjustmentVoucherDetail.cs" />
@@ -155,6 +154,8 @@
     <Compile Include="Models\PurchaseOrderDetail.cs" />
     <Compile Include="Models\Requisition.cs" />
     <Compile Include="Models\RequisitionDetail.cs" />
+    <Compile Include="Models\RetrievalList.cs" />
+    <Compile Include="Models\RetrievalListDetail.cs" />
     <Compile Include="Models\StoreEmployee.cs" />
     <Compile Include="Models\StoreUser.cs" />
     <Compile Include="Models\Supplier.cs" />
@@ -216,6 +217,15 @@
     <Content Include="Views\StoreClerk\ViewOrderDetails.cshtml" />
     <Content Include="Views\StoreClerk\ViewOrderHistory.cshtml" />
     <Content Include="Views\StoreClerk\UpdatePurchaseOrder.cshtml" />
+    <Content Include="Views\StoreClerk\GenerateDisbursement.cshtml" />
+    <Content Include="Views\StoreClerk\DisbursementListPartial.cshtml" />
+    <Content Include="Views\StoreClerk\NewViewRetrievalList.cshtml" />
+    <Content Include="Views\StoreClerk\UpdateRetrievalList.cshtml" />
+    <Content Include="Views\Representative\ChangeCollectionPoint.cshtml" />
+    <Content Include="Views\Representative\ViewCollectionPoint.cshtml" />
+    <Content Include="Views\Representative\GetPendingList.cshtml" />
+    <Content Include="Views\Representative\ViewDetails.cshtml" />
+    <Content Include="Views\Representative\UpdateRequisitionDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -232,11 +242,6 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.3.1.min.map" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Migrations\202001181214205_Initial.resx">
-      <DependentUpon>202001181214205_Initial.cs</DependentUpon>
-    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

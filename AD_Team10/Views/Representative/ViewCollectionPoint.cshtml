@@ -1,0 +1,16 @@
+﻿@model AD_Team10.Models.Department
+@using AD_Team10.DataService
+
+@{
+    ViewBag.Title = "ViewCollectionPoint";
+}
+
+<h3 align="center">@Model.DepartmentName</h3>
+<p></p>
+
+<p align="left">
+    @RepresentativeService.stringCurrentCollection @Model.CollectionPoint.CollectionPointName
+</p>
+<p align="center">
+    <a href="/Representative/ChangeCollectionPoint?id=@Model.DepartmentID" class="btn btn-default">@RepresentativeService.changeCollection</a>
+</p>

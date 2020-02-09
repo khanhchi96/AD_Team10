@@ -169,10 +169,53 @@ namespace AD_Team10.Controllers
             return View(items);
         }
 
-        public ActionResult UpdateRetrievalList()
+        //GET: Using Rerieval List table
+        public ActionResult NewViewRetrievalList()
         {
+            RetrievalList retrievalList = reqService.GetRetrievalListForNow();   //After test, change to generate retrieval list
+            List<Item> items = reqService.GetDistictItemForRetrievalList(retrievalList);
+            return View(Tuple.Create(retrievalList, items));
+        }
 
+        public ActionResult GenerateDisbursement()
+        {
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
             return View();
+        }
+
+        [HttpPost]
+        public ActionResult GenerateDisbursement(Department department)
+        {
+            Dictionary<Item, int> departmentItemQuantity = reqService.GetDepartmentItemAndQuantity(department);
+            ViewData["departmentItemAndQuantity"] = departmentItemQuantity;
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName", department.DepartmentID);
+            return View(department);
+        }
+
+        public ActionResult UpdateRetrievalList(int id_retrieval)
+        {
+            RetrievalList retrievalList = reqService.GetRetrievalListForNow();   //After test, change to generate retrieval list
+            List<Item> items = reqService.GetDistictItemForRetrievalList(retrievalList);
+            ViewData["items"] = items;
+            return View(retrievalList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateRetrievalList(RetrievalList retrievalList)
+        {
+            if (ModelState.IsValid)
+            {
+                RetrievalList editedRetrieval = reqService.GetRetrievalListById(retrievalList.RetrievalListID);
+                foreach(var details in retrievalList.RetrievalListDetails)
+                {
+                    editedRetrieval.RetrievalListDetails.Where(x => x.ItemID == details.ItemID && x.DepartmentID == details.DepartmentID)
+                                                        .SingleOrDefault().QuantityOffered = details.QuantityOffered;
+                }
+                reqService.UpdateRetrievalList(editedRetrieval);
+                return RedirectToAction("NewViewRetrievalList");
+            }
+            return View(retrievalList);
         }
 
         public ActionResult UpdateRequisitionDetails(int id_requisition)
@@ -190,31 +233,25 @@ namespace AD_Team10.Controllers
                 Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
                 for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
                 {
-                    editedRequisition.RequisitionDetails[i].QuantityDelivered = requisition.RequisitionDetails[i].QuantityDelivered;
+                    editedRequisition.RequisitionDetails[i].QuantityReceived = requisition.RequisitionDetails[i].QuantityReceived;
                 }
                 if (reqService.IsCompleted(editedRequisition))
                 {
                     editedRequisition.CompletedDate = DateTime.Now;
                     editedRequisition.Status = Status.Completed;
                 }
+                else
+                {
+                    editedRequisition.Status = Status.Incompleted;
+                    RetrievalList retrievalList = reqService.GetRetrievalListForNow();
+                    reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
+                    reqService.UpdateRetrievalList(retrievalList);
+                }
                 reqService.UpdateRequisition(editedRequisition);
                 return RedirectToAction("ViewDetails", new { id = requisition.RequisitionID });
             }
             return View(requisition);
         }
-
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult UpdateRequisitionDetails([Bind(Include = "ItemID,RequisitionID,Quantity,QuantityDelivered")] RequisitionDetail requisitionDetail)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        db.Entry(requisitionDetail).State = EntityState.Modified;
-        //        db.SaveChanges();
-        //        return RedirectToAction("ViewDetails", new { id=requisitionDetail.RequisitionID });
-        //    }
-        //    return View(requisitionDetail);
-        //}
 
         public ActionResult CreateNewOrder()
         {
@@ -268,7 +305,6 @@ namespace AD_Team10.Controllers
                         purchaseOrders = purchaseOrders.Where(x => x.OrderStatus.ToString() == selectOrderStatus.OrderStatusName).ToList();
                         return View(Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
                     }
-               
                 }
                 else
                 {

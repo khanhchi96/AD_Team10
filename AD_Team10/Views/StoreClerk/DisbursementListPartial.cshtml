@@ -1,0 +1,34 @@
+﻿@using AD_Team10.Models
+
+@{
+    ViewBag.Title = "DisbursementListPartial";
+}
+
+@{
+    Dictionary<Item, int> itemAndQuantity = (Dictionary<Item, int>)ViewData["departmentItemAndQuantity"];
+}
+
+<div class="container">
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(x => itemAndQuantity.First().Key.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(x => itemAndQuantity.First().Key.RequisitionDetails.First().Quantity)
+            </th>
+        </tr>
+        @foreach (var item in itemAndQuantity)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(x => item.Key.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(x => item.Value)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
+
