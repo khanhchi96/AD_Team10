@@ -1,0 +1,61 @@
+﻿@model AD_Team10.Models.Category
+
+@{
+    var items = ViewBag.items;
+    var cats = ViewBag.cats;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>ITEM CATALOGUE</h3>
+
+    <div class="create">
+        <span class="glyphycon glyphicon-plus plus-sign"></span>
+        <div class="create-link">
+            @Html.ActionLink("Create New Item", "CreateItem")
+        </div>
+    </div>
+
+    @using (Html.BeginForm("ItemCatalogue", "Clerk", FormMethod.Post, new { id = "demoForm2", name = "demoForm2" }))
+    {
+        @Html.DropDownListFor(m => m.CategoryId, Model.Cats, "Select Category", new { Class = "filter", onchange = "SelectedIndexChanged()" })
+
+
+        <fieldset>
+            <table class="table">
+                <tr>
+                    <th>Item ID</th>
+                    <th>Category</th>
+                    <th>Description</th>
+                    <th>Unit of Measure</th>
+                    <th>Reorder Level</th>
+                    <th>Reorder Quantity</th>
+                    <th>Update/Delete</th>
+                </tr>
+                @for (int i = 0; i < items.Count; i++)
+                {
+                    <tr>
+                        <td>@items[i].ItemID</td>
+                        <td>@cats[i].CategoryName</td>
+                        <td>@items[i].Description</td>
+                        <td>@items[i].UnitOfMeasure</td>
+                        <td>@items[i].ReorderLevel</td>
+                        <td>@items[i].ReorderQuantity</td>
+                        <td>@Html.ActionLink("Update", "UpdateItem", "Clerk", new { itemID = items[i].ItemID }, null)/@Html.ActionLink("Delete", "DeleteItem", "Clerk", new { itemID = items[i].ItemID }, null)</td>
+                    </tr>
+                }
+            </table>
+        </fieldset>
+    }
+</div>
+
+<script type="text/javascript">
+
+    function SelectedIndexChanged() {
+        //Form post
+        document.demoForm2.submit();
+    }
+</script>

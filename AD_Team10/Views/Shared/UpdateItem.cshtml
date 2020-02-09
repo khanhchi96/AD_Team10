@@ -1,0 +1,46 @@
+﻿@model AD_Team10.Models.Category
+
+@{
+    var itemID = ViewBag.itemID;
+    var description = ViewBag.description;
+    var unitOfMeasure = ViewBag.unitOfMeasure;
+    var reorderLevel = ViewBag.reorderLevel;
+    var reorderQuantity = ViewBag.reorderQuantity;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>UPDATE ITEM</h3>
+
+    @using (Html.BeginForm("UpdateItem", "Clerk", FormMethod.Post))
+    {
+        <table class="table">
+            <tr>
+                <td style="display:none;"><input type="hidden" name="itemID" value="@itemID" /></td>
+                <td>Category</td>
+                <td>@Html.DropDownListFor(m => m.CategoryId, Model.Cats, "Select Category", new { required = "required" })</td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><input type="text" name="description" value="@description" required /></td>
+            </tr>
+            <tr>
+                <td>Unit of Measure</td>
+                <td><input type="text" name="unitOfMeasure" value="@unitOfMeasure" required /></td>
+            </tr>
+            <tr>
+                <td>Reorder Level</td>
+                <td><input type="number" name="reorderLevel" value="@reorderLevel" min="0" required /></td>
+            </tr>
+            <tr>
+                <td>Reorder Quantity</td>
+                <td><input type="number" name="reorderQuantity" value="@reorderQuantity" min="0" required /></td>
+            </tr>
+        </table>
+        <input type="submit" class="submit" value="Submit" />
+    }
+</div>
+

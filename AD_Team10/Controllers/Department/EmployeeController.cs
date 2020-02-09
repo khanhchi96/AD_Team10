@@ -33,3 +33,7 @@ namespace AD_Team10.Controllers.Department
             }
 
             ViewBag.role = currentRole;
+            return View("~/Views/Department/Employee/Index.cshtml");
+        }
+    }
+}

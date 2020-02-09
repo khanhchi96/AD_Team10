@@ -25,8 +25,8 @@ namespace AD_Team10.Models
         
         public override String ToString()
         {
-            if (MiddleName != null) return FirstName + MiddleName + LastName;
-            else return FirstName + LastName;
+            if (MiddleName != null) return FirstName + " " + MiddleName + " " + LastName;
+            else return FirstName + " " + LastName;
         }
     }
 }

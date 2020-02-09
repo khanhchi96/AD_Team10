@@ -1,0 +1,71 @@
+﻿
+@{
+    var supplierID = ViewBag.supplierID;
+    var supplierName = ViewBag.supplierName;
+    var contactName = ViewBag.contactName;
+    var phone = ViewBag.phone;
+    var fax = ViewBag.fax;
+    var addressLine1 = ViewBag.addressLine1;
+    var addressLine2 = ViewBag.addressLine2;
+    var addressLine3 = ViewBag.addressLine3;
+    var gstNumber = ViewBag.gstNumber;
+    var path = "";
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    @if (supplierName == "")
+    {
+        <h3>NEW SUPPLIER</h3>
+        path = "CreateSupplier";
+    }
+    else
+    {
+        <h3>UPDATE SUPPLIER</h3>
+        path = "UpdateSupplier";
+    }
+
+    @using (Html.BeginForm(path, "Clerk", FormMethod.Post))
+    {
+        <table class="table">
+            <tr>
+                <td style="display:none;"><input type="hidden" name="supplierID" value="@supplierID" /></td>
+                <td>Supplier Name</td>
+                <td><input type="text" name="suppliername" value="@supplierName" required /></td>
+            </tr>
+            <tr>
+                <td>Contact Name</td>
+                <td><input type="text" name="contactname" value="@contactName" required /></td>
+            </tr>
+            <tr>
+                <td>Phone Number</td>
+                <td><input type="text" name="phonenumber" value="@phone" required /></td>
+            </tr>
+            <tr>
+                <td>Fax Number</td>
+                <td><input type="text" name="faxnumber" value="@fax" /></td>
+            </tr>
+            <tr>
+                <td>Address Line 1</td>
+                <td><input type="text" name="address1" value="@addressLine1" required /></td>
+            </tr>
+            <tr>
+                <td>Address Line 2</td>
+                <td><input type="text" name="address2" value="@addressLine2" required /></td>
+            </tr>
+            <tr>
+                <td>Address Line 3</td>
+                <td><input type="text" name="address3" value="@addressLine3" /></td>
+            </tr>
+            <tr>
+                <td>GST Registration No.</td>
+                <td><input type="text" name="gstnumber" value="@gstNumber" required /></td>
+            </tr>
+        </table>
+        <input type="submit" class="submit" value="Submit" />
+    }
+</div>
+

@@ -16,6 +16,8 @@ namespace AD_Team10.Models
         public string Phone { get; set; }
         public string Fax { get; set; }
         public string Address { get; set; }
+        public string Address2 { get; set; }
+        public string Address3 { get; set; }
         public string GSTNumber { get; set; }
 
         public virtual ICollection<SupplierItem> SupplierItems { get; set; }

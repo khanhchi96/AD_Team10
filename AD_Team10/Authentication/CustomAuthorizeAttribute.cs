@@ -18,10 +18,6 @@ namespace AD_Team10.Authentication
             return ((CurrentUser != null && !CurrentUser.IsInRole(Roles)) || CurrentUser == null) ? false : true;
         }
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
             RedirectToRouteResult routeData = null;
@@ -32,13 +28,8 @@ namespace AD_Team10.Authentication
                     (new System.Web.Routing.RouteValueDictionary
                     (new
                     {
-<<<<<<< HEAD
                         controller = "Home",
                         action = "Index",
-=======
-                        controller = "Account",
-                        action = "Login",
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
                     }
                     ));
             }
@@ -48,11 +39,7 @@ namespace AD_Team10.Authentication
                 (new System.Web.Routing.RouteValueDictionary
                  (new
                  {
-<<<<<<< HEAD
                      controller = "Home",
-=======
-                     controller = "Account",
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
                      action = "AccessDenied"
                  }
                  ));

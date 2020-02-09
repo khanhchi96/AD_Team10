@@ -1,0 +1,81 @@
+﻿
+@{
+    var suppliers = ViewBag.suppliers;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>SUPPLIERS</h3>
+    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search" class="filter">
+    <div class="create">
+        <span class="glyphycon glyphicon-plus plus-sign"></span>
+        <div class="create-link">
+            @Html.ActionLink("Create New Supplier", "CreateSupplier")
+        </div>
+    </div>
+    <table class="table" id="myTable">
+        <tr>
+            <th>Supplier Name</th>
+            <th>Contact Name</th>
+            <th>Phone Number</th>
+            <th>Fax Number</th>
+            <th>Address</th>
+            <th>GST Registration No.</th>
+            <th>Update/Delete</th>
+        </tr>
+        @foreach (var supplier in suppliers)
+        {
+            <tr>
+                <td style="display:none;"><input type="hidden" name="supplierID" value="@supplier.SupplierID" /></td>
+                <td>@supplier.SupplierName</td>
+                <td>@supplier.ContactName</td>
+                <td>@supplier.Phone</td>
+                <td>@supplier.Fax</td>
+                <td>
+                    <ul class="nobull">
+                        <li>@supplier.Address</li>
+                        <li>@supplier.Address2</li>
+                        <li>@supplier.Address3</li>
+                    </ul>
+                </td>
+                <td>@supplier.GSTNumber</td>
+                <td>@Html.ActionLink("Update", "UpdateSupplier", "Clerk", new { supplierID = supplier.SupplierID }, null)/@Html.ActionLink("Delete", "DeleteSupplier", "Clerk", new { supplierID = supplier.SupplierID }, null)</td>
+            </tr>
+        }
+    </table>
+
+</div>
+
+<script type="text/javascript">
+    function myFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, occurrence;
+
+        input = document.getElementById("myInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("myTable");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 1; i < tr.length; i++) {
+            occurrence = false; // Only reset to false once per row.
+            td = tr[i].getElementsByTagName("td");
+            for (var j = 0; j < td.length; j++) {
+                currentTd = td[j];
+                if (currentTd) {
+                    if (currentTd.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                        occurrence = true;
+                    }
+                }
+            }
+            if (!occurrence) {
+                tr[i].style.display = "none";
+            }
+        }
+    }
+</script>
+

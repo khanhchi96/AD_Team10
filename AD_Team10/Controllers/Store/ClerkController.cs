@@ -613,5 +613,368 @@ namespace AD_Team10.Controllers.Store
                 chart.Series[departments[i]].Points.DataBindXY(xValues, yValues);
             }
         }
+
+        public ActionResult DepartmentList()
+        {
+            var departments = new Models.Department();
+            departments.ListDep = GetDepartmentListFromDB();
+            var cps = new CollectionPoint();
+            cps.listCP = GetCollectionPointFromDB();
+
+            ViewBag.depts = departments.ListDep;
+
+            List<int> repIDs = db.DepUsers.Where(x => x.Role == DepartmentRole.REPRESENTATIVE).OrderBy(x => x.DepEmployee.DepartmentID).Select(x => x.DepEmployeeID).ToList();
+            List<DepEmployee> reps = new List<DepEmployee>();
+            foreach (int repID in repIDs)
+            {
+                DepEmployee rep = db.DepEmployees.Where(x => x.DepEmployeeID == repID).First();
+                reps.Add(rep);
+            }
+            List<string> repNames = new List<string>();
+            foreach (var rep in reps)
+            {
+                string repName = rep.ToString();
+                repNames.Add(repName);
+            }
+
+            List<Models.Department> deps = GetDepartmentListFromDB().OrderBy(x => x.DepartmentID).ToList();
+            List<CollectionPoint> collectionPoints = new List<CollectionPoint>();
+
+            foreach (var dep in deps)
+            {
+                CollectionPoint collectionPoint = db.CollectionPoints.Where(x => x.CollectionPointID == dep.CollectionPointID).First();
+                collectionPoints.Add(collectionPoint);
+            }
+
+            ViewBag.rep = reps;
+            ViewBag.repName = repNames;
+            ViewBag.cp = collectionPoints;
+
+            return View(cps);
+        }
+
+        [HttpPost]
+        public ActionResult DepartmentList(Models.Department model)
+        {
+            var departments = new Models.Department();
+            departments.ListDep = GetDepartmentListFromDB();
+            var depts = departments.ListDep.Where(x => x.CollectionPointID == model.CollectionPointID).ToList();
+            var cps = new CollectionPoint();
+            cps.listCP = GetCollectionPointFromDB();
+
+            ViewBag.depts = depts;
+
+            List<int> depIDs = depts.Select(x => x.DepartmentID).ToList();
+            List<int> repIDs = db.DepUsers.Where(x => x.Role == DepartmentRole.REPRESENTATIVE).OrderBy(x => x.DepEmployee.DepartmentID).Select(x => x.DepEmployeeID).ToList();
+            List<DepEmployee> reps = new List<DepEmployee>();
+            foreach (int repID in repIDs)
+            {
+                DepEmployee rep = db.DepEmployees.Where(x => x.DepEmployeeID == repID).First();
+                reps.Add(rep);
+            }
+
+            List<DepEmployee> representatives = new List<DepEmployee>();
+            foreach (var depID in depIDs)
+            {
+                foreach (var rep in reps)
+                {
+                    if (rep.DepartmentID == depID)
+                    {
+                        DepEmployee representative = db.DepEmployees.Where(x => x.DepEmployeeID == rep.DepEmployeeID).First();
+                        representatives.Add(representative);
+                    }
+                }
+            }
+
+            List<string> repNames = new List<string>();
+            foreach (var rep in representatives)
+            {
+                string repName = rep.ToString();
+                repNames.Add(repName);
+            }
+
+            List<Models.Department> deps = depts.OrderBy(x => x.DepartmentID).ToList();
+            List<CollectionPoint> collectionPoints = new List<CollectionPoint>();
+
+            foreach (var dep in deps)
+            {
+                CollectionPoint collectionPoint = db.CollectionPoints.Where(x => x.CollectionPointID == dep.CollectionPointID).First();
+                collectionPoints.Add(collectionPoint);
+            }
+
+            ViewBag.rep = representatives;
+            ViewBag.repName = repNames;
+            ViewBag.cp = collectionPoints;
+
+            if (model.CollectionPointID == 0)
+            {
+                return RedirectToAction("DepartmentList", "Clerk");
+            }
+
+            return View(cps);
+        }
+
+        private List<CollectionPoint> GetCollectionPointFromDB()
+        {
+            return db.CollectionPoints.ToList();
+        }
+
+        private List<Models.Department> GetDepartmentListFromDB()
+        {
+            return db.Departments.ToList();
+        }
+
+        public ActionResult Suppliers()
+        {
+            IEnumerable<Supplier> suppliers = GetSuppliersFromDB();
+            ViewBag.suppliers = suppliers;
+
+            return View(suppliers);
+        }
+
+        public IEnumerable<Supplier> GetSuppliersFromDB()
+        {
+            List<Supplier> suppliers = db.Suppliers.ToList();
+            return suppliers;
+        }
+
+        public ActionResult CreateSupplier()
+        {
+            ViewBag.supplierID = "";
+            ViewBag.supplierName = "";
+            ViewBag.contactName = "";
+            ViewBag.phone = "";
+            ViewBag.fax = "";
+            ViewBag.addressLine1 = "";
+            ViewBag.addressLine2 = "";
+            ViewBag.addressLine3 = "";
+            ViewBag.gstNumber = "";
+            return View("~/Views/Shared/CreateEditSupplier.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult CreateSupplier(FormCollection form)
+        {
+            string supplierName = Request.Form["suppliername"];
+            string contactname = Request.Form["contactname"];
+            string phonenumber = Request.Form["phonenumber"];
+            string faxnumber = Request.Form["faxnumber"];
+            string address1 = Request.Form["address1"];
+            string address2 = Request.Form["address2"];
+            string address3 = Request.Form["address3"];
+            string gstnumber = Request.Form["gstnumber"];
+
+            Supplier supplier = new Supplier();
+            supplier.SupplierName = supplierName;
+            supplier.ContactName = contactname;
+            supplier.Phone = phonenumber;
+            supplier.Fax = faxnumber;
+            supplier.Address = address1;
+            supplier.Address2 = address2;
+            supplier.Address3 = address3;
+            supplier.GSTNumber = gstnumber;
+            db.Suppliers.Add(supplier);
+
+            db.SaveChanges();
+
+            return RedirectToAction("Suppliers", "Clerk");
+        }
+
+        public ActionResult UpdateSupplier(int supplierID)
+        {
+            ViewBag.supplierID = supplierID;
+            Supplier supplier = GetSuppliersFromDB().Where(x => x.SupplierID == supplierID).First();
+            ViewBag.supplierName = supplier.SupplierName;
+            ViewBag.contactName = supplier.ContactName;
+            ViewBag.phone = supplier.Phone;
+            ViewBag.fax = supplier.Fax;
+            ViewBag.addressLine1 = supplier.Address;
+            ViewBag.addressLine2 = supplier.Address2;
+            ViewBag.addressLine3 = supplier.Address3;
+            ViewBag.gstNumber = supplier.GSTNumber;
+            return View("~/Views/Shared/CreateEditSupplier.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateSupplier(FormCollection form)
+        {
+            string supplierID = Request.Form["supplierID"];
+            string supplierName = Request.Form["suppliername"];
+            string contactname = Request.Form["contactname"];
+            string phonenumber = Request.Form["phonenumber"];
+            string faxnumber = Request.Form["faxnumber"];
+            string address1 = Request.Form["address1"];
+            string address2 = Request.Form["address2"];
+            string address3 = Request.Form["address3"];
+            string gstnumber = Request.Form["gstnumber"];
+
+            Supplier supplier = GetSuppliersFromDB().Where(x => x.SupplierID.ToString() == supplierID).First();
+            supplier.SupplierName = supplierName;
+            supplier.ContactName = contactname;
+            supplier.Phone = phonenumber;
+            supplier.Fax = faxnumber;
+            supplier.Address = address1;
+            supplier.Address2 = address2;
+            supplier.Address3 = address3;
+            supplier.GSTNumber = gstnumber;
+
+            db.SaveChanges();
+
+            return RedirectToAction("Suppliers", "Clerk");
+        }
+
+        public ActionResult DeleteSupplier(int supplierID)
+        {
+            Supplier supplier = GetSuppliersFromDB().Where(x => x.SupplierID == supplierID).First();
+            db.Suppliers.Remove(supplier);
+            db.SaveChanges();
+            return RedirectToAction("Suppliers", "Clerk");
+        }
+
+        public ActionResult ItemCatalogue()
+        {
+            var items = new Item();
+            items.ListItem = GetItemCatalogueFromDB();
+            var cats = new Category();
+            cats.listCat = GetCategoryFromDB();
+
+            List<Category> categories = new List<Category>();
+            for (int i = 0; i < items.ListItem.Count; i++)
+            {
+                Category cat = GetCategoryFromDB().Where(x => x.CategoryId == items.ListItem[i].CategoryID).First();
+                categories.Add(cat);
+            }
+
+            ViewBag.items = items.ListItem;
+            ViewBag.cats = categories;
+
+            return View(cats);
+        }
+
+        [HttpPost]
+        public ActionResult ItemCatalogue(Item model)
+        {
+            var items = new Item();
+            items.ListItem = GetItemCatalogueFromDB();
+            var itemList = items.ListItem.Where(x => x.CategoryID == model.CategoryID).ToList();
+            var cats = new Category();
+            cats.listCat = GetCategoryFromDB();
+
+            List<Category> categories = new List<Category>();
+            List<int> catIDs = itemList.Select(x => x.CategoryID).ToList();
+            for (int i = 0; i < itemList.Count; i++)
+            {
+                Category cat = GetCategoryFromDB().Where(x => x.CategoryId == catIDs[i]).First();
+                categories.Add(cat);
+            }
+
+            ViewBag.items = itemList;
+            ViewBag.cats = categories;
+
+            if (model.CategoryID == 0)
+            {
+                return RedirectToAction("ItemCatalogue", "Clerk");
+            }
+
+            return View(cats);
+        }
+
+        private List<Item> GetItemCatalogueFromDB()
+        {
+            return db.Items.ToList();
+        }
+
+        private List<Category> GetCategoryFromDB()
+        {
+            return db.Categories.ToList();
+        }
+
+        public ActionResult CreateItem()
+        {
+            ViewBag.description = "";
+            ViewBag.itemID = "";
+            ViewBag.unitOfMeasure = "";
+            ViewBag.reorderLevel = "";
+            ViewBag.reorderQuantity = "";
+
+            var cats = new Category();
+            cats.listCat = GetCategoryFromDB();
+            return View(cats);
+        }
+
+        [HttpPost]
+        public ActionResult CreateItem(FormCollection form)
+        {
+            string categoryID = Request.Form["categoryID"];
+            string description = Request.Form["description"];
+            string unitOfMeasure = Request.Form["unitOfMeasure"];
+            string reorderLevel = Request.Form["reorderLevel"];
+            string reorderQuantity = Request.Form["reorderQuantity"];
+
+            int reorderLvl = int.Parse(reorderLevel);
+            int reorderQty = int.Parse(reorderQuantity);
+            int catID = int.Parse(categoryID);
+
+            Item item = new Item();
+            item.Description = description;
+            item.UnitOfMeasure = unitOfMeasure;
+            item.ReorderLevel = reorderLvl;
+            item.ReorderQuantity = reorderQty;
+            item.CategoryID = catID;
+            db.Items.Add(item);
+
+            db.SaveChanges();
+
+            return RedirectToAction("ItemCatalogue", "Clerk");
+        }
+
+        public ActionResult UpdateItem(int itemID)
+        {
+            ViewBag.itemID = itemID;
+            Item item = GetItemCatalogueFromDB().Where(x => x.ItemID == itemID).First();
+            ViewBag.description = item.Description;
+            ViewBag.unitOfMeasure = item.UnitOfMeasure;
+            ViewBag.reorderLevel = item.ReorderLevel;
+            ViewBag.reorderQuantity = item.ReorderQuantity;
+
+            var cats = new Category();
+            cats.listCat = GetCategoryFromDB();
+
+            return View(cats);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateItem(FormCollection form)
+        {
+            string itemID = Request.Form["itemID"];
+            string categoryID = Request.Form["categoryID"];
+            string description = Request.Form["description"];
+            string unitOfMeasure = Request.Form["unitOfMeasure"];
+            string reorderLevel = Request.Form["reorderLevel"];
+            string reorderQuantity = Request.Form["reorderQuantity"];
+
+            int reorderLvl = int.Parse(reorderLevel);
+            int reorderQty = int.Parse(reorderQuantity);
+            int catID = int.Parse(categoryID);
+
+            Item item = GetItemCatalogueFromDB().Where(x => x.ItemID.ToString() == itemID).First();
+            item.Description = description;
+            item.UnitOfMeasure = unitOfMeasure;
+            item.ReorderLevel = reorderLvl;
+            item.ReorderQuantity = reorderQty;
+            item.CategoryID = catID;
+
+            db.SaveChanges();
+
+            return RedirectToAction("ItemCatalogue", "Clerk");
+        }
+
+        public ActionResult DeleteItem(int itemID)
+        {
+            Item item = GetItemCatalogueFromDB().Where(x => x.ItemID == itemID).First();
+            db.Items.Remove(item);
+            db.SaveChanges();
+            return RedirectToAction("ItemCatalogue", "Clerk");
+        }
     }
 }

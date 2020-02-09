@@ -29,6 +29,6 @@ namespace AD_Team10.Models
         public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
         public virtual ICollection<SupplierItem> SupplierItems { get; set; }
         public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
-    
+        public List<Item> ListItem { get; set; }
     }
 }

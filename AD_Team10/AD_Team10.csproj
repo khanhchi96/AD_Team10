@@ -226,6 +226,10 @@
     <Compile Include="Migrations\202002060600381_initial.designer.cs">
       <DependentUpon>202002060600381_initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202002090930215_initial2.cs" />
+    <Compile Include="Migrations\202002090930215_initial2.designer.cs">
+      <DependentUpon>202002090930215_initial2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
     <Compile Include="Models\AdjustmentVoucherDetail.cs" />
@@ -340,6 +344,12 @@
     <Content Include="Views\Department\Head\SuccessfulAssignActingHead.cshtml" />
     <Content Include="Views\Department\Head\SucessfulAssignRep.cshtml" />
     <Content Include="Views\Department\Head\SuccessfulCancelActingHead.cshtml" />
+    <Content Include="Views\Shared\CreateEditSupplier.cshtml" />
+    <Content Include="Views\Shared\CreateItem.cshtml" />
+    <Content Include="Views\Shared\DepartmentList.cshtml" />
+    <Content Include="Views\Shared\ItemCatalogue.cshtml" />
+    <Content Include="Views\Shared\Suppliers.cshtml" />
+    <Content Include="Views\Shared\UpdateItem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -362,6 +372,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202002060600381_initial.resx">
       <DependentUpon>202002060600381_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002090930215_initial2.resx">
+      <DependentUpon>202002090930215_initial2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

@@ -17,10 +17,6 @@
 
         protected override void Seed(AD_Team10.DAL.DBContext context)
         {
-<<<<<<< HEAD
-=======
-
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
             context.CollectionPoints.AddOrUpdate(c => c.CollectionPointID,
                 new CollectionPoint { CollectionPointID = 1, CollectionPointName = "Stationery Store - Administration Building" },
                 new CollectionPoint { CollectionPointID = 2, CollectionPointName = "Management School" },
@@ -32,7 +28,10 @@
 
             context.Departments.AddOrUpdate(d => d.DepartmentID,
                 new Department { DepartmentID = 1, DepartmentCode = "ENGL", DepartmentName = "English Department", CollectionPointID = 1 },
-                new Department { DepartmentID = 2, DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 }
+                new Department { DepartmentID = 2, DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 },
+                new Department { DepartmentID = 3, DepartmentCode = "COMM", DepartmentName = "Commerce Dept", CollectionPointID = 1 },
+                new Department { DepartmentID = 4, DepartmentCode = "REGR", DepartmentName = "Registrar Dept", CollectionPointID = 1 },
+                new Department { DepartmentID = 5, DepartmentCode = "ZOOL", DepartmentName = "Zoology Dept", CollectionPointID = 3 }
             );
             context.DepEmployees.AddOrUpdate(d => d.DepEmployeeID,
                 new DepEmployee
@@ -45,7 +44,6 @@
                     Email = "billgates@gmail.com",
                     Designation = "Lecturer",
                     Phone = "99996666"
-<<<<<<< HEAD
                 },
                 new DepEmployee
                 {
@@ -79,19 +77,61 @@
                     Email = "amysantiago@gmail.com",
                     Designation = "Lecturer",
                     Phone = "23456789"
+                },
+                new DepEmployee
+                {
+                    DepEmployeeID = 5,
+                    DepartmentID = 2,
+                    FirstName = "Jake",
+                    LastName = "Peralta",
+                    Gender = "Male",
+                    Email = "jakeperalta@gmail.com",
+                    Designation = "Lecturer",
+                    Phone = "23456789"
+                },
+                new DepEmployee
+                {
+                    DepEmployeeID = 6,
+                    DepartmentID = 3,
+                    FirstName = "Dep 3",
+                    LastName = "Rep",
+                    Gender = "Male",
+                    Email = "jakeperalta@gmail.com",
+                    Designation = "Lecturer",
+                    Phone = "23456789"
+                },
+                new DepEmployee
+                {
+                    DepEmployeeID = 7,
+                    DepartmentID = 4,
+                    FirstName = "Dep 4",
+                    LastName = "Rep",
+                    Gender = "Male",
+                    Email = "jakeperalta@gmail.com",
+                    Designation = "Lecturer",
+                    Phone = "23456789"
+                },
+                new DepEmployee
+                {
+                    DepEmployeeID = 8,
+                    DepartmentID = 5,
+                    FirstName = "Dep 5",
+                    LastName = "Rep",
+                    Gender = "Male",
+                    Email = "jakeperalta@gmail.com",
+                    Designation = "Lecturer",
+                    Phone = "23456789"
                 });
 
             context.DepUsers.AddOrUpdate(d => d.DepUserID,
                 new DepUser { DepUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 },
                 new DepUser { DepUserID = 2, Username = "wang.yibo", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 2 },
                 new DepUser { DepUserID = 3, Username = "angela.baby", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 3 },
-                new DepUser { DepUserID = 4, Username = "amy.santiago", Password = "12345678", Role = DepartmentRole.HEAD, DepEmployeeID = 4 });
-=======
-                });
-
-            context.DepUsers.AddOrUpdate(d => d.DepUserID,
-                new DepUser { DepUserID = 1, Username = "bill.gates", Password = "12345678", Role = DepartmentRole.EMPLOYEE, DepEmployeeID = 1 });
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b
+                new DepUser { DepUserID = 4, Username = "amy.santiago", Password = "12345678", Role = DepartmentRole.HEAD, DepEmployeeID = 4 },
+                 new DepUser { DepUserID = 5, Username = "jake.peralta", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 5 },
+                new DepUser { DepUserID = 6, Username = "dep3.rep", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 6 },
+                new DepUser { DepUserID = 7, Username = "dep4.rep", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 7 },
+                new DepUser { DepUserID = 8, Username = "dep5.rep", Password = "12345678", Role = DepartmentRole.REPRESENTATIVE, DepEmployeeID = 8 });
 
             context.StoreEmployees.AddOrUpdate(s => s.StoreEmployeeID,
                 new StoreEmployee { StoreEmployeeID = 1,  FirstName = "Esther", LastName = "Tan", Gender = "Female", Phone = "76548097", Email = "esthertan@gmail.com", Designation = "Clerk" },
@@ -103,7 +143,6 @@
                 new StoreUser { StoreUserID = 2, Username = "wang.yibo", Password = "12345678", Role = StoreRole.SUPERVISOR, StoreEmployeeID = 2 },
                 new StoreUser { StoreUserID = 3, Username = "justin.bieber", Password = "12345678", Role = StoreRole.MANAGER, StoreEmployeeID = 3 });
 
-<<<<<<< HEAD
             context.Categories.AddOrUpdate(c => c.CategoryId,
                 new Category { CategoryId = 1, CategoryName = "Clip" },
                 new Category { CategoryId = 2, CategoryName = "Pencil" });
@@ -358,7 +397,45 @@
                 );
 
             context.Suppliers.AddOrUpdate(s => s.SupplierID,
-                new Supplier { SupplierID = 1, SupplierCode = "ALPA", SupplierName = "ALPHA Office Supplies" });
+                new Supplier
+                {
+                    SupplierID = 1,
+                    SupplierCode = "ALPA",
+                    SupplierName = "ALPHA Office Supplies",
+                    ContactName = "Ms Irene Tan",
+                    Phone = "12345678",
+                    Fax = "12345678",
+                    GSTNumber = "MR-8500440-2",
+                    Address = "Blk 1128, Ang Mo Kio Industrial Park",
+                    Address2 = "#02-08 Ang Mo Kio Street 62",
+                    Address3 = "Singapore 622262"
+                },
+                new Supplier
+                {
+                    SupplierID = 2,
+                    SupplierCode = "CHEP",
+                    SupplierName = "Cheap Stationery",
+                    ContactName = "Mr Soh Kway Koh",
+                    Phone = "12345678",
+                    Fax = "12345678",
+                    GSTNumber = "Nil",
+                    Address = "Blk 34, Clementi Road",
+                    Address2 = "#07-02 Ban Ban Soh Building",
+                    Address3 = "Singapore 110525"
+                },
+                new Supplier
+                {
+                    SupplierID = 3,
+                    SupplierCode = "BANE",
+                    SupplierName = "BANES Shop",
+                    ContactName = "Mr Loh Ah Pek",
+                    Phone = "12345678",
+                    Fax = "12345678",
+                    GSTNumber = "MR-8200420-2",
+                    Address = "Blk 124, Alexandra Road",
+                    Address2 = "#03-04 Banes Building",
+                    Address3 = "Singapore 550315"
+                });
 
             context.SupplierItems.AddOrUpdate(s => new { s.SupplierID, s.ItemID },
                 new SupplierItem { SupplierID = 1, ItemID = 1, Price = 20 },
@@ -428,9 +505,3 @@
         }
     }
 }
-
-=======
-        }
-    }
-}
->>>>>>> 10578a09f5d6cdf27db9a235fc7f8c6c6b60fd2b

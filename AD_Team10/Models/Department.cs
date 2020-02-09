@@ -17,6 +17,7 @@ namespace AD_Team10.Models
 
         public virtual CollectionPoint CollectionPoint { get; set; }
         public virtual ICollection<DepEmployee> Employees { get; set; }
+        public List<Department> ListDep { get; set; }
 
     }
 }

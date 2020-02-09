@@ -1,0 +1,50 @@
+﻿@model AD_Team10.Models.CollectionPoint
+
+@{
+    var depts = ViewBag.depts;
+    var deps = ViewBag.dep;
+    var reps = ViewBag.rep;
+    var repNames = ViewBag.repName;
+    var cps = ViewBag.cp;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>DEPARTMENT LIST</h3>
+
+    @using (Html.BeginForm("DepartmentList", "Clerk", FormMethod.Post, new { id = "demoForm", name = "demoForm" }))
+    {
+        @Html.DropDownListFor(m => m.CollectionPointID, Model.CPs, "Select Collection Point", new { Class = "filter", onchange = "SelectedIndexChanged()" })
+
+        <fieldset>
+            <table class="table">
+                <tr>
+                    <th>Department Name</th>
+                    <th>Collection Point</th>
+                    <th>Representative Name</th>
+                    <th>Contact Number</th>
+                </tr>
+                @for (int i = 0; i < depts.Count; i++)
+                {
+                    <tr>
+                        <td>@depts[i].DepartmentName</td>
+                        <td>@cps[i].CollectionPointName</td>
+                        <td>@repNames[i]</td>
+                        <td>@reps[i].Phone</td>
+                    </tr>
+                }
+            </table>
+        </fieldset>
+    }
+</div>
+
+<script type="text/javascript">
+
+    function SelectedIndexChanged() {
+        //Form post
+        document.demoForm.submit();
+    }
+</script>
