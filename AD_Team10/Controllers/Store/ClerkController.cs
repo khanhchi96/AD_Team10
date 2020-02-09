@@ -480,11 +480,18 @@ namespace AD_Team10.Controllers.Store
                     yValues[i] = yValues[i] + 1;
                 }             
             }
-
-            double[] c = Fit.MultiDim(
+            double[] c = new double[totalVariable + 1];
+            try
+            {
+                c = Fit.MultiDim(
                 xValues,
                 yValues,
                 intercept: true);
+            }catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+
 
             double[][] predictedInput = new double[PREDICT_SIZE][];
             double[] predictedOutput = new double[PREDICT_SIZE];

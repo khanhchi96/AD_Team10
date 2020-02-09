@@ -9,13 +9,13 @@
         {
 
             //AdjustmentVouchers
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-01-10T12:30:50',3,1)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-02-21T12:34:35',3,2)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-03-05T12:30:50',3,3)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-04-15T11:45:23',3,1)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-05-27T12:34:35',3,4)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-06-18T11:02:53',3,6)");
-            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-07-10T12:30:50',3,7)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-01-10T12:30:50',1,1)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-02-21T12:34:35',2,2)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-03-05T12:30:50',1,3)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-04-15T11:45:23',2,1)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-05-27T12:34:35',1,4)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-06-18T11:02:53',2,6)");
+            Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-07-10T12:30:50',1,7)");
             Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-08-27T12:34:45',3,1)");
             Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-09-17T12:30:50',2,8)");
             Sql("INSERT INTO AdjustmentVouchers(AdjustmentDate,Status,StoreEmployeeID) Values('2019-11-11T11:30:50',2,5)");

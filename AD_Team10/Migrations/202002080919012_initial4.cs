@@ -106,8 +106,8 @@
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Shorthand Book (120 pg)','Each',100,80,105,14)");
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Shorthand Book (80 pg)','Each',100,80,123,14)");
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 28','Each',50,20,53,15)");
-            Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 36','Each',50,20,60,15)");//80
-            Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 28','Box',50,20,56,15)");
+            Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 34','Each',50,20,60,15)");//80
+            Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 29','Box',50,20,56,15)");
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Stapler No. 36','Box',50,20,67,15)");
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Thumb Tacks Large','Box',10,10,11,16)");
             Sql("INSERT INTO Items(Description,UnitOfMeasure,ReorderLevel,ReorderQuantity,UnitsInStock,CategoryID) Values('Thumb Tacks Medium','Box',10,10,17,16)");
