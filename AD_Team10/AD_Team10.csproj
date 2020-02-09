@@ -203,6 +203,7 @@
     <Compile Include="Authentication\CustomPrincipal.cs" />
     <Compile Include="Authentication\CustomRole.cs" />
     <Compile Include="Controllers\AdjustmentVouchersController.cs" />
+    <Compile Include="Controllers\Department\ActingHeadController.cs" />
     <Compile Include="Controllers\Department\EmployeeController.cs" />
     <Compile Include="Controllers\Department\HeadController.cs" />
     <Compile Include="Controllers\Department\RepresentativeController.cs" />
@@ -230,6 +231,22 @@
     <Compile Include="Migrations\202002071029235_initial2.cs" />
     <Compile Include="Migrations\202002071029235_initial2.designer.cs">
       <DependentUpon>202002071029235_initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002080852161_initial3.cs" />
+    <Compile Include="Migrations\202002080852161_initial3.designer.cs">
+      <DependentUpon>202002080852161_initial3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002080919012_initial4.cs" />
+    <Compile Include="Migrations\202002080919012_initial4.designer.cs">
+      <DependentUpon>202002080919012_initial4.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002080924120_initial5.cs" />
+    <Compile Include="Migrations\202002080924120_initial5.designer.cs">
+      <DependentUpon>202002080924120_initial5.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002081006502_initial6.cs" />
+    <Compile Include="Migrations\202002081006502_initial6.designer.cs">
+      <DependentUpon>202002081006502_initial6.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
@@ -340,9 +357,19 @@
     <Content Include="Views\Department\Employee\RequisitionDetails.cshtml" />
     <Content Include="Views\Department\Employee\UpdateRequisition.cshtml" />
     <Content Include="Views\Department\Employee\_EmployeeNavigation.cshtml" />
+    <Content Include="Views\Department\Head\_HeadNavigation.cshtml" />
+    <Content Include="Views\Department\Head\AssignActingHead.cshtml" />
+    <Content Include="Views\Department\Head\AssignRep.cshtml" />
+    <Content Include="Views\Department\Head\CancelActingHead.cshtml" />
+    <Content Include="Views\Department\Head\RequisitionDetails.cshtml" />
+    <Content Include="Views\Department\Head\RequisitionsToApprove.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulAssignActingHead.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulCancelActingHead.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulAssignRep.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\ActingHead\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -368,6 +395,18 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202002071029235_initial2.resx">
       <DependentUpon>202002071029235_initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002080852161_initial3.resx">
+      <DependentUpon>202002080852161_initial3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002080919012_initial4.resx">
+      <DependentUpon>202002080919012_initial4.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002080924120_initial5.resx">
+      <DependentUpon>202002080924120_initial5.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002081006502_initial6.resx">
+      <DependentUpon>202002081006502_initial6.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

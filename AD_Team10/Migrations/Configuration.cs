@@ -17,7 +17,7 @@
 
         protected override void Seed(AD_Team10.DAL.DBContext context)
         {
-
+            /*
             context.CollectionPoints.AddOrUpdate(c => c.CollectionPointID,
                 new CollectionPoint { CollectionPointID = 1, CollectionPointName = "Stationery Store - Administration Building" },
                 new CollectionPoint { CollectionPointID = 2, CollectionPointName = "Management School" },
@@ -26,11 +26,16 @@
                 new CollectionPoint { CollectionPointID = 5, CollectionPointName = "Science School" },
                 new CollectionPoint { CollectionPointID = 6, CollectionPointName = "University Hospital" }
             );
+            
 
+            
             context.Departments.AddOrUpdate(d => d.DepartmentID,
                 new Department { DepartmentID = 1, DepartmentCode = "ENGL", DepartmentName = "English Department", CollectionPointID = 1 },
                 new Department { DepartmentID = 2, DepartmentCode = "CPSC", DepartmentName = "Computer Science", CollectionPointID = 2 }
             );
+
+
+
             context.DepEmployees.AddOrUpdate(d => d.DepEmployeeID,
                 new DepEmployee
                 {
@@ -84,11 +89,14 @@
             context.Categories.AddOrUpdate(c => c.CategoryId,
                 new Category { CategoryId = 1, CategoryName = "Clip" },
                 new Category { CategoryId = 2, CategoryName = "Pencil" });
+
             context.Items.AddOrUpdate(i => i.ItemID,
                 new Item { ItemID = 1, Description = "Clip 3/4", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 160 },
                 new Item { ItemID = 2, Description = "Clip 1/2", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 1, UnitsInStock = 120 },
                 new Item { ItemID = 3, Description = "2B Pencil", UnitOfMeasure = "Dozen", ReorderLevel = 150, ReorderQuantity = 150, CategoryID = 2, UnitsInStock = 120 });
             
+            */
+    
             context.RetrievalLists.AddOrUpdate(r => r.RetrievalListID,
                 new RetrievalList { RetrievalListID = 1, StartDate = DateTime.Parse("2019-10-05"), EndDate = DateTime.Parse("2019-10-11") },
                 new RetrievalList { RetrievalListID = 2, StartDate = DateTime.Parse("2019-10-12"), EndDate = DateTime.Parse("2019-10-18") },
@@ -116,6 +124,8 @@
                 new RetrievalList { RetrievalListID = 24, StartDate = DateTime.Parse("2020-03-15"), EndDate = DateTime.Parse("2019-03-21") }
             );
 
+
+            /*
             context.Requisitions.AddOrUpdate(r => r.RequisitionID,
                 new Requisition
                 {
@@ -372,7 +382,7 @@
                     ItemID = 3,
                     Quantity = 180,
                     QuantityReceived = 180,
-                });
+                });*/
         }
     }
 }
