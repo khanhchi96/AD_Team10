@@ -80,11 +80,9 @@ namespace AD_Team10.Controllers.Department
             if (ModelState.IsValid)
             {
                 Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
-                List<RequisitionDetail> editedDetails = editedRequisition.RequisitionDetails;
-                List<RequisitionDetail> details = requisition.RequisitionDetails;
                 for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
                 {
-                    details[i].QuantityReceived = details[i].QuantityReceived;
+                    editedRequisition.RequisitionDetails[i].QuantityReceived = requisition.RequisitionDetails[i].QuantityReceived;
                 }
                 
                 if (reqService.IsCompleted(editedRequisition))
@@ -100,8 +98,7 @@ namespace AD_Team10.Controllers.Department
                     reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
                     reqService.UpdateRetrievalList(retrievalList);
                 }
-
-                db.SaveChanges();
+                reqService.UpdateRequisition(editedRequisition);
                 return RedirectToAction("EmployeeRequisitionDetails", new { id = requisition.RequisitionID });
             }
             return View(requisition);
