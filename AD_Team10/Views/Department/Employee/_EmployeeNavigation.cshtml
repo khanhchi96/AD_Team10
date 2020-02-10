@@ -1,0 +1,15 @@
+﻿<div class="navbar navbar-inverse navbar-fixed-top">
+
+    @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
+
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+
+                <li class="non-dropdown">@Html.ActionLink("Requisition History", "Index", "Employee")</li>
+                <li class="non-dropdown">@Html.ActionLink("Create New Requisition", "CreateRequisition", "Employee")</li>
+
+            </ul>
+        </div>
+    </div>
+</div>

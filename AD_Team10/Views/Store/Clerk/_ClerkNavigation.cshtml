@@ -9,14 +9,14 @@
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Requisitions <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("View Requisition", "Requisition", "Clerk")</li>
-                        <li>@Html.ActionLink("Create Requisition", "CreateRequisition", "Clerk")</li>
+                        <li>@Html.ActionLink("View Requisition", "GetPendingList", "Clerk")</li>
+                        <li>@Html.ActionLink("Retrieval List", "ViewRetrievalList", "Clerk")</li>
                     </ul>
                 </li>
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Purchase Orders <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("View Purchase Order", "PurchaseOrder", "Clerk")</li>
+                        <li>@Html.ActionLink("View Purchase Order", "ViewOrderHistory", "Clerk")</li>
                         <li>@Html.ActionLink("Create Purchase Order", "CreatePurchaseOrder", "Clerk")</li>
                     </ul>
                 </li>

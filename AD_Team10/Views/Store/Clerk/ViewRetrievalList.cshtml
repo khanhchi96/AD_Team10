@@ -1,0 +1,82 @@
+﻿@*@model IEnumerable<AD_Team10.Models.RequisitionDetail>*@
+
+@model IEnumerable<AD_Team10.Models.Item>
+@using AD_Team10.Models
+@using AD_Team10.DataService;
+
+@{
+    ViewBag.Title = "ViewRetrievalList";
+}
+
+@{ 
+    int len = Model.Count();
+    List<Requisition> requisitions = (List<Requisition>)ViewData["Requisition"];
+    Dictionary<Item, int> itemQuantity = (Dictionary<Item, int>)ViewData["itemquantity"];
+    List<RequisitionDetail> requisitionDetails = (List<RequisitionDetail>)ViewData["requisitionDetails"];
+    List<Item> items = (List<Item>)ViewData["items"];
+    RequisitionService requisitionSerivice = new RequisitionService();
+}
+
+@functions{
+    int getItemTotalQuantity(Item item, List<RequisitionDetail> requisitionDetails)
+    {
+        RequisitionService requisitionService1 = new RequisitionService();
+        return requisitionService1.DepartmentsForItem(item, requisitionDetails).Count();
+    }
+}
+
+<h3 align="center">RETRIEVAL LIST</h3>
+<hr />
+<p align="right"><a href="/StoreClerk/GenerateDisbursement" class="btn btn-default">Generate Disursement List</a></p>
+<table class="table table-bordered">
+    <tr class="bg-primary">
+        <th rowspan="2">Description</th>
+        <th colspan="2">Total Quantity</th>
+        <th colspan="3">Breakdown by Department</th>
+    </tr>
+    <tr class="bg-primary">
+        <th>Needed</th>
+        <th>Retrieved</th>
+        <th>Department Name</th>
+        <th>Needed</th>
+        <th>Retrieved</th>
+    </tr>
+    @foreach (var item in items)
+    {
+        <tr>
+            <td rowspan="@getItemTotalQuantity(item, requisitionDetails)">
+                @item.Description
+            </td>
+            <td rowspan="@getItemTotalQuantity(item, requisitionDetails)">
+                @itemQuantity[item]
+            </td>
+            <td rowspan="@getItemTotalQuantity(item, requisitionDetails)">
+            </td>
+            <td>
+                @requisitionSerivice.DepartmentsForItem(item, requisitionDetails).First().DepartmentName
+            </td>
+            <td>
+                @requisitionSerivice.DepartmentTotalItemQuantity(item, requisitionSerivice.DepartmentsForItem(item, requisitionDetails).First())
+            </td>
+            <td>
+
+            </td>
+        </tr>
+        foreach (var department in requisitionSerivice.DepartmentsForItem(item, requisitionDetails).Skip(1).ToList())
+        {
+            <tr>
+                <td>
+                    @department.DepartmentName
+                </td>
+                <td>
+                    @requisitionSerivice.DepartmentTotalItemQuantity(item, department)
+                </td>
+                <td>
+
+                </td>
+            </tr>
+        }
+
+    }
+
+</table>

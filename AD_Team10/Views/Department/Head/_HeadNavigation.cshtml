@@ -1,0 +1,16 @@
+﻿
+<div class="navbar navbar-inverse navbar-fixed-top">
+
+    @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
+
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="non-dropdown">@Html.ActionLink("Approve/Reject Requisitions", "RequisitionsToApprove")</li>
+                <li class="non-dropdown">@Html.ActionLink("Assign Representative", "AssignRep")</li>
+                <li class="non-dropdown">@Html.ActionLink("Assign Acting Head", "AssignActingHead")</li>
+                <li class="non-dropdown">@Html.ActionLink("Cancel Acting Head", "CancelActingHead")</li>
+            </ul>
+        </div>
+    </div>
+</div>

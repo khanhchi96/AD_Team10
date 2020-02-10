@@ -1,0 +1,73 @@
+﻿
+@{
+    var reqDetail = ViewBag.reqDetail;
+    var req = ViewBag.req;
+    var empName = ViewBag.name;
+    var itemNames = ViewBag.itemNames;
+    var item = ViewBag.item;
+    var date = ViewBag.date;
+    var message = ViewBag.message;
+}
+
+@if (message != null)
+{
+    <script type="text/javascript">
+        window.onload = function ()
+        {
+            alert("@message");
+        };
+    </script>
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>REQUISITION DETAILS</h3>
+
+            <h4>Date: @date </h4>
+            <h4>Employee: @empName </h4>
+            <h4>Status: @req.Status </h4>
+
+            <hr />
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < reqDetail.Count; i++)
+                    {
+                        <tr>
+                            <td>@itemNames[i]</td>
+                            <td>@reqDetail[i].Quantity</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (message == null)
+            {
+                <p></p>
+                <p>Remarks:</p>
+                using (Html.BeginForm("Decision", "Head", FormMethod.Post))
+                {
+                    <input type="text" name="remarks" class="remarks">
+                    <input type="hidden" name="reqID" value="@req.RequisitionID" />
+                    <p></p>
+                    <p>
+                        <input type="submit" name="button" value="Approve" />
+                        <input type="submit" name="button" value="Reject" />
+                    </p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+

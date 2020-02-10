@@ -225,9 +225,25 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\202002080327376_initial.cs" />
-    <Compile Include="Migrations\202002080327376_initial.designer.cs">
-      <DependentUpon>202002080327376_initial.cs</DependentUpon>
+    <Compile Include="Migrations\202002091423319_initial.cs" />
+    <Compile Include="Migrations\202002091423319_initial.designer.cs">
+      <DependentUpon>202002091423319_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002091425123_initial1.cs" />
+    <Compile Include="Migrations\202002091425123_initial1.designer.cs">
+      <DependentUpon>202002091425123_initial1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002091427039_initial2.cs" />
+    <Compile Include="Migrations\202002091427039_initial2.designer.cs">
+      <DependentUpon>202002091427039_initial2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002091428106_initial3.cs" />
+    <Compile Include="Migrations\202002091428106_initial3.designer.cs">
+      <DependentUpon>202002091428106_initial3.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202002091429422_initial4.cs" />
+    <Compile Include="Migrations\202002091429422_initial4.designer.cs">
+      <DependentUpon>202002091429422_initial4.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AdjustmentVoucher.cs" />
@@ -242,6 +258,7 @@
     <Compile Include="Models\PurchaseOrderDetail.cs" />
     <Compile Include="Models\Requisition.cs" />
     <Compile Include="Models\RequisitionDetail.cs" />
+    <Compile Include="Models\RequisitionRetrieval.cs" />
     <Compile Include="Models\RetrievalList.cs" />
     <Compile Include="Models\RetrievalListDetail.cs" />
     <Compile Include="Models\StoreEmployee.cs" />
@@ -249,6 +266,10 @@
     <Compile Include="Models\Supplier.cs" />
     <Compile Include="Models\SupplierItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service\PurchaseOrderService.cs" />
+    <Compile Include="Service\RepresentativeService.cs" />
+    <Compile Include="Service\RequisitionService.cs" />
+    <Compile Include="ViewModels\DataTableList.cs" />
     <Compile Include="ViewModels\LoginView.cs" />
     <Compile Include="ViewModels\ModelInput.cs" />
     <Compile Include="ViewModels\ModelOutput.cs" />
@@ -256,6 +277,7 @@
     <Compile Include="ViewModels\RequisitionReport.cs" />
     <Compile Include="ViewModels\ReportByCategory.cs" />
     <Compile Include="ViewModels\ReportByTimeSeries.cs" />
+    <Compile Include="ViewModels\SelectOrderStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -302,9 +324,6 @@
     <Content Include="Views\Store\Clerk\Index.cshtml" />
     <Content Include="Views\Store\Manager\Index.cshtml" />
     <Content Include="Views\Store\Supervisor\Index.cshtml" />
-    <Content Include="Views\Department\Employee\Index.cshtml" />
-    <Content Include="Views\Department\Head\Index.cshtml" />
-    <Content Include="Views\Department\Representative\Index.cshtml" />
     <Content Include="Views\Store\Clerk\Inventory.cshtml" />
     <Content Include="Views\Store\Clerk\AdjustmentVoucher.cshtml" />
     <Content Include="Views\Store\Clerk\CreateVoucher.cshtml" />
@@ -323,17 +342,46 @@
     </Content>
     <Content Include="Views\Store\Clerk\OrderReport.cshtml" />
     <Content Include="Views\Store\Clerk\_ClerkNavigation.cshtml" />
-    <Content Include="Views\AdjustmentVouchers\Create.cshtml" />
-    <Content Include="Views\AdjustmentVouchers\Delete.cshtml" />
-    <Content Include="Views\AdjustmentVouchers\Details.cshtml" />
-    <Content Include="Views\AdjustmentVouchers\Edit.cshtml" />
-    <Content Include="Views\AdjustmentVouchers\Index.cshtml" />
     <Content Include="Views\Store\_AdjustmentVoucher.cshtml" />
     <Content Include="Views\Store\_AdjustmentVoucherDetail.cshtml" />
     <Content Include="Views\Store\Manager\VoucherDetails.cshtml" />
     <Content Include="Views\Store\Supervisor\VoucherDetails.cshtml" />
     <Content Include="Views\Store\_SupervisorManagerNavigation.cshtml" />
     <Content Include="Views\Shared\_BasicInfo.cshtml" />
+    <Content Include="Views\Department\Employee\CreateRequisition.cshtml" />
+    <Content Include="Views\Department\Employee\Index.cshtml" />
+    <Content Include="Views\Department\Employee\RequisitionDetails.cshtml" />
+    <Content Include="Views\Department\Employee\UpdateRequisition.cshtml" />
+    <Content Include="Views\Department\Employee\_EmployeeNavigation.cshtml" />
+    <Content Include="Views\Department\Head\AssignActingHead.cshtml" />
+    <Content Include="Views\Department\Head\AssignRep.cshtml" />
+    <Content Include="Views\Department\Head\CancelActingHead.cshtml" />
+    <Content Include="Views\Department\Head\Index.cshtml" />
+    <Content Include="Views\Department\Head\RequisitionDetails.cshtml" />
+    <Content Include="Views\Department\Head\RequisitionsToApprove.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulAssignActingHead.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulAssignRep.cshtml" />
+    <Content Include="Views\Department\Head\SuccessfulCancelActingHead.cshtml" />
+    <Content Include="Views\Department\Head\_HeadNavigation.cshtml" />
+    <Content Include="Views\Department\Representative\ChangeLocation.cshtml" />
+    <Content Include="Views\Department\Representative\GetPendingList.cshtml" />
+    <Content Include="Views\Department\Representative\Index.cshtml" />
+    <Content Include="Views\Department\Representative\UpdateRequisitionDetails.cshtml" />
+    <Content Include="Views\Department\Representative\ViewDetails.cshtml" />
+    <Content Include="Views\Store\Clerk\CreateNewOrder.cshtml" />
+    <Content Include="Views\Store\Clerk\DisbursementListPartial.cshtml" />
+    <Content Include="Views\Store\Clerk\GenerateDisbursement.cshtml" />
+    <Content Include="Views\Store\Clerk\GetPendingList.cshtml" />
+    <Content Include="Views\Store\Clerk\GetPendingOrderList.cshtml" />
+    <Content Include="Views\Store\Clerk\NewViewRetrievalList.cshtml" />
+    <Content Include="Views\Store\Clerk\UpdatePurchaseOrder.cshtml" />
+    <Content Include="Views\Store\Clerk\UpdateRequisitionDetails.cshtml" />
+    <Content Include="Views\Store\Clerk\UpdateRetrievalList.cshtml" />
+    <Content Include="Views\Store\Clerk\ViewDetails.cshtml" />
+    <Content Include="Views\Store\Clerk\ViewOrderDetails.cshtml" />
+    <Content Include="Views\Store\Clerk\ViewOrderHistory.cshtml" />
+    <Content Include="Views\Store\Clerk\ViewRequisitionHistory.cshtml" />
+    <Content Include="Views\Store\Clerk\ViewRetrievalList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -354,8 +402,20 @@
     <Content Include="Scripts\jquery-3.3.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202002080327376_initial.resx">
-      <DependentUpon>202002080327376_initial.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202002091423319_initial.resx">
+      <DependentUpon>202002091423319_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091425123_initial1.resx">
+      <DependentUpon>202002091425123_initial1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091427039_initial2.resx">
+      <DependentUpon>202002091427039_initial2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091428106_initial3.resx">
+      <DependentUpon>202002091428106_initial3.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202002091429422_initial4.resx">
+      <DependentUpon>202002091429422_initial4.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

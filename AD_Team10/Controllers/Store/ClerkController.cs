@@ -18,6 +18,9 @@ using System.Web.UI.DataVisualization.Charting;
 using Chart = System.Web.UI.DataVisualization.Charting.Chart;
 using System.Data;
 using ClosedXML.Excel;
+using System.Diagnostics;
+using AD_Team10.Service;
+using System.Globalization;
 
 namespace AD_Team10.Controllers.Store
 {
@@ -26,6 +29,8 @@ namespace AD_Team10.Controllers.Store
     {
         static readonly int PAGE_SIZE = 8;
         private DBContext db = new DBContext();
+        private RequisitionService reqService = new RequisitionService();
+        private PurchaseOrderService orderService = new PurchaseOrderService();
 
         public ActionResult Index()
         {
@@ -34,6 +39,375 @@ namespace AD_Team10.Controllers.Store
             ViewBag.voucherList = db.AdjustmentVouchers.OrderByDescending(v => v.AdjustmentDate).Take(PAGE_SIZE).ToList();
             ViewBag.stock = db.Items.OrderBy(i => i.UnitsInStock / i.ReorderLevel).Take(PAGE_SIZE).ToList();
             return View("~/Views/Store/Clerk/Index.cshtml");
+        }
+
+
+        // GET: Pending requisition list
+        public ActionResult GetPendingList()
+        {
+            var requisitions = reqService.GetPendingRequisitions();
+            var department = new Models.Department();
+            var collectionPoint = new CollectionPoint();
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
+            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName");
+            return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+        }
+
+        [HttpPost]
+        public ActionResult GetPendingList(Models.Department department, CollectionPoint collectionPoint)
+        {
+            var requisitions = reqService.GetPendingRequisitions();
+            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName", collectionPoint.CollectionPointID);
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName", department.DepartmentID);
+            if (department != null)
+            {
+                if (department.DepartmentID == 0)
+                {
+                    if (collectionPoint != null)
+                    {
+                        if (collectionPoint.CollectionPointID == 0)
+                        {
+                            return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
+                        }
+                        else
+                        {
+                            requisitions = requisitions.Where(x => x.Employee.Department.CollectionPointID == collectionPoint.CollectionPointID).ToList();
+                            return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+                        }
+                    }
+                    else
+                    {
+                        return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
+                    }
+                }
+                else
+                {
+                    requisitions = requisitions.Where(x => x.Employee.DepartmentID == department.DepartmentID).ToList();
+                    return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+                }
+            }
+            else
+            {
+                return View("~/Views/Store/Clerk/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+            }
+
+        }
+
+        // GET: View pending requisition detail
+        public ActionResult ViewDetails(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Requisition requisition = reqService.Find(id);
+            List<RequisitionDetail> requisitionDetail = requisition.RequisitionDetails.ToList();
+            if (requisition == null)
+            {
+                return HttpNotFound();
+            }
+            //return View(requisition);
+            return View("~/Views/Store/Clerk/ViewDetails.cshtml", Tuple.Create(requisition, requisitionDetail));
+        }
+
+        [HttpGet]
+        public JsonResult GetRequisitionDetailsList()
+        {
+            List<RequisitionDetail> requisitionDetailsList = reqService.GetPendingRequisitionDetails();
+            return Json(requisitionDetailsList, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: View requisition history
+        public ActionResult ViewRequisitionHistory()
+        {
+            var requisitions = reqService.GetRequisitionByStatus(Status.Completed);
+            var department = new Models.Department();
+            var collectionPoint = new CollectionPoint();
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
+            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName");
+            return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+        }
+
+        [HttpPost]
+        public ActionResult ViewRequisitionHistory(Models.Department department, CollectionPoint collectionPoint)
+        {
+            var requisitions = reqService.GetRequisitionByStatus(Status.Completed);
+            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName", collectionPoint.CollectionPointID);
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName", department.DepartmentID);
+            if (department != null)
+            {
+                if (department.DepartmentID == 0)
+                {
+                    if (collectionPoint != null)
+                    {
+                        if (collectionPoint.CollectionPointID == 0)
+                        {
+                            return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
+                        }
+                        else
+                        {
+                            requisitions = requisitions.Where(x => x.Employee.Department.CollectionPointID == collectionPoint.CollectionPointID).ToList();
+                            return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+                        }
+                    }
+                    else
+                    {
+                        return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
+                    }
+                }
+                else
+                {
+                    requisitions = requisitions.Where(x => x.Employee.DepartmentID == department.DepartmentID).ToList();
+                    return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+                }
+            }
+            else
+            {
+                return View("~/Views/Store/Clerk/ViewRequisitionHistory.cshtml", Tuple.Create(requisitions, department, collectionPoint));
+            }
+        }
+
+        // GET: View retrieval list
+        public ActionResult ViewRetrievalList()
+        {
+            var requisitionDetails = reqService.GetPendingRequisitionDetails();
+            ViewData["requisitionDetails"] = requisitionDetails;
+            Dictionary<Item, int> itemQuantity = reqService.GetItemAndQuantity(requisitionDetails);
+            ViewData["itemquantity"] = itemQuantity;
+            List<Item> items = reqService.GetDistinctItem(requisitionDetails);
+            ViewData["items"] = items;
+
+            Dictionary<Item, Dictionary<Requisition, int>> itemRquisitionList = new Dictionary<Item, Dictionary<Requisition, int>>();
+            foreach (var item in items)
+            {
+                if (!itemRquisitionList.ContainsKey(item))
+                    itemRquisitionList.Add(item, reqService.GetRequisitionByItem(item, requisitionDetails));
+            }
+            ViewData["itemRequisitionList"] = itemRquisitionList;
+            return View("~/Views/Store/Clerk/ViewRetrievalList.cshtml", items);
+        }
+
+        //GET: Using Rerieval List table
+        public ActionResult NewViewRetrievalList()
+        {
+            RetrievalList retrievalList = reqService.GetRetrievalListForNow();   //After test, change to generate retrieval list
+            List<Item> items = reqService.GetDistictItemForRetrievalList(retrievalList);
+            return View("~/Views/Store/Clerk/NewViewRetrievalList.cshtml", Tuple.Create(retrievalList, items));
+        }
+
+        public ActionResult GenerateDisbursement()
+        {
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
+            return View("~/Views/Store/Clerk/GenerateDisbursement.cshtml");
+        }
+
+        [HttpPost]
+        public ActionResult GenerateDisbursement(Models.Department department)
+        {
+            Dictionary<Item, int> departmentItemQuantity = reqService.GetDepartmentItemAndQuantity(department);
+            ViewData["departmentItemAndQuantity"] = departmentItemQuantity;
+            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName", department.DepartmentID);
+            return View("~/Views/Store/Clerk/GenerateDisbursement.cshtml", department);
+        }
+
+        public ActionResult UpdateRetrievalList(int id_retrieval)
+        {
+            RetrievalList retrievalList = reqService.GetRetrievalListForNow();   //After test, change to generate retrieval list
+            List<Item> items = reqService.GetDistictItemForRetrievalList(retrievalList);
+            ViewData["items"] = items;
+            return View("~/Views/Store/Clerk/UpdateRetrievalList.cshtml", retrievalList);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateRetrievalList(RetrievalList retrievalList)
+        {
+            if (ModelState.IsValid)
+            {
+                RetrievalList editedRetrieval = reqService.GetRetrievalListById(retrievalList.RetrievalListID);
+                foreach (var details in retrievalList.RetrievalListDetails)
+                {
+                    editedRetrieval.RetrievalListDetails.Where(x => x.ItemID == details.ItemID && x.DepartmentID == details.DepartmentID)
+                                                        .SingleOrDefault().QuantityOffered = details.QuantityOffered;
+                }
+                reqService.UpdateRetrievalList(editedRetrieval);
+                return RedirectToAction("NewViewRetrievalList");
+            }
+            return View("~/Views/Store/Clerk/UpdateRetrievalList.cshtml", retrievalList);
+        }
+
+        public ActionResult UpdateRequisitionDetails(int id_requisition)
+        {
+            Requisition requisition = reqService.GetRequisitionById(id_requisition);
+            return View("~/Views/Store/Clerk/UpdateRequisitionDetails.cshtml", requisition);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateRequisitionDetails(Requisition requisition)
+        {
+            if (ModelState.IsValid)
+            {
+                Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
+                for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
+                {
+                    editedRequisition.RequisitionDetails.ToList()[i].QuantityReceived = requisition.RequisitionDetails.ToList()[i].QuantityReceived;
+                }
+                if (reqService.IsCompleted(editedRequisition))
+                {
+                    editedRequisition.CompletedDate = DateTime.Now;
+                    editedRequisition.Status = Status.Completed;
+                }
+                else
+                {
+                    editedRequisition.Status = Status.Incomplete;
+                    RetrievalList retrievalList = reqService.GetRetrievalListForNow();
+                    reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
+                    reqService.UpdateRetrievalList(retrievalList);
+                }
+                reqService.UpdateRequisition(editedRequisition);
+                return RedirectToAction("ViewDetails", new { id = requisition.RequisitionID });
+            }
+            return View("~/Views/Store/Clerk/UpdateRequisitionDetails.cshtml", requisition);
+        }
+
+        public ActionResult CreateNewOrder()
+        {
+            ViewBag.SupplierId = new SelectList(orderService.GetSuppliersList(), "SupplierID", "SupplierName");
+            return View("~/Views/Store/Clerk/CreateNewOrder.cshtml");
+        }
+
+        public ActionResult GetPendingOrderList()
+        {
+            List<PurchaseOrder> purchaseOrders = reqService.GetPendingPurchaseOrder();
+            Supplier supplier = new Supplier();
+            SelectOrderStatus selectOrderStatus = new SelectOrderStatus();
+            ViewBag.SupplierID = new SelectList(orderService.GetSuppliersList(), "SupplierID", "SupplierName");
+            ViewBag.OrderStatusId = new SelectList(selectOrderStatus.GetSelectOrderList(), "OrderStatusId", "OrderStatusName");
+            return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+        }
+
+        [HttpPost]
+        public ActionResult GetPendingOrderList(Supplier supplier, SelectOrderStatus selectOrderStatus)
+        {
+            List<PurchaseOrder> purchaseOrders = reqService.GetPendingPurchaseOrder();
+            ViewBag.SupplierID = new SelectList(orderService.GetSuppliersList(), "SupplierID", "SupplierName", supplier.SupplierID);
+            ViewBag.OrderStatusId = new SelectList(selectOrderStatus.GetSelectOrderList(), "OrderStatusId", "OrderStatusName", selectOrderStatus.OrderStatusId);
+            switch (selectOrderStatus.OrderStatusId)
+            {
+                case 1:
+                    selectOrderStatus.OrderStatusName = "Pending";
+                    break;
+                case 2:
+                    selectOrderStatus.OrderStatusName = "Delivering";
+                    break;
+                case 3:
+                    selectOrderStatus.OrderStatusName = "Incompleted";
+                    break;
+                case 4:
+                    selectOrderStatus.OrderStatusName = "Completed";
+                    break;
+                default:
+                    break;
+            }
+            if (supplier != null)
+            {
+                if (supplier.SupplierID == 0)
+                {
+                    if (selectOrderStatus.OrderStatusId == 0)
+                    {
+                        return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+                    }
+                    else
+                    {
+                        purchaseOrders = purchaseOrders.Where(x => x.OrderStatus.ToString() == selectOrderStatus.OrderStatusName).ToList();
+                        return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+                    }
+                }
+                else
+                {
+                    if (selectOrderStatus.OrderStatusId != 0)
+                    {
+                        purchaseOrders = purchaseOrders.Where(x => x.OrderStatus.ToString() == selectOrderStatus.OrderStatusName && x.SupplierID == supplier.SupplierID).ToList();
+                        return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+                    }
+                    else
+                    {
+                        purchaseOrders = purchaseOrders.Where(x => x.SupplierID == supplier.SupplierID).ToList();
+                        return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+                    }
+                }
+            }
+            else
+            {
+                return View("~/Views/Store/Clerk/GetPendingOrderList.cshtml", Tuple.Create(purchaseOrders, supplier, selectOrderStatus));
+            }
+        }
+
+        public ActionResult ViewOrderHistory()
+        {
+            List<PurchaseOrder> purchaseOrders = orderService.GetPurchaseOrderHistory();
+            Supplier supplier = new Supplier();
+            ViewBag.SupplierID = new SelectList(orderService.GetSuppliersList(), "SupplierID", "SupplierName");
+            return View("~/Views/Store/Clerk/ViewOrderHistory.cshtml", Tuple.Create(purchaseOrders, supplier));
+        }
+
+        [HttpPost]
+        public ActionResult ViewOrderHistory(Supplier supplier)
+        {
+            List<PurchaseOrder> purchaseOrders = orderService.GetPurchaseOrderHistory();
+            ViewBag.SupplierID = new SelectList(orderService.GetSuppliersList(), "SupplierID", "SupplierName", supplier.SupplierID);
+            if (supplier != null)
+            {
+                if (supplier.SupplierID == 0)
+                {
+                    return View("~/Views/Store/Clerk/ViewOrderHistory.cshtml", Tuple.Create(purchaseOrders, supplier));
+                }
+                else
+                {
+                    purchaseOrders = purchaseOrders.Where(x => x.SupplierID == supplier.SupplierID).ToList();
+                    return View("~/Views/Store/Clerk/ViewOrderHistory.cshtml", Tuple.Create(purchaseOrders, supplier));
+                }
+            }
+            else
+            {
+                return View("~/Views/Store/Clerk/ViewOrderHistory.cshtml", Tuple.Create(purchaseOrders, supplier));
+            }
+        }
+
+        public ActionResult ViewOrderDetails(int id)
+        {
+            List<PurchaseOrderDetail> purchaseOrderDetails = orderService.GetOrderDetailByOrderId(id);
+            ViewData["purchaseOrder"] = orderService.GetPurchaseOrder(id);
+            return View("~/Views/Store/Clerk/ViewOrderDetails.cshtml", purchaseOrderDetails);
+        }
+
+        public ActionResult UpdatePurchaseOrder(int orderID)
+        {
+            PurchaseOrder purchaseOrder = orderService.GetPurchaseOrder(orderID);
+            return View("~/Views/Store/Clerk/UpdatePurchaseOrder.cshtml", purchaseOrder);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdatePurchaseOrder(PurchaseOrder purchaseOrder)
+        {
+            if (ModelState.IsValid)
+            {
+                PurchaseOrder editedorder = orderService.GetPurchaseOrder(purchaseOrder.PurchaseOrderID);
+                for (int i = 0; i < editedorder.PurchaseOrderDetails.Count; i++)
+                {
+                    editedorder.PurchaseOrderDetails.ToList()[i].QuantityReceived = purchaseOrder.PurchaseOrderDetails.ToList()[i].QuantityReceived;
+                }
+                if (orderService.IsComoleted(editedorder))
+                {
+                    editedorder.CompletedDate = DateTime.Now;
+                    editedorder.OrderStatus = OrderStatus.Completed;
+                }
+                orderService.UpdatePurchaseOrder(editedorder);
+                return RedirectToAction("ViewOrderDetails", new { id = editedorder.PurchaseOrderID });
+            }
+            return View("~/Views/Store/Clerk/UpdatePurchaseOrder.cshtml", purchaseOrder);
         }
 
         public ActionResult Inventory(int? page, string stockLevel = "", string sort = "", string searchStr = "")
@@ -168,28 +542,31 @@ namespace AD_Team10.Controllers.Store
         [HttpPost]
         public ActionResult RequisitionReport(RequisitionReport reqReport)
         {
-            TempData["reqReport"] = reqReport;
+            Session["reqReport"] = reqReport;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+        private RequisitionReport requisitionReport = new RequisitionReport();
 
         [HttpPost]
         public ActionResult OrderReport(OrderReport orderReport)
         {
-            TempData["orderReport"] = orderReport;
+            Session["orderReport"] = orderReport;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         public ActionResult ShowReqReport()
         {
-            RequisitionReport reqReport = TempData["reqReport"] as RequisitionReport;
+            RequisitionReport reqReport = Session["reqReport"] as RequisitionReport;
+            //RequisitionReport reqReport = requisitionReport;
             if (reqReport.CategoryList == null)
                 reqReport.CategoryList = db.Categories.Select(c => c.CategoryId).ToList();
 
             if (reqReport.DepartmentList == null)
                 reqReport.DepartmentList = db.Departments.Select(d => d.DepartmentID).ToList();
+
             GetRequisitionData(reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt);
-            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+            DataTable dt = GetTable(categories, reqReport.DepartmentList, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
             
 
             ViewBag.report = reqReport;
@@ -200,18 +577,20 @@ namespace AD_Team10.Controllers.Store
 
         public ActionResult ShowOrderReport()
         {
-            OrderReport orderReport = TempData["orderReport"] as OrderReport;
+            OrderReport orderReport = Session["orderReport"] as OrderReport;
             if (orderReport.CategoryList == null)
                 orderReport.CategoryList = db.Categories.Select(c => c.CategoryId).ToList();
             GetOrderData(orderReport, out string[] categories, out ReportByTimeSeries[] timeDt);
-            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
+            DataTable dt = GetTable(categories, null, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
             ViewBag.report = orderReport;
             ViewBag.catSize = catSize;
             ViewBag.tableName = "Purchase order quantity by category from " + tablePeriod;
+            //List<DataRow> list = dt.AsEnumerable().ToList();
+            //PagedList<DataRow> plist = new PagedList<DataRow>(list, page ?? 1, 5);
             return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
         }
 
-        public DataTable GetTable(string[] categories, out int[] catSize, out string tablePeriod,
+        public DataTable GetTable(string[] categories, List<int> departmentList, out int[] catSize, out string tablePeriod,
                                     ReportByTimeSeries[] timeDt, string start, string end)
         {
             DateTime startDate = Convert.ToDateTime(start);
@@ -223,14 +602,14 @@ namespace AD_Team10.Controllers.Store
 
             for (int i = 0; i < categories.Length; i++)
             {
-                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
+                GetTimeRange(timeDt, departmentList, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
                     out Dictionary<string, double[]> dic);
                 months[i] = xValues;
                 quantity[i] = yValues;
                 itemDataByMonth.Add(dic);
                 catSize[i] = dic.Count();
-            }             
-            tablePeriod = months[0][0] + " - " + months[0][months[0].Length - 1];
+            }
+            tablePeriod = startDate.ToString("MM/yyyy") + "-" + startDate.AddMonths(6).AddDays(-1).ToString("MM/yyyy") + " (predicted)";
             DataTable dt = new DataTable("MyTable");
             dt.Columns.Add(new DataColumn("Category", typeof(string)));
             dt.Columns.Add(new DataColumn("Item", typeof(string)));
@@ -260,7 +639,7 @@ namespace AD_Team10.Controllers.Store
             RequisitionReport reqReport = GetReqReport(report);
             GetRequisitionData(reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt);
-            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+            DataTable dt = GetTable(categories, reqReport.DepartmentList, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
             string fileName = "Requisition " + tablePeriod.Replace('/', '-');
             ExportData(dt, fileName, catSize, categories);
         }
@@ -269,7 +648,7 @@ namespace AD_Team10.Controllers.Store
         {
             OrderReport orderReport = GetOrderReport(report);
             GetOrderData(orderReport, out string[] categories, out ReportByTimeSeries[] timeDt);
-            DataTable dt = GetTable(categories, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
+            DataTable dt = GetTable(categories, null, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
             DateTime endDate = Convert.ToDateTime(orderReport.EndDate);
             string fileName = "PurchaseOrder " + tablePeriod.Replace('/', '-');
             ExportData(dt, fileName, catSize, categories);
@@ -328,7 +707,7 @@ namespace AD_Team10.Controllers.Store
             if (groupBy.Equals("time"))
             {
                 chart.Titles.Add("Total quantity of all departments by month");
-                ChartByTimeSeries(timeDt, categories, chart,
+                ChartByTimeSeries(timeDt, reqReport.DepartmentList, categories, chart,
                                 Convert.ToDateTime(reqReport.StartDate), Convert.ToDateTime(reqReport.EndDate), chartType);
             }
 
@@ -358,7 +737,7 @@ namespace AD_Team10.Controllers.Store
             if (groupBy.Equals("time"))
             {
                 chart.Titles.Add("Total order quantity of all categories by month");
-                ChartByTimeSeries(timeDt, categories, chart,
+                ChartByTimeSeries(timeDt, null, categories, chart,
                                 Convert.ToDateTime(orderReport.StartDate), Convert.ToDateTime(orderReport.EndDate), chartType);
             }
 
@@ -398,12 +777,14 @@ namespace AD_Team10.Controllers.Store
         public void GetRequisitionData(RequisitionReport reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt)
         {
+            List<int> catId = reqReport.CategoryList;
+            List<int> depId = reqReport.DepartmentList;
             DateTime startDate = Convert.ToDateTime(reqReport.StartDate);
             DateTime endDate = Convert.ToDateTime(reqReport.EndDate);
             var data = db.RequisitionDetails
                  .Where(r => r.Requisition.RequisitionDate >= startDate &&
                              r.Requisition.RequisitionDate < endDate &&
-                             reqReport.CategoryList.Contains(r.Item.CategoryID) && reqReport.DepartmentList.Contains(r.Requisition.Employee.Department.DepartmentID));
+                             catId.Contains(r.Item.CategoryID) && depId.Contains(r.Requisition.Employee.DepartmentID));
             var timeSeriesData = data
                  .GroupBy(r => new ReportByTimeSeriesKey
                  {
@@ -418,9 +799,10 @@ namespace AD_Team10.Controllers.Store
                     Department = r.Requisition.Employee.Department.DepartmentName,
                     Category = r.Item.Category.CategoryName
                 })
-                .Select(r => new ReportByCategory { Key = r.Key, Quantity = r.Sum(b => b.Quantity) });
-
-            categories = timeSeriesData.Select(r => r.Key.Category.ToString()).Distinct().ToArray();
+                .Select(r => new ReportByCategory { Key = r.Key, Quantity = r.Sum(b => b.Quantity) }).ToList();
+            
+            categories = db.Categories.Where(c => catId.Contains(c.CategoryId)).Select(c => c.CategoryName).Distinct().ToArray();
+            //categories = timeSeriesData.Select(r => r.Key.Category.ToString()).Distinct().ToArray();
             timeDt = timeSeriesData.ToArray();
             departments = catData.Select(r => r.Key.Department.ToString()).Distinct().ToArray();
             catDt = catData.ToArray();
@@ -443,7 +825,8 @@ namespace AD_Team10.Controllers.Store
                  .Select(r => new ReportByTimeSeries { Key = r.Key, Quantity = r.Sum(b => b.Quantity) }).ToList();
 
             data = query.ToArray();
-            categories = query.Select(r => r.Key.Category.ToString()).Distinct().ToArray();
+            List<int> catId = orderReport.CategoryList;
+            categories = db.Categories.Where(c => catId.Contains(c.CategoryId)).Select(c => c.CategoryName).Distinct().ToArray();
         }
 
         public double[] Predict(double[] data)
@@ -463,6 +846,7 @@ namespace AD_Team10.Controllers.Store
 
             double[][] xValues = new double[data.Count() - totalVariable][];
             double[] yValues = new double[data.Count() - totalVariable];
+            
             for (int i = 0; i < data.Count() - totalVariable; i++)
             {
                 xValues[i] = new double[totalVariable];
@@ -478,13 +862,20 @@ namespace AD_Team10.Controllers.Store
                 {
                     xValues[i] = xValues[i].Select(r => r + 1).ToArray();
                     yValues[i] = yValues[i] + 1;
-                }             
+                }
             }
-
-            double[] c = Fit.MultiDim(
-                xValues,
-                yValues,
-                intercept: true);
+            double[] c = new double[totalVariable + 1];
+            try
+            {
+                c = Fit.MultiDim(
+                    xValues,
+                    yValues,
+                    intercept: true);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
 
             double[][] predictedInput = new double[PREDICT_SIZE][];
             double[] predictedOutput = new double[PREDICT_SIZE];
@@ -507,17 +898,19 @@ namespace AD_Team10.Controllers.Store
                 }
                 predictedInput[i][totalVariable - 1] = predictedOutput[i - 1];
                 predictedOutput[i] += c[totalVariable] * predictedInput[i][totalVariable - 1];
-                if (predictedOutput[i] < 0) predictedOutput[i] = 0;
+                if (predictedOutput[i] < 0)
+                    predictedOutput[i] = 0;
+                else predictedOutput[i] = Math.Round(predictedOutput[i]);
             }
             return predictedOutput;
         }
 
-        public void ChartByTimeSeries(ReportByTimeSeries[] timeDt, string[] categories, Chart chart,
+        public void ChartByTimeSeries(ReportByTimeSeries[] timeDt, List<int> departmentList, string[] categories, Chart chart,
                                 DateTime startDate, DateTime endDate, SeriesChartType chartType)
         {
             for (int i = 0; i < categories.Length; i++)
             {
-                GetTimeRange(timeDt, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
+                GetTimeRange(timeDt, departmentList, categories[i], startDate, endDate, out string[] xValues, out double[] yValues,
                     out Dictionary<string, double[]> dic);
                 chart.Series.Add(new Series(categories[i]));
                 //chart.Series[categories[i]].IsValueShownAsLabel = true;
@@ -530,7 +923,7 @@ namespace AD_Team10.Controllers.Store
             }
         }
 
-        public void GetTimeRange(ReportByTimeSeries[] timeDt, string category, DateTime startDate, DateTime endDate,
+        public void GetTimeRange(ReportByTimeSeries[] timeDt, List<int> departmentList, string category, DateTime startDate, DateTime endDate,
             out string[] xValues, out double[] yValues, out Dictionary<string, double[]> dic)
         {
             var query = timeDt.Where(r => r.Key.Category == category)
@@ -571,7 +964,7 @@ namespace AD_Team10.Controllers.Store
                     string itemName = item[j];
                     var query2 = db.RequisitionDetails.Where(r =>
                                SqlFunctions.DatePart("month", r.Requisition.RequisitionDate) == month
-                               && SqlFunctions.DatePart("year", r.Requisition.RequisitionDate) == year
+                               && SqlFunctions.DatePart("year", r.Requisition.RequisitionDate) == year && departmentList.Contains(r.Requisition.Employee.DepartmentID)
                                && r.Item.Description.Equals(itemName)).ToList();
                     double qty = 0;
                     if (query2 != null) qty = query2.Select(r => r.Quantity).Sum();

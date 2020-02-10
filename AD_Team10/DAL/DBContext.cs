@@ -32,6 +32,7 @@ namespace AD_Team10.DAL
         public DbSet<RetrievalList> RetrievalLists { get; set; }
         public DbSet<RetrievalListDetail> RetrievalListDetails { get; set; }
   
+        public DbSet<RequisitionRetrieval> RequisitionRetrievals { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

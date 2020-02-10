@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewBag.Title = "rqDetails";
+    var requisitionDetails = ViewBag.rqDetails;
+    var Requisition = ViewBag.Requisition;
+    var requisitionId = ViewBag.rqID;
+}
+
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>REQUISITION DETAILS</h3>
+    <h4>Requistion ID: @ViewBag.rqID</h4>
+    <h4>Status: @ViewBag.Requisition.Status</h4>
+
+
+
+    <table class="table">
+        <tr>
+            <th>
+                Item
+            </th>
+            <th>
+                Quantity Requested
+            </th>
+            <th>
+                Quantity Received
+            </th>
+            <th>
+                Quantity Remaining
+            </th>
+
+        </tr>
+
+        @foreach (var rqDetail in requisitionDetails)
+        {
+            <tr>
+                <td>
+                    @rqDetail.Item.Description
+                </td>
+                <td>
+                    @rqDetail.Quantity
+                </td>
+                <td>
+                    @rqDetail.QuantityReceived
+                </td>
+                <td>
+                    @(rqDetail.Quantity - rqDetail.QuantityReceived)
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    <div>
+        @Html.ActionLink("Back to List", "Index", new { @class = "btn btn-primary" })
+    </div>
+
+</div>

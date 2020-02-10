@@ -1,0 +1,51 @@
+﻿@using AD_Team10.Models
+@model DeptEmployee
+
+@{
+    var actingHead = ViewBag.actingHead;
+    var start = ViewBag.startDate;
+    var end = ViewBag.endDate;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>ASSIGN ACTING HEAD</h3>
+            <p></p>
+            <b>Current Acting Head:</b>
+
+            @if (actingHead != "None")
+            { 
+                <p>@actingHead (@start - @end)</p>
+                <p>Please @Html.ActionLink("cancel current acting head", "CancelActingHead") before assigning a new one.</p>
+            }
+            else
+            {
+                using (Html.BeginForm("SuccessfulAssignActingHead", "Head", FormMethod.Post))
+                {
+                    <p>None</p>
+                    <p><b>Assign Acting Head:</b> @Html.DropDownListFor(m => m.DeptEmployeeID, (IEnumerable<SelectListItem>)ViewBag.depEmployees, "Select Employee", new { @class = "form-control" })</p>
+                    <p><b>Period:</b></p>
+                    <p><input type="date" id="start" name="start" />  to  <input type="date" id="end" name="end" /></p>
+                    <p></p>
+                    <p><input type="submit" name="submit" value="Submit and Update" /></p>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    let today = new Date().toISOString().substr(0, 10);
+    document.querySelector("#start").value = today;
+
+    var testDate = new Date();
+    testDate.setDate(testDate.getDate() + 7);
+    let nextWeek = testDate.toISOString().substr(0, 10);
+    document.querySelector("#end").value = nextWeek;
+
+    start.min = new Date().toISOString().split("T")[0];
+</script>

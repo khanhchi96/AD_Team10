@@ -10,8 +10,7 @@ namespace AD_Team10.CustomMobileModels
     {
         public int DepartmentID { get; set; }
         public string DepartmentName { get; set; }
-        public int CollectionPointID { get; set; }
-        public string CollectionPointName { get; set; }
+        public CollectionPoint CollectionPoint { get; set; }
         public CustomDeptEmployee Representative { get; set; }
     }
 }

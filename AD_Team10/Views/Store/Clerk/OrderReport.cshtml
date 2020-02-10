@@ -42,16 +42,17 @@
     <br><br>
 
 
-    @*<button class="ui button">
-            Clear Filters
-        </button>*@
-    <div>
-    <button class="generate submit">
-        Generate Report
-    </button>
+    <div class="button">
+        <button class="generate submit">
+            Generate Report
+        </button>
+    </div>
+    <div class="loading-container">
+        <div class="loading"></div>
+        <div id="loading-text">loading</div>
     </div>
 
-    <div id="report">
+    <div id="chart">
         @Html.Partial("~/Views/Store/Clerk/_Report.cshtml")
     </div>
 </div>
@@ -81,6 +82,7 @@
 
 
     $('.generate').on('click', function () {
+        $('.loading-container').show();
         var range = $("#timeRange :selected").val();
         var date1 = new Date($('#endDate').val());
         var startDate = new Date(date1.setMonth(date1.getMonth() - range + 1));
@@ -97,7 +99,7 @@
         report.endDate = endDate.toISOString();
         report.categoryList = categoryList;
 
-
+        
         $.ajax({
             type: "POST",
             url: "@Url.Action("OrderReport", "Clerk")",
@@ -105,8 +107,9 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function () {
-                $("#report").load("@Url.Action("ShowOrderReport", "Clerk")");
-
+                $("#report").load("@Url.Action("ShowOrderReport", "Clerk")", {}, function () {
+                    $('.loading-container').hide();
+                }); 
             }
         });
     })

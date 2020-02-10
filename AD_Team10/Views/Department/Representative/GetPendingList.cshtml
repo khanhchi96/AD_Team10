@@ -1,0 +1,118 @@
+﻿@model Tuple<List<AD_Team10.Models.Requisition>, AD_Team10.Models.Department, AD_Team10.Models.CollectionPoint>
+@*@model IEnumerable<AD_Team10.Models.Requisition>*@
+
+@{
+    ViewBag.Title = "GetPendingList";
+}
+
+<h3 align="center">PENDING REQUISITIONS</h3>
+
+@using (Html.BeginForm())
+{
+    <div class="superDiv">
+        <div class="filter">
+            Filter by
+        </div>
+        <div class="filter">
+            @*@Html.Label(null, null, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            @Html.HiddenFor(m => m.Item2.DepartmentID, "DepartmentID")
+            @Html.DropDownList("DepartmentID", ViewBag.DepartmentID as SelectList, "Department", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="filter">
+            @Html.HiddenFor(m => m.Item3.CollectionPointID)
+            @Html.DropDownList("CollectionPointID", ViewBag.CollectionPointID as SelectList, "CollectionPoint", htmlAttributes: new { @class = "form-control" })
+        </div>
+        <div class="filter">
+            <input type="submit" value="Submit" />
+        </div>
+    </div>
+}
+<hr />
+
+
+
+<table class="table table-hover row mx-0" align="center">
+    <!--Why cannot change the width of the table?-->
+    @*<thead class="w-50">*@
+    <tr class="row mx-0 bg-primary">
+        <th class="col-3">
+            @*@Html.DisplayNameFor(model => model.RequisitionDate)*@
+            Requisition Date
+        </th>
+        <th class="col-3">
+            @*@Html.DisplayNameFor(model => model.Employee.Department.DepartmentName)*@
+            Department Name
+        </th>
+        <th>
+            @*@Html.DisplayNameFor(model => model.Employee.Department.CollectionPoint.CollectionPointName)*@
+            Collection Point Name
+        </th>
+        <th class="col-3">
+            @*@Html.DisplayNameFor(model => model.Status)*@
+            Status
+        </th>
+
+        <th class="col-3">Details</th>
+    </tr>
+    @*</thead>*@
+
+    @if (Model.Item1.Count() == 0)
+    {
+        <tr>
+            <td colspan="6" align="center">
+                There's nothing you want!
+            </td>
+        </tr>
+    }
+    else
+    {
+
+        foreach (var item in Model.Item1)
+        {
+            @*<tbody class="w-50">*@
+            <tr class="row mx-0">
+                <td class="col-3">
+                    @{
+                        string dateValue = item.RequisitionDate.ToString("dd/MM/yyyy");
+                    }
+                    @Html.DisplayFor(modelItem => dateValue)
+                </td>
+                <td class="col-3">
+                    @Html.DisplayFor(modelItem => item.Employee.Department.DepartmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Employee.Department.CollectionPoint.CollectionPointName)
+                </td>
+                <td class="col-3">
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td class="col-3">
+                    @Html.ActionLink("View", "ViewDetails", new { id = item.RequisitionID })
+                </td>
+            </tr>
+            @*</tbody>*@
+        }
+    }
+
+</table>
+
+<style>
+    .superDiv {
+        position: relative;
+        left: 600px;
+    }
+
+    .filter {
+        display: inline-block;
+    }
+</style>
+
+@*<script type="text/javascript">
+    $(function(){
+    $("#DepartmentID").on("change", function {
+       $("#DepartmentName").val($(this).text());
+     });
+    });
+    </script>*@
+
+

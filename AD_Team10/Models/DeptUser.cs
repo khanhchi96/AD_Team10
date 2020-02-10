@@ -8,7 +8,7 @@ namespace AD_Team10.Models
 {
     public enum DepartmentRole
     {
-        EMPLOYEE, REPRESENTATIVE, HEAD
+        EMPLOYEE, REPRESENTATIVE, HEAD, ACTINGHEAD
     }
     public class DeptUser
     {
@@ -19,7 +19,8 @@ namespace AD_Team10.Models
         public DepartmentRole Role { get; set; }
         [ForeignKey("DeptEmployee")]
         public int DeptEmployeeID { get; set; }
-
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public virtual DeptEmployee DeptEmployee { get; set; }
     }
 }

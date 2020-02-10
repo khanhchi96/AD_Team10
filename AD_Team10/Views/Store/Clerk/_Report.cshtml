@@ -8,56 +8,59 @@
     //else { report = null; }
     int[] catSize = new int[0];
     int[] rowSpan = new int[0];
-    if (ViewBag.catSize != null) {
+    if (ViewBag.catSize != null)
+    {
         catSize = (int[])ViewBag.catSize;
         rowSpan = new int[catSize.Length];
         rowSpan[0] = 0;
         for (int i = 1; i < catSize.Length; i++)
         {
-            rowSpan[i] = rowSpan[i - 1] + catSize[i-1];
+            rowSpan[i] = rowSpan[i - 1] + catSize[i - 1];
         }
     }
 }
 
 @if (report != null)
 {
-    <table border="1" cellpadding="5">
-        <thead>
+    <div class="table-wrap">
+        <table border="1" cellpadding="5" class="table">
+
             <tr>
                 @foreach (System.Data.DataColumn col in Model.Columns)
                 {
                     <th>@col.Caption</th>
                 }
             </tr>
-        </thead>
-        <tbody>
 
-            @for (int j = 0; j < Model.Rows.Count; j++)
-            {
-            <tr>
+            <tbody>
 
-                @if (rowSpan.Contains(j))
+                @for (int j = 0; j < Model.Rows.Count; j++)
                 {
-                    var index = Array.FindIndex(rowSpan, row => row == j);
-                    if (@catSize[index] > 1)
-                    {
-                        <td rowspan=@catSize[index]>@Model.Rows[j].ItemArray[0].ToString()</td>
-                    }
-                    else
-                    {
-                        <td>@Model.Rows[j].ItemArray[0].ToString()</td>
-                    }
+                    <tr>
 
-                }
+                        @if (rowSpan.Contains(j))
+                        {
+                            var index = Array.FindIndex(rowSpan, row => row == j);
+                            if (@catSize[index] > 1)
+                            {
+                                <td rowspan=@catSize[index]>@Model.Rows[j].ItemArray[0].ToString()</td>
+                            }
+                            else
+                            {
+                                <td>@Model.Rows[j].ItemArray[0].ToString()</td>
+                            }
 
-                @for (int i = 1; i < Model.Rows[j].ItemArray.Length; i++)
-                {
-                    <td>@Model.Rows[j].ItemArray[i].ToString()</td>
+                        }
+
+                        @for (int i = 1; i < Model.Rows[j].ItemArray.Length; i++)
+                        {
+                            <td>@Model.Rows[j].ItemArray[i].ToString()</td>
+                        }
+                    </tr>
                 }
-            </tr>
-            }
-        </tbody>
-    </table>
+            </tbody>
+        </table>
+    </div>
 
     if (report.GetType() == typeof(RequisitionReport))
     {
@@ -81,5 +84,17 @@
 }
 
 
+<style>
+    .table-wrap {
+        display: inline-block;
+        height: 600px;
+        overflow-y: auto
+    }
 
+    table th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+    }
+</style>
 

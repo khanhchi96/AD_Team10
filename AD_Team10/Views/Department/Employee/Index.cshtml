@@ -1,7 +1,143 @@
-﻿
+﻿@model PagedList.IPagedList<AD_Team10.Models.Requisition>
+@using PagedList.Mvc;
+@using AD_Team10.Models;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Requisition History";
+    var rquisitions = ViewBag.Requisitions;
+    var statusList = (List<string>)ViewBag.statusList;
+
 }
 
-<h2>This is Employee page</h2>
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+
+    <div class="filter-option">
+    <div class="create">
+        <span class="glyphycon glyphicon-plus plus-sign"></span>
+        <div class="create-link">
+            @Html.ActionLink("Create New Requisition", "CreateRequisition", "Employee")
+        </div>
+    </div>
+        <button id="clear">Clear</button>
+        <div class="filter">
+            <span>Filter by status: </span>
+            <select name="filterStatus" id="filterStatus">
+                @foreach (var s in statusList)
+                {
+                    <option value="@Url.Action("Index", "Employee", new { status = s})">@s</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        if (ViewBag.status == null)
+        {
+            <p>No  Requisition has been created yet.</p>
+        }
+        else
+        {
+            <p>No Requisition matches the condition.</p>
+        }
+    }
+
+    else
+    {
+        <table class="table">
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().RequisitionID)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().RequisitionDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().Status)
+                </th>
+                <th>
+                    View
+                </th>
+                <th>Action</th>
+            </tr>
+
+            @foreach (var requisition in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelRQ => requisition.RequisitionID)
+                    </td>
+                    <td>
+                        @requisition.RequisitionDate.ToString("dd-MM-yyyy")
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelRQ => requisition.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Details", "RequisitionDetails", "Employee", new { requisitionId = @requisition.RequisitionID }, null)
+                    </td>
+                    @if (requisition.Status == 0)
+                    {
+                        <td>
+                            @Html.ActionLink("Update", "UpdateRequisition", "Employee", new { requisitionId = @requisition.RequisitionID }, null)
+                            &nbsp;&nbsp;
+                            @Html.ActionLink("Delete", "DeleteRequisition", "Employee", new { requisitionId = @requisition.RequisitionID }, null)
+                        </td>
+                    }
+                    else
+                    {
+                        <td>
+                        </td>
+                    }
+                </tr>
+            }
+
+
+        </table>
+    }
+
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+            new { page }))
+    </div>
+</div>
+    <script>
+    @*$(document).ready(function () {
+        $('#filterStatus').val("@Url.Action("AdjustmentVoucher", "Clerk", new { status = @ViewBag.status })");
+
+    });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+    });*@
+
+    $(document).ready(function () {
+        var selectedItem = sessionStorage.getItem("SelectedRequisition");
+        $('#filterStatus').val(selectedItem);
+    });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedRequisition", this.value);
+    });
+
+        $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedRequisition", "");
+        location.href = '@Url.Action("Index", "Employee")';
+    })
+    </script>
+
+
+
+
+
+
+
 

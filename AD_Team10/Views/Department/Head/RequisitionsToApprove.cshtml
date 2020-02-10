@@ -1,0 +1,88 @@
+﻿@using AD_Team10.Models
+@model RequisitionDetail
+
+@{
+    var items = ViewBag.items;
+    var quantities = ViewBag.quantities;
+    var quantities2 = ViewBag.quantities2;
+    var quantities3 = ViewBag.quantities3;
+    var employees = ViewBag.employees;
+    var reqIds = ViewBag.reqIds;
+    var items2 = ViewBag.items2;
+    var items3 = ViewBag.items3;
+    var reqIDs = ViewBag.reqIDs;
+    var more = ViewBag.more;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>REQUISITIONS PENDING APPROVAL</h3>
+            @if (items.Count > 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ordered By</th>
+                            <th>Items</th>
+                            <th>Quantity</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < items.Count; i++)
+                        {
+                            <tr>
+                                <td>@employees[i]</td>
+                                <td>
+                                    <ul class="nobull">
+                                        <li>@items[i]</li>
+                                        @if (items2[i] != null)
+                                        {
+                                            <li>@items2[i]</li>
+                                        }
+                                        @if (items3[i] != null)
+                                        {
+                                            <li>@items3[i]</li>
+                                        }
+                                        @if (more[i] == true)
+                                        {
+                                            <li>...</li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>
+                                    <ul class="nobull">
+                                        <li>@quantities[i]</li>
+                                        @if (quantities2 != null && quantities2[i] != null)
+                                        {
+                                            <li>@quantities2[i]</li>
+                                        }
+
+                                        @if (quantities3 != null && quantities3[i] != null)
+                                        {
+                                            <li>@quantities3[i]</li>
+                                        }
+                                        @if (more[i] == true)
+                                        {
+                                            <li>...</li>
+                                        }
+                                    </ul>
+                                </td>
+                                <td>@Html.ActionLink("View", "RequisitionDetails", new { requisitionId = reqIDs[i] }, new { @class = "view-detail" })</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>There are currently no requisitions that require approval.</p>
+            }
+        </div>
+    </div>
+</div>

@@ -26,12 +26,8 @@ namespace AD_Team10.Models
         public string Remark { get; set; }
         [ForeignKey("Employee")]
         public int EmployeeID { get; set; }
-        [ForeignKey("RetrievalList")]
-        public int RetrievalListID { get; set; }
 
         public virtual DeptEmployee Employee { get; set; }
-        public virtual RetrievalList RetrievalList { get; set; }
-
         public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
     }
 }

@@ -1,0 +1,165 @@
+﻿@model Tuple<AD_Team10.Models.Requisition, List<AD_Team10.Models.RequisitionDetail>>
+@using AD_Team10.DataService
+@{
+    ViewBag.Title = "ViewPendingDetails";
+    int num = 0;
+    string requisitionId = Model.Item1.RequisitionID.ToString();
+}
+
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/bootstrap.min.js"></script>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+<h3 align="center">@RequisitionService.requisitionNo @Html.DisplayFor(model => model.Item1.RequisitionID)</h3>
+<hr />
+<div class="detailDiv">
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Employee.Department.DepartmentName):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Department.DepartmentName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.RequisitionDate):
+            </dt>
+
+            <dd>
+                @{
+                    string dateValue = Model.Item1.RequisitionDate.ToString("dd/MM/yyyy");
+                }
+                @Html.DisplayFor(model => dateValue)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Status):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Status)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <dl class="dl-horizontal">
+            <dt>
+                @RequisitionService.employeeName:
+            </dt>
+
+            <dd>
+                @{
+                    string nameValue = Model.Item1.Employee.ToString();
+                }
+                @Html.DisplayFor(model => nameValue)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Employee.Phone):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Phone)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Item1.Employee.Email):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Item1.Employee.Email)
+            </dd>
+
+        </dl>
+    </div>
+</div>
+@if (Model.Item1.Status == AD_Team10.Models.Status.Completed)
+{
+    <table class="table">
+        <thead>
+            <tr class="bg-primary">
+                <th>@RequisitionService.itemNo</th>
+                <th>@Html.DisplayNameFor(model => Model.Item2.First().Item.Description)</th>
+                <th>@RequisitionService.quantityRequsted</th>
+                <th>@Html.DisplayNameFor(model => Model.Item2.First().QuantityReceived)</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Item2)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @(num + 1)
+                    </td>
+                    <td>
+                        @item.Item.Description
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.QuantityReceived
+                    </td>
+                </tr>
+            </tbody>
+            num++;
+        }
+
+    </table>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr class="bg-primary">
+                <th>@RequisitionService.itemNo</th>
+                <th>@Html.DisplayNameFor(model => Model.Item2.First().Item.Description)</th>
+                <th>@RequisitionService.quantityRequsted</th>
+                <th>@Html.DisplayNameFor(model => Model.Item2.First().QuantityReceived)</th>
+                <th>@RequisitionService.quantityRemaining</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Item2)
+        {
+            <tbody>
+                <tr>
+                    <td>
+                        @(num + 1)
+                    </td>
+                    <td>
+                        @item.Item.Description
+                    </td>
+                    <td>
+                        @item.Quantity
+                    </td>
+                    <td>
+                        @item.QuantityReceived
+                    </td>
+                    <td>
+                        @(item.Quantity - item.QuantityReceived)
+                    </td>
+                </tr>
+            </tbody>
+            num++;
+        }
+
+    </table>
+
+    <div align="right">
+        <a class="btn btn-warning" href="/StoreClerk/UpdateRequisitionDetails?id_requisition=@Model.Item1.RequisitionID" role="button">@RequisitionService.update</a>
+    </div>
+}
+
+
+<style>
+    .detailDiv {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+</style>
+
+
+

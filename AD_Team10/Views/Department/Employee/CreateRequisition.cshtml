@@ -1,0 +1,127 @@
+﻿@model AD_Team10.Models.Requisition
+@using AD_Team10.Models
+
+@{
+    ViewBag.Title = "createRequisition";
+    var items = ViewBag.items;
+    DeptEmployee employee = ViewBag.employee;
+    var itemNames = new List<String>();
+    foreach (var item in items)
+    {
+        itemNames.Add(item.Description);
+    }
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>CREATE REQUISITION</h3>
+
+    <form action="/Employee/CreateRequisition" method="post">
+        <div>
+            @Html.HiddenFor(m => m.RequisitionDate, new { @Value = @DateTime.Now })
+        </div>
+        <div>
+            @Html.HiddenFor(m => m.Status, new { @Value = Status.Pending })
+        </div>
+        <div>
+            @Html.HiddenFor(m => m.EmployeeID, new { @Value = employee.DeptEmployeeID })
+        </div>
+
+        <table id="tblRD" class="table">
+            <tr>
+                <th class="form-group">Item</th>
+                <th class="form-group">Quantity</th>
+                <th class="form-group"> Action</th>
+            </tr>
+
+            <tbody class="tbody">
+                <tr class="tblRow">
+                    <td>
+                        @Html.DropDownList("ItemDescription", new SelectList(itemNames), new { @class = "itemName"})
+                        
+                    </td>
+                    <td>
+                        @Html.Editor("ItemQuantity", new { htmlAttributes = new { @type = "number", @min = "1", @step = "1", @Value = "1", @class = "quantity" } })
+                    </td>
+                    <td> <a class="remove" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i></a></td>
+                </tr>
+            </tbody>
+
+        </table>
+
+        <div class="create">
+            <span class="glyphycon glyphicon-plus plus-sign"></span>
+            <div class="create-link">
+                <a href="javascript:void(0)" class="addItem">Add more item</a>
+            </div>
+        </div>
+
+        <input type="submit" id="btnSubmit"  value="Submit" class="submit" onclick="conf()" />
+
+
+    </form>
+    </div>
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+
+    <script type="text/javascript">
+
+        $(".addItem").on('click', function () {
+            var row = $('.tblRow').first().clone();
+            row.each(function () {
+                $(this).find('#ItemDescription').val("");
+                $(this).find('#ItemQuantity').val(1);
+                $(this).find('#remove').html();
+            });
+
+            $('.tbody').append(row);
+        });
+
+
+        function Remove(button) {
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var table = $("#tblRD")[0];
+            table.deleteRow(row[0].rowIndex);
+        };
+
+          $("body").on("click", ".remove", function () {
+        if ($(".remove").length == 1) alert("Requisition must have at least 1 item")
+              else $(this).parent('td').parent('.tblRow').remove();
+
+          });
+
+
+        
+         function conf() {
+                var con = confirm("Do you want to submit for sure?");
+                }
+
+
+      /*  $("#btnSubmit").on("click", function () {
+            var isValid = true;
+            $("#tblRD .tbody TR").each(function () {
+                var row = $(this);
+                if (row.find(".itemName option:selected").text() == "Choose item") {
+                    row.find(".nameError").html("</br>You must choose one item");
+                    isValid = false;
+                }
+            })
+            if (!isValid) {
+               
+        });
+        
+        */
+
+
+
+
+    </script>
+
+    <div class="back-to-list">
+        @Html.ActionLink("Back to List", "Index")
+    </div>

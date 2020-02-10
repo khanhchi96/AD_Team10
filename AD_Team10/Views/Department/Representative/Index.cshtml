@@ -3,5 +3,18 @@
     ViewBag.Title = "Index";
 }
 
-<h2>This is Representative page</h2>
-
+<h2> @ViewBag.deptName</h2>
+<p>Current collection point : @ViewBag.collectionPointName</p>
+<form method="GET" action="/Representative/ChangeLocation">
+    <label>New Collection Point:</label>
+    <select name="location">
+        <option value="1">Stationery Store - Administration Building</option>
+        <option value="2">Management School</option>
+        <option value="3">Medical School</option>
+        <option value="4">Engineering School</option>
+        <option value="5">Science School</option>
+        <option value="6">University Hospital</option>
+    </select>
+    <input type="hidden" value="@ViewBag.deptID" name="departmentId" />
+    <input type="submit" value="Confirm" />
+</form>

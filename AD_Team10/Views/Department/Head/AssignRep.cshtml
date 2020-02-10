@@ -1,0 +1,30 @@
+﻿@using AD_Team10.Models
+@model DeptEmployee
+
+@{
+    var rep = ViewBag.representative;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>ASSIGN REPRESENTATIVE</h3>
+
+            <p></p>
+            <b>Current Representative:</b>
+            <p>@rep</p>
+
+            @using (Html.BeginForm("SuccessfulAssignRep", "Head", FormMethod.Post))
+            {
+                <p></p>
+                <p><b>New Representative:</b> @Html.DropDownListFor(m => m.DeptEmployeeID, (IEnumerable<SelectListItem>)ViewBag.depEmployees, "Select Employee", new { @class = "form-control" })</p>
+                <p></p>
+                <p><input type="submit" name="submit" value="Submit and Update" /></p>
+            }
+        </div>
+    </div>
+</div>

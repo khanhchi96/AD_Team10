@@ -13,6 +13,5 @@ namespace AD_Team10.CustomMobileModels
         public int Quantity { get; set; }
         public int QuantityOffered { get; set; }
         public int QuantityReceived { get; set; }
-        public int QuantityDistributed { get; set; }
     }
 }
