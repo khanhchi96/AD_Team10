@@ -545,7 +545,6 @@ namespace AD_Team10.Controllers.Store
             Session["reqReport"] = reqReport;
             return Json(true, JsonRequestBehavior.AllowGet);
         }
-        private RequisitionReport requisitionReport = new RequisitionReport();
 
         [HttpPost]
         public ActionResult OrderReport(OrderReport orderReport)
@@ -564,15 +563,20 @@ namespace AD_Team10.Controllers.Store
             if (reqReport.DepartmentList == null)
                 reqReport.DepartmentList = db.Departments.Select(d => d.DepartmentID).ToList();
 
+            ViewBag.report = reqReport;
             GetRequisitionData(reqReport, out string[] categories, out ReportByTimeSeries[] timeDt,
                                     out string[] departments, out ReportByCategory[] catDt);
-            DataTable dt = GetTable(categories, reqReport.DepartmentList, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
-            
-
-            ViewBag.report = reqReport;
-            ViewBag.catSize = catSize;
-            ViewBag.tableName = "Department requisition quantity by category from " + tablePeriod;
-            return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
+            if (timeDt.Count() == 0 || catDt.Count() == 0)
+            {
+                return PartialView("~/Views/Store/Clerk/_Report.cshtml", null);
+            }
+            else
+            {
+                DataTable dt = GetTable(categories, reqReport.DepartmentList, out int[] catSize, out string tablePeriod, timeDt, reqReport.StartDate, reqReport.EndDate);
+                ViewBag.catSize = catSize;
+                ViewBag.tableName = "Department requisition quantity by category from " + tablePeriod;
+                return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
+            }
         }
 
         public ActionResult ShowOrderReport()
@@ -580,14 +584,16 @@ namespace AD_Team10.Controllers.Store
             OrderReport orderReport = Session["orderReport"] as OrderReport;
             if (orderReport.CategoryList == null)
                 orderReport.CategoryList = db.Categories.Select(c => c.CategoryId).ToList();
+            ViewBag.report = orderReport;
             GetOrderData(orderReport, out string[] categories, out ReportByTimeSeries[] timeDt);
             DataTable dt = GetTable(categories, null, out int[] catSize, out string tablePeriod, timeDt, orderReport.StartDate, orderReport.EndDate);
-            ViewBag.report = orderReport;
-            ViewBag.catSize = catSize;
-            ViewBag.tableName = "Purchase order quantity by category from " + tablePeriod;
-            //List<DataRow> list = dt.AsEnumerable().ToList();
-            //PagedList<DataRow> plist = new PagedList<DataRow>(list, page ?? 1, 5);
-            return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
+            if (timeDt.Count() == 0) return PartialView("~/Views/Store/Clerk/_Report.cshtml", null);
+            else
+            {
+                ViewBag.catSize = catSize;
+                ViewBag.tableName = "Purchase order quantity by category from " + tablePeriod;
+                return PartialView("~/Views/Store/Clerk/_Report.cshtml", dt);
+            }
         }
 
         public DataTable GetTable(string[] categories, List<int> departmentList, out int[] catSize, out string tablePeriod,

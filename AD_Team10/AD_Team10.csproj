@@ -204,12 +204,12 @@
     <Compile Include="Authentication\CustomMembershipUser.cs" />
     <Compile Include="Authentication\CustomPrincipal.cs" />
     <Compile Include="Authentication\CustomRole.cs" />
-    <Compile Include="Controllers\AdjustmentVouchersController.cs" />
     <Compile Include="Controllers\Department\EmployeeController.cs" />
     <Compile Include="Controllers\Department\HeadController.cs" />
     <Compile Include="Controllers\Department\RepresentativeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\Mobile\MobileController.cs" />
+    <Compile Include="Controllers\RequisitionDetailsController.cs" />
     <Compile Include="Controllers\Store\ClerkController.cs" />
     <Compile Include="Controllers\Store\ManagerController.cs" />
     <Compile Include="Controllers\Store\SupervisorController.cs" />
@@ -382,6 +382,14 @@
     <Content Include="Views\Store\Clerk\ViewOrderHistory.cshtml" />
     <Content Include="Views\Store\Clerk\ViewRequisitionHistory.cshtml" />
     <Content Include="Views\Store\Clerk\ViewRetrievalList.cshtml" />
+    <Content Include="Views\Department\Representative\EmployeeRequisitions.cshtml" />
+    <Content Include="Views\Department\Representative\EmployeeRequisitionDetails.cshtml" />
+    <Content Include="Views\RequisitionDetails\Create.cshtml" />
+    <Content Include="Views\RequisitionDetails\Delete.cshtml" />
+    <Content Include="Views\RequisitionDetails\Details.cshtml" />
+    <Content Include="Views\RequisitionDetails\Edit.cshtml" />
+    <Content Include="Views\RequisitionDetails\Index.cshtml" />
+    <Content Include="Views\Department\Representative\UpdateEmployeeRequisition.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

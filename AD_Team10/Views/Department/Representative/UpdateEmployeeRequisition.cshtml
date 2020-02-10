@@ -101,17 +101,17 @@
                         @(num + 1)
                     </td>
                     <td>
-                        @Model.RequisitionDetails.ToList()[i].Item.Description
+                        @Model.RequisitionDetails[i].Item.Description
                     </td>
                     <td>
-                        @Model.RequisitionDetails.ToList()[i].Quantity
+                        @Model.RequisitionDetails[i].Quantity
                     </td>
                     <td>
-                        @Html.EditorFor(modelItem => modelItem.RequisitionDetails.ToList()[i].QuantityReceived, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(modelItem => modelItem.RequisitionDetails.ToList()[i].QuantityReceived, "", new { @class = "text-danger" })
+                        @Html.EditorFor(modelItem => modelItem.RequisitionDetails[i].QuantityReceived, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(modelItem => modelItem.RequisitionDetails[i].QuantityReceived, "", new { @class = "text-danger" })
                     </td>
                     <td>
-                        @(Model.RequisitionDetails.ToList()[i].Quantity - Model.RequisitionDetails.ToList()[i].QuantityReceived)
+                        @(Model.RequisitionDetails[i].Quantity - Model.RequisitionDetails[i].QuantityReceived)
                     </td>
                 </tr>
             </tbody>

@@ -23,11 +23,11 @@ namespace AD_Team10.Service
         public static string breakDownByDep = "Breakdown by Department";
         public static string needed = "Needed";
         public static string retrieved = "Retrieved";
-        private DBContext dBContext = new DBContext();
+        DBContext db = new DBContext();
 
         public List<Requisition> GetRequisitionByStatus(Status status)
         {
-            List<Requisition> requisitions = dBContext.Requisitions.Where(x => x.Status == status).ToList();
+            List<Requisition> requisitions = db.Requisitions.Where(x => x.Status == status).ToList();
             return requisitions;
         }
 
@@ -35,23 +35,23 @@ namespace AD_Team10.Service
 
         public Requisition Find(int? id)
         {
-            Requisition requisition = dBContext.Requisitions.Find(id);
+            Requisition requisition = db.Requisitions.Find(id);
             return requisition;
         }
 
         public List<RequisitionDetail> GetPendingRequisitionDetails()
         {
-            return dBContext.RequisitionDetails.Include(i => i.Requisition).Include(x => x.Item).Where(x => x.Requisition.Status == Status.Approved).ToList();
+            return db.RequisitionDetails.Include(i => i.Requisition).Include(x => x.Item).Where(x => x.Requisition.Status == Status.Approved).ToList();
         }
 
         public List<RequisitionDetail> GetApprovedRequisitionDetail()
         {
-            return dBContext.RequisitionDetails.Include(i => i.Requisition).Include(x => x.Item).Where(x => x.Requisition.Status == Status.Approved).ToList();
+            return db.RequisitionDetails.Include(i => i.Requisition).Include(x => x.Item).Where(x => x.Requisition.Status == Status.Approved).ToList();
         }
 
         public List<Requisition> GetPendingRequisitions()
         {
-            return dBContext.Requisitions.Include(x => x.Employee).Where(x => x.Status == Status.Approved).ToList();
+            return db.Requisitions.Include(x => x.Employee).Where(x => x.Status == Status.Approved).ToList();
         }
 
         public Dictionary<Requisition, int> GetRequisitionByItem(Item item, List<RequisitionDetail> pendingRequisitionDetails)
@@ -62,7 +62,7 @@ namespace AD_Team10.Service
             foreach(var reqDetail in requisitionDetails)
             {
                 int quantity = reqDetail.Quantity;
-                Requisition requisition = dBContext.Requisitions.Include(x => x.Employee).Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
+                Requisition requisition = db.Requisitions.Include(x => x.Employee).Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
                 requisitionQuantity.Add(requisition, quantity);
             }
             return requisitionQuantity;
@@ -73,7 +73,7 @@ namespace AD_Team10.Service
             List<Requisition> requisitions = new List<Requisition>();
             foreach (var reqDetail in requisitionDetails)
             {
-                Requisition requisition = dBContext.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
+                Requisition requisition = db.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
                 requisitions.Add(requisition);
             }
             return requisitions;
@@ -84,7 +84,7 @@ namespace AD_Team10.Service
             List<Item> items = new List<Item>();
             foreach(var reqDetail in requisitionDetails)
             {
-                Item item = dBContext.Items.Where(x => x.ItemID == reqDetail.ItemID).SingleOrDefault();
+                Item item = db.Items.Where(x => x.ItemID == reqDetail.ItemID).SingleOrDefault();
                 if (!items.Contains(item))
                     items.Add(item);
             }
@@ -112,14 +112,14 @@ namespace AD_Team10.Service
 
         public int DepartmentTotalItemQuantity(Item item, Department department)
         {
-            List<DeptEmployee> depEmployees = dBContext.DeptEmployees.Where(x => x.DepartmentID == department.DepartmentID).ToList();
+            List<DeptEmployee> depEmployees = db.DeptEmployees.Where(x => x.DepartmentID == department.DepartmentID).ToList();
             int quantity=0;
             foreach(var depEmp in depEmployees)
             {
-                List<Requisition> requisitions = dBContext.Requisitions.Where(x => x.EmployeeID == depEmp.DeptEmployeeID && x.Status != Status.Completed).ToList();
+                List<Requisition> requisitions = db.Requisitions.Where(x => x.EmployeeID == depEmp.DeptEmployeeID && x.Status != Status.Completed).ToList();
                 foreach(var requisition in requisitions)
                 {
-                    List<RequisitionDetail> requisitionDetails = dBContext.RequisitionDetails.Where(x => x.RequisitionID == requisition.RequisitionID && x.ItemID == item.ItemID).ToList();
+                    List<RequisitionDetail> requisitionDetails = db.RequisitionDetails.Where(x => x.RequisitionID == requisition.RequisitionID && x.ItemID == item.ItemID).ToList();
                     foreach(var reqDetail in requisitionDetails)
                     {
                         quantity += (reqDetail.Quantity - reqDetail.QuantityReceived);
@@ -136,14 +136,14 @@ namespace AD_Team10.Service
         //    List<DepEmployee> employees = new List<DepEmployee>();
         //    foreach(var reqDetail in requisitionDetails)
         //    {
-        //        Requisition requisition = dBContext.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
-        //        DepEmployee depEmployee = dBContext.DepEmployees.Where(x => x.DepEmployeeID == requisition.EmployeeID).SingleOrDefault();
+        //        Requisition requisition = db.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
+        //        DepEmployee depEmployee = db.DepEmployees.Where(x => x.DepEmployeeID == requisition.EmployeeID).SingleOrDefault();
         //        employees.Add(depEmployee);
         //    }
         //    List<Department> departments = new List<Department>();
         //    foreach(var employee in employees)
         //    {
-        //        Department department = dBContext.Departments.Where(x => x.DepartmentID == employee.DepartmentID).SingleOrDefault();
+        //        Department department = db.Departments.Where(x => x.DepartmentID == employee.DepartmentID).SingleOrDefault();
         //        if (!departments.Contains(department))
         //            departments.Add(department);
         //    }
@@ -158,14 +158,14 @@ namespace AD_Team10.Service
             List<DeptEmployee> employees = new List<DeptEmployee>();
             foreach (var reqDetail in requisitionDetails)
             {
-                Requisition requisition = dBContext.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
-                DeptEmployee depEmployee = dBContext.DeptEmployees.Where(x => x.DeptEmployeeID == requisition.EmployeeID).SingleOrDefault();
+                Requisition requisition = db.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
+                DeptEmployee depEmployee = db.DeptEmployees.Where(x => x.DeptEmployeeID == requisition.EmployeeID).SingleOrDefault();
                 employees.Add(depEmployee);
             }
             List<Department> departments = new List<Department>();
             foreach (var employee in employees)
             {
-                Department department = dBContext.Departments.Where(x => x.DepartmentID == employee.DepartmentID).SingleOrDefault();
+                Department department = db.Departments.Where(x => x.DepartmentID == employee.DepartmentID).SingleOrDefault();
                 if (!departments.Contains(department))
                     departments.Add(department);
             }
@@ -194,28 +194,28 @@ namespace AD_Team10.Service
 
         public List<Department> GetDepartments()
         {
-            return dBContext.Departments.ToList();
+            return db.Departments.ToList();
         }
 
         public List<CollectionPoint> GetCollectionPoints()
         {
-            return dBContext.CollectionPoints.ToList();
+            return db.CollectionPoints.ToList();
         }
 
         public List<RequisitionDetail> GetRequisitionDetailsByRequisitionID(int Id)
         {
-            List<RequisitionDetail> requisitionDetails = dBContext.RequisitionDetails.Include(x => x.Item).Include(x => x.Requisition).Where(x => x.RequisitionID == Id).ToList();
+            List<RequisitionDetail> requisitionDetails = db.RequisitionDetails.Include(x => x.Item).Include(x => x.Requisition).Where(x => x.RequisitionID == Id).ToList();
             return requisitionDetails;
         }
 
         public List<PurchaseOrder> GetPendingPurchaseOrder()
         {
-            return dBContext.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).Where(x => x.OrderStatus != OrderStatus.Completed).ToList();
+            return db.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).Where(x => x.OrderStatus != OrderStatus.Completed).ToList();
         }
 
         public Requisition GetRequisitionById(int id)
         {
-            return dBContext.Requisitions.Include(x => x.Employee).Include(x => x.RequisitionDetails).Where(x => x.RequisitionID == id).SingleOrDefault();
+            return db.Requisitions.Include(x => x.Employee).Include(x => x.RequisitionDetails).Where(x => x.RequisitionID == id).SingleOrDefault();
         }
 
         //check if the requisition is completed
@@ -235,15 +235,15 @@ namespace AD_Team10.Service
 
         public void UpdateRequisition(Requisition requisition)
         {
-            dBContext.Entry(requisition).State = EntityState.Modified;
-            dBContext.SaveChanges();
+            db.Entry(requisition).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         //Generate the last Retrieval List
         public RetrievalList GenerateRetrievalList()
         {
             DateTime yesterday = DateTime.Now.AddDays(-1);
-            RetrievalList retrievalList = dBContext.RetrievalLists.Include(x => x.RequisitionRetrievals)
+            RetrievalList retrievalList = db.RetrievalLists.Include(x => x.RequisitionRetrievals)
                                                                   .Include(x => x.RetrievalListDetails)
                                                                   .Where(x => x.StartDate <= yesterday && x.EndDate >= yesterday)
                                                                   .SingleOrDefault();
@@ -254,7 +254,7 @@ namespace AD_Team10.Service
         public RetrievalList GetRetrievalListForNow()
         {
             DateTime today = DateTime.Today;
-            RetrievalList retrievalList = dBContext.RetrievalLists.Include(x => x.RequisitionRetrievals)
+            RetrievalList retrievalList = db.RetrievalLists.Include(x => x.RequisitionRetrievals)
                                                                   .Include(x => x.RetrievalListDetails)
                                                                   .Where(x => x.StartDate <= today && x.EndDate >= today)
                                                                   .SingleOrDefault();
@@ -287,6 +287,9 @@ namespace AD_Team10.Service
         public bool ContainsDepartment(int id, RetrievalList retrievalList)
         {
             bool contains = false;
+            
+            if (retrievalList == null) return contains;
+            if (retrievalList.RetrievalListDetails == null) return contains;
             foreach(var item in retrievalList.RetrievalListDetails)
             {
                 if(item.DepartmentID == id)
@@ -349,18 +352,42 @@ namespace AD_Team10.Service
             }
         }
 
+
+        public RetrievalList CreateRetrievalList()
+        {
+            DateTime today = DateTime.Today;
+            int daysUntilFriday = ((int)DayOfWeek.Friday - (int)today.DayOfWeek + 7) % 7;
+            DateTime nextFriday = today.AddDays(daysUntilFriday);
+            DateTime lastSaturday = nextFriday.AddDays(-6);
+            RetrievalList retrievalList = new RetrievalList { StartDate = lastSaturday, EndDate = nextFriday };
+            db.RetrievalLists.Add(retrievalList);
+            db.SaveChanges();
+            return retrievalList;
+        }
+
+
+     
+
+
         //Update retrival list
         public void UpdateRetrievalList(RetrievalList retrievalList)
         {
-            dBContext.Entry(retrievalList).State = EntityState.Modified;
-            dBContext.SaveChanges();
+            db.Entry(retrievalList).State = EntityState.Modified;
+            db.SaveChanges();
         }
 
         //Get retrieval list by retrieval id
         public RetrievalList GetRetrievalListById(int id)
         {
             return null;
-            //return dBContext.RetrievalLists.Include(x => x.Requisitions).Include(x => x.RetrievalListDetails).Where(x => x.RetrievalListID == id).SingleOrDefault();
+            //return db.RetrievalLists.Include(x => x.Requisitions).Include(x => x.RetrievalListDetails).Where(x => x.RetrievalListID == id).SingleOrDefault();
+        }
+
+        public RetrievalList FindCurrentRetrievalList()
+        {
+            DateTime today = DateTime.Today;
+            RetrievalList retrievalList = db.RetrievalLists.SingleOrDefault(r => r.StartDate <= today && r.EndDate >= today);
+            return retrievalList;
         }
     }
 }

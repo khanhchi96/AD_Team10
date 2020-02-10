@@ -120,14 +120,6 @@
     </div>
 </div>
 <script>
-    @*$(document).ready(function () {
-        $('#filterStatus').val("@Url.Action("AdjustmentVoucher", "Clerk", new { status = @ViewBag.status })");
-
-    });
-
-    $('#filterStatus').on('change', function () {
-        location.href = this.value;
-    });*@
 
     $(document).ready(function () {
         var selectedItem = sessionStorage.getItem("SelectedVoucher");

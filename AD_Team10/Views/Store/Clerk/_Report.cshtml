@@ -22,6 +22,12 @@
 
 @if (report != null)
 {
+    if (Model == null)
+    {
+        <p> The department(s) did not made any requisition for these categories during this period</p>
+    }
+    else
+    {
     <div class="table-wrap">
         <table border="1" cellpadding="5" class="table">
 
@@ -62,24 +68,25 @@
         </table>
     </div>
 
-    if (report.GetType() == typeof(RequisitionReport))
-    {
+        if (report.GetType() == typeof(RequisitionReport))
+        {
         @Html.ActionLink("Download", "ExportReqDataTable", "Clerk", new { report = Json.Encode(report) }, null)
 
-        <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "Column", groupBy = "time"})" />
+        <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "Column", groupBy = "time" })" />
 
-        <img src="@Url.Action("ShowRequisitionChart", new {  report = Json.Encode(report), type = "Line", groupBy = "time"})" />
+        <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "Line", groupBy = "time" })" />
 
-        <img src="@Url.Action("ShowRequisitionChart", new {  report = Json.Encode(report), type = "StackedColumn", groupBy = "cat"})" />
-    }
+        <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "StackedColumn", groupBy = "cat" })" />
+        }
 
-    if (report.GetType() == typeof(OrderReport))
-    {
+        if (report.GetType() == typeof(OrderReport))
+        {
         @Html.ActionLink("Download", "ExportOrderDataTable", "Clerk", new { report = Json.Encode(report) }, null)
 
-        <img src="@Url.Action("ShowOrderChart", new { report = Json.Encode(report), type = "Column", groupBy = "time"})" />
+        <img src="@Url.Action("ShowOrderChart", new { report = Json.Encode(report), type = "Column", groupBy = "time" })" />
 
-        <img src="@Url.Action("ShowOrderChart", new {  report = Json.Encode(report), type = "Line", groupBy = "time"})" />
+        <img src="@Url.Action("ShowOrderChart", new { report = Json.Encode(report), type = "Line", groupBy = "time" })" />
+        }
     }
 }
 

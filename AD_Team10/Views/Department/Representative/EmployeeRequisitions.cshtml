@@ -1,0 +1,67 @@
+﻿@model IEnumerable<AD_Team10.Models.Requisition>
+@using AD_Team10.Models;
+<div class="container-fluid body"> 
+<table class="table">
+    <tr>
+        <th>
+            Employee
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ApprovalDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.RequisitionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CompletedDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Remark)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @if (item.Employee.MiddleName == null)
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.LastName)
+            </td>
+        }
+        else
+        {
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.MiddleName) @Html.DisplayFor(modelItem => item.Employee.LastName)
+            </td>
+        }
+        <td>
+            @Html.DisplayFor(modelItem => item.ApprovalDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.RequisitionDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CompletedDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Remark)
+        </td>
+        <td>
+            @if (item.Status != Status.Completed)
+            {
+                @Html.ActionLink("Update", "UpdateEmployeeRequisition", new { id = item.RequisitionID }) 
+            }
+            @Html.ActionLink("Details", "EmployeeRequisitionDetails", new { id = item.RequisitionID })
+        </td>
+    </tr>
+}
+
+</table>
+    </div>

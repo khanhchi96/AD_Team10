@@ -1,22 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using AD_Team10.Authentication;
 using AD_Team10.DAL;
+using AD_Team10.Models;
+using AD_Team10.Service;
 
 namespace AD_Team10.Controllers.Department
 {
     [CustomAuthorize(Roles = "REPRESENTATIVE")]
     public class RepresentativeController : Controller
     {
-        DBContext db = new DBContext();
+        private DBContext db = new DBContext();
+        private RequisitionService reqService = new RequisitionService();
         public ActionResult Index()
         {
-            CustomPrincipal user = (CustomPrincipal)System.Web.HttpContext.Current.User;
-            int employeeId = user.UserID;
-            var deptID = (db.DeptEmployees.Where(dE => dE.DeptEmployeeID == employeeId).SingleOrDefault()).DepartmentID;
+            int deptID = FindDepartmentId();
             var collectionPoint = (db.Departments.Where(d => d.DepartmentID == deptID).SingleOrDefault()).CollectionPoint;
 
             ViewBag.collectionPointName = collectionPoint.CollectionPointName;
@@ -26,6 +28,13 @@ namespace AD_Team10.Controllers.Department
 
         }
 
+        private int FindDepartmentId()
+        {
+            CustomPrincipal user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+            int employeeId = user.UserID;
+            int deptID = (db.DeptEmployees.Where(dE => dE.DeptEmployeeID == employeeId).SingleOrDefault()).DepartmentID;
+            return deptID;
+        }
         public ActionResult ChangeLocation(string location, string departmentId)
         {
             var locationId = int.Parse(location);
@@ -42,13 +51,67 @@ namespace AD_Team10.Controllers.Department
             return View("~/Views/Department/Representative/ChangeLocation.cshtml");
         }
 
-        /* conflicts with WWW's following code cuz WWW still got RetrievalList in Requisition model
+
+        public ActionResult EmployeeRequisitions()
+        {
+            int deptId = FindDepartmentId();
+            var requisitions = db.Requisitions.Where(r => r.Employee.DepartmentID == deptId &&
+                            (r.Status == Status.Approved || r.Status == Status.Incomplete || r.Status == Status.Completed));
+            return View("~/Views/Department/Representative/EmployeeRequisitions.cshtml", requisitions.ToList());
+        }
+       
+
+        public ActionResult EmployeeRequisitionDetails(int id)
+        {
+            var details = db.RequisitionDetails.Where(r => r.RequisitionID == id);
+            return View("~/Views/Department/Representative/EmployeeRequisitionDetails.cshtml", details.ToList());
+        }
+
+        public ActionResult UpdateEmployeeRequisition(int id)
+        {
+            Requisition requisition = reqService.GetRequisitionById(id);
+            return View("~/Views/Department/Representative/UpdateEmployeeRequisition.cshtml", requisition);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateEmployeeRequisition(Requisition requisition)
+        {
+            if (ModelState.IsValid)
+            {
+                Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
+                List<RequisitionDetail> editedDetails = editedRequisition.RequisitionDetails;
+                List<RequisitionDetail> details = requisition.RequisitionDetails;
+                for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
+                {
+                    details[i].QuantityReceived = details[i].QuantityReceived;
+                }
+                
+                if (reqService.IsCompleted(editedRequisition))
+                {
+                    editedRequisition.CompletedDate = DateTime.Now;
+                    editedRequisition.Status = Status.Completed;
+                }
+                else
+                {
+                    editedRequisition.Status = Status.Incomplete;
+                    RetrievalList retrievalList = reqService.FindCurrentRetrievalList();
+                    if (retrievalList == null) retrievalList = reqService.CreateRetrievalList();
+                    reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
+                    reqService.UpdateRetrievalList(retrievalList);
+                }
+
+                db.SaveChanges();
+                return RedirectToAction("EmployeeRequisitionDetails", new { id = requisition.RequisitionID });
+            }
+            return View(requisition);
+        }
 
         // GET: Pending requisition list
         public ActionResult GetPendingList()
         {
             var requisitions = reqService.GetPendingRequisitions();
-            var department = new Department();
+            var department = new Models.Department();
             var collectionPoint = new CollectionPoint();
             ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
             ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName");
@@ -56,7 +119,7 @@ namespace AD_Team10.Controllers.Department
         }
 
         [HttpPost]
-        public ActionResult GetPendingList(Department department, CollectionPoint collectionPoint)
+        public ActionResult GetPendingList(Models.Department department, CollectionPoint collectionPoint)
         {
             var requisitions = reqService.GetPendingRequisitions();
             ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName", collectionPoint.CollectionPointID);
@@ -69,28 +132,28 @@ namespace AD_Team10.Controllers.Department
                     {
                         if (collectionPoint.CollectionPointID == 0)
                         {
-                            return View(Tuple.Create(requisitions.ToList(), new Department(), new CollectionPoint()));
+                            return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
                         }
                         else
                         {
                             requisitions = requisitions.Where(x => x.Employee.Department.CollectionPointID == collectionPoint.CollectionPointID).ToList();
-                            return View(Tuple.Create(requisitions, department, collectionPoint));
+                            return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
                         }
                     }
                     else
                     {
-                        return View(Tuple.Create(requisitions.ToList(), new Department(), new CollectionPoint()));
+                        return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
                     }
                 }
                 else
                 {
                     requisitions = requisitions.Where(x => x.Employee.DepartmentID == department.DepartmentID).ToList();
-                    return View(Tuple.Create(requisitions, department, collectionPoint));
+                    return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
                 }
             }
             else
             {
-                return View(Tuple.Create(requisitions, department, collectionPoint));
+                return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
             }
 
         }
@@ -112,42 +175,9 @@ namespace AD_Team10.Controllers.Department
             return View(Tuple.Create(requisition, requisitionDetail));
         }
 
-        public ActionResult UpdateRequisitionDetails(int id_requisition)
-        {
-            Requisition requisition = reqService.GetRequisitionById(id_requisition);
-            return View(requisition);
-        }
+        
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult UpdateRequisitionDetails(Requisition requisition)
-        {
-            if (ModelState.IsValid)
-            {
-                Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
-                for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
-                {
-                    editedRequisition.RequisitionDetails[i].QuantityReceived = requisition.RequisitionDetails[i].QuantityReceived;
-                }
-                if (reqService.IsCompleted(editedRequisition))
-                {
-                    editedRequisition.CompletedDate = DateTime.Now;
-                    editedRequisition.Status = Status.Completed;
-                }
-                else
-                {
-                    editedRequisition.Status = Status.Incompleted;
-                    RetrievalList retrievalList = reqService.GetRetrievalListForNow();
-                    reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
-                    reqService.UpdateRetrievalList(retrievalList);
-                }
-                reqService.UpdateRequisition(editedRequisition);
-                return RedirectToAction("ViewDetails", new { id = requisition.RequisitionID });
-            }
-            return View(requisition);
-        }
-
-    */
+    
 
 
 

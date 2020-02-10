@@ -28,6 +28,7 @@ namespace AD_Team10.Models
         public int EmployeeID { get; set; }
 
         public virtual DeptEmployee Employee { get; set; }
-        public virtual ICollection<RequisitionDetail> RequisitionDetails { get; set; }
+        public virtual List<RequisitionDetail> RequisitionDetails { get; set; }
+
     }
 }
