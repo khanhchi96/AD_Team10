@@ -177,7 +177,7 @@ namespace AD_Team10.Controllers
             return View(Tuple.Create(retrievalList, items));
         }
 
-        public ActionResult GenerateDisbursement()
+        public ActionResult GenerateDisbursement(int id_retrieval)
         {
             ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
             return View();
@@ -194,9 +194,11 @@ namespace AD_Team10.Controllers
 
         public ActionResult UpdateRetrievalList(int id_retrieval)
         {
-            RetrievalList retrievalList = reqService.GetRetrievalListForNow();   //After test, change to generate retrieval list
+            RetrievalList retrievalList = reqService.GetRetrievalListById(id_retrieval);   //After test, change to generate retrieval list
             List<Item> items = reqService.GetDistictItemForRetrievalList(retrievalList);
             ViewData["items"] = items;
+            reqService.SequencedRetrievalList(items, retrievalList);
+            reqService.UpdateRetrievalList(retrievalList);
             return View(retrievalList);
         }
 
@@ -207,10 +209,11 @@ namespace AD_Team10.Controllers
             if (ModelState.IsValid)
             {
                 RetrievalList editedRetrieval = reqService.GetRetrievalListById(retrievalList.RetrievalListID);
-                foreach(var details in retrievalList.RetrievalListDetails)
+                List<Item> items = reqService.GetDistictItemForRetrievalList(editedRetrieval);
+                reqService.SequencedRetrievalList(items, editedRetrieval);
+                for (int i = 0; i < editedRetrieval.RetrievalListDetails.Count; i++)
                 {
-                    editedRetrieval.RetrievalListDetails.Where(x => x.ItemID == details.ItemID && x.DepartmentID == details.DepartmentID)
-                                                        .SingleOrDefault().QuantityOffered = details.QuantityOffered;
+                    editedRetrieval.RetrievalListDetails[i].QuantityOffered = retrievalList.RetrievalListDetails[i].QuantityOffered;
                 }
                 reqService.UpdateRetrievalList(editedRetrieval);
                 return RedirectToAction("NewViewRetrievalList");
@@ -385,6 +388,10 @@ namespace AD_Team10.Controllers
                 {
                     editedorder.CompletedDate = DateTime.Now;
                     editedorder.OrderStatus = OrderStatus.Completed;
+                }
+                else
+                {
+                    editedorder.OrderStatus = OrderStatus.Incompleted;
                 }
                 orderService.UpdatePurchaseOrder(editedorder);
                 return RedirectToAction("ViewOrderDetails", new { id = editedorder.PurchaseOrderID });

@@ -4,92 +4,88 @@
     ViewBag.Title = "GetPendingOrderList";
 }
 
-<h3 align="center">Pending Purchase Orders</h3>
-<hr />
-<a href="/StoreClerk/CreateNewOrder" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"></span>CREATE NEW ORDER</a>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-@using (Html.BeginForm())
-{
-    <div class="superDiv">
-        <div class="filter">
-            Filter by
-        </div>
-        <div class="filter">
-            @Html.HiddenFor(model => model.Item2.SupplierID, "SupplierID")
-            @Html.DropDownList("SupplierID", ViewBag.SupplierID as SelectList, "Supplier", htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div class="filter">
-            @Html.HiddenFor(model => model.Item3.OrderStatusId, "OrderStatusId")
-            @Html.DropDownList("OrderStatusId", ViewBag.OrderStatusId as SelectList, htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div class="filter">
-            <input type="submit" value="Submit" />
-        </div>
-    </div>
-}
+<div class="container-fluid body">
+    <h3 align="center">Pending Purchase Orders</h3>
+    <hr />
+    <a href="/StoreClerk/CreateNewOrder" class="btn btn-primary" role="button"><span class="glyphicon glyphicon-plus"></span><span>CREATE NEW ORDER</span></a>
 
-<table class="table table-hover" align="center">
-    <tr class="bg-primary">
-        <th>
-            Order ID
-        </th>
-        <th>
-            Order Date
-        </th>
-        <th>
-            Supplier
-        </th>
-        <th>
-            Status
-        </th>
-        <th>Details</th>
-    </tr>
-    @if (Model.Item1.Count() == 0)
+    @using (Html.BeginForm())
     {
-        <tr>
-            <td colspan="5" align="center">
-                There's nothing you want!
-            </td>
-        </tr>
+        <div class="superDiv">
+            <div class="listDiv">
+                <span>Filter by</span>
+            </div>
+            <div class="listDiv">
+                @Html.HiddenFor(model => model.Item2.SupplierID, "SupplierID")
+                @Html.DropDownList("SupplierID", ViewBag.SupplierID as SelectList, "Supplier", htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="listDiv">
+                @Html.HiddenFor(model => model.Item3.OrderStatusId, "OrderStatusId")
+                @Html.DropDownList("OrderStatusId", ViewBag.OrderStatusId as SelectList, htmlAttributes: new { @class = "form-control" })
+            </div>
+            <div class="listDiv">
+                <button type="submit" class="btn btn-default">VIEW</button>
+            </div>
+        </div>
     }
-    else
-    {
 
-        foreach (var item in Model.Item1)
+    <table class="table">
+        <tr>
+            <th>
+                Order ID
+            </th>
+            <th>
+                Order Date
+            </th>
+            <th>
+                Supplier
+            </th>
+            <th>
+                Status
+            </th>
+            <th>Details</th>
+        </tr>
+        @if (Model.Item1.Count() == 0)
         {
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PurchaseOrderID)
-                </td>
-                <td>
-                    @{
-                        string dateValue = item.OrderDate.ToString("dd/MM/yyyy");
-                    }
-                    @Html.DisplayFor(modelItem => dateValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderStatus)
-                </td>
-                <td>
-                    @Html.ActionLink("View", "ViewOrderDetails", new { id = item.PurchaseOrderID })
+                <td colspan="5" align="center">
+                    There's nothing you want!
                 </td>
             </tr>
         }
-    }
+        else
+        {
 
-</table>
+            foreach (var item in Model.Item1)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PurchaseOrderID)
+                    </td>
+                    <td>
+                        @{
+                            string dateValue = item.OrderDate.ToString("dd/MM/yyyy");
+                        }
+                        @Html.DisplayFor(modelItem => dateValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.OrderStatus)
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "ViewOrderDetails", new { id = item.PurchaseOrderID })
+                    </td>
+                </tr>
+            }
+        }
 
-<style>
-    .superDiv {
-        position: relative;
-        left: 600px;
-    }
+    </table>
+</div>
 
-    .filter {
-        display: inline-block;
-    }
-</style>
 

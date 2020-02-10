@@ -176,17 +176,17 @@ namespace AD_Team10.DataService
         public Dictionary<Item, int> GetDepartmentItemAndQuantity(Department department)
         {
             Dictionary<Item, int> departmentItemQuantity = new Dictionary<Item, int>();
-            List<RequisitionDetail> approvedRequisitionDetails = this.GetApprovedRequisitionDetail();
-            List<RequisitionDetail> departmentRequisitionDetails = approvedRequisitionDetails.Where(x => x.Requisition.Employee.DepartmentID == department.DepartmentID).ToList();
-            foreach(var detail in departmentRequisitionDetails)
+            RetrievalList retrievalList = this.GetRetrievalListForNow();
+            List<RetrievalListDetail> departmentRetrievalDetails = retrievalList.RetrievalListDetails.Where(x => x.DepartmentID == department.DepartmentID).ToList();
+            foreach(var detail in departmentRetrievalDetails)
             {
                 if (!departmentItemQuantity.ContainsKey(detail.Item))
                 {
-                    departmentItemQuantity.Add(detail.Item, detail.QuantityReceived);
+                    departmentItemQuantity.Add(detail.Item, detail.QuantityOffered);
                 }
                 else
                 {
-                    departmentItemQuantity[detail.Item] += detail.QuantityReceived;
+                    departmentItemQuantity[detail.Item] += detail.QuantityOffered;
                 }
             }
             return departmentItemQuantity;
@@ -360,6 +360,21 @@ namespace AD_Team10.DataService
         public RetrievalList GetRetrievalListById(int id)
         {
             return dBContext.RetrievalLists.Include(x => x.Requisitions).Include(x => x.RetrievalListDetails).Where(x => x.RetrievalListID == id).SingleOrDefault();
+        }
+
+        //Get the retrieval list detail in the retrieval sequenced by item
+        public void SequencedRetrievalList(List<Item> items, RetrievalList retrievalList)
+        {
+            List<RetrievalListDetail> newRetrievalListDetails = new List<RetrievalListDetail>();
+            foreach(var item in items)
+            {
+                List<RetrievalListDetail> retrievalListDetails = retrievalList.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).ToList();
+                newRetrievalListDetails.AddRange(retrievalListDetails);
+            }
+            for(int i = 0; i < retrievalList.RetrievalListDetails.Count; i++)
+            {
+                retrievalList.RetrievalListDetails[i] = newRetrievalListDetails[i];
+            }
         }
     }
 }

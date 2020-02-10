@@ -3,71 +3,77 @@
     ViewBag.Title = "UpdatePurchaseOrder";
 }
 
-<h3 align="center">ORDER NO. @Model.PurchaseOrderID</h3>
-<hr />
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.PurchaseOrderID)
-    <div class="superdiv">
-        <div class="div1">
-            <div>
-                Supplier: @Model.Supplier.SupplierName
-            </div>
-            <div>
-                Deliver to: Logic University Stationery Store
-            </div>
-            <div>
-                Total amount: @totalPrice()
-            </div>
-        </div>
-        <div class="div2">
-            <div>
-                <input type="submit" value="Save" class="btn btn-default" />
-            </div>
-        </div>
-    </div>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-    <table class="table table-hover w-auto" align="center">
-        <tr class="bg-primary">
-            <th>
-                Description
-            </th>
-            <th>
-                Quantity Requested
-            </th>
-            <th>
-                Price
-            </th>
-            <th>
-                Quantity Received
-            </th>
-            <th>Quantity Remaining</th>
-        </tr>
-        @for(int i=0; i< Model.PurchaseOrderDetails.Count; i++)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Price)
-                </td>
-                <td>
-                    @Html.EditorFor(modelItem => modelItem.PurchaseOrderDetails[i].QuantityReceived, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(modelItem => modelItem.PurchaseOrderDetails[i].QuantityReceived, "", new { @class = "text-danger" })
-                </td>
-                <td>
-                    @(Model.PurchaseOrderDetails[i].Quantity - Model.PurchaseOrderDetails[i].QuantityReceived)
-                </td>
+<div class="container-fluid body">
+    <h3 align="center">ORDER NO. @Model.PurchaseOrderID</h3>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.PurchaseOrderID)
+        <div class="purchaseDiv">
+            <div class="div1">
+                <div>
+                    <span style="font-weight: bold">Supplier: </span>@Model.Supplier.SupplierName
+                </div>
+                <div>
+                    <span style="font-weight: bold">Deliver to: </span>Logic University Stationery Store
+                </div>
+                <div>
+                    <span style="font-weight: bold">Total amount: </span>@totalPrice()
+                </div>
+            </div>
+            <div class="div2">
+                <div>
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+
+        <table class="table table-hover w-auto" align="center">
+            <tr class="bg-primary">
+                <th>
+                    Description
+                </th>
+                <th>
+                    Quantity Requested
+                </th>
+                <th>
+                    Price
+                </th>
+                <th>
+                    Quantity Received
+                </th>
+                <th>Quantity Remaining</th>
             </tr>
-        }
-    </table>
-}
+            @for (int i = 0; i < Model.PurchaseOrderDetails.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => modelItem.PurchaseOrderDetails[i].Price)
+                    </td>
+                    <td>
+                        @Html.EditorFor(modelItem => modelItem.PurchaseOrderDetails[i].QuantityReceived, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(modelItem => modelItem.PurchaseOrderDetails[i].QuantityReceived, "", new { @class = "text-danger" })
+                    </td>
+                    <td>
+                        @(Model.PurchaseOrderDetails[i].Quantity - Model.PurchaseOrderDetails[i].QuantityReceived)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>
 
 
 @functions{
@@ -81,11 +87,4 @@
         return sum;
     }
 }
-
-<style>
-    .superdiv {
-        display: flex;
-        justify-content: space-between;
-    }
-</style>
 

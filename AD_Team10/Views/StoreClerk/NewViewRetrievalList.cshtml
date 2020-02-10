@@ -1,27 +1,30 @@
 ﻿@model Tuple<AD_Team10.Models.RetrievalList, List<AD_Team10.Models.Item>>
-@using  AD_Team10.DataService
+@using AD_Team10.DataService
 @{
     ViewBag.Title = "NewViewRetrievalList";
 }
 
-<h3 align="center">@RequisitionService.retrievalList</h3>
-<p></p>
-<h4 align="center">
-    From @Model.Item1.StartDate.ToString("dd/MM/yyyy") to @Model.Item1.EndDate.ToString("dd/MM/yyyy")
-</h4>
-<p></p>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-<p align="right">
-    <a href="/StoreClerk/GenerateDisbursement" class="btn btn-default">
-        @RequisitionService.generateDisbursement
-    </a>
-    <a href="/StoreClerk/UpdateRetrievalList?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
-        @RequisitionService.update
-    </a>
-</p>
+<div class="container-fluid body">
+    <h3 align="center">@RequisitionService.retrievalList</h3>
+    <h4 align="center">
+        From @Model.Item1.StartDate.ToString("dd/MM/yyyy") to @Model.Item1.EndDate.ToString("dd/MM/yyyy")
+    </h4>
+    <hr />
 
-<div class="container">
-    <table class="table">
+    <p align="right">
+        <a href="/StoreClerk/GenerateDisbursement?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
+            @RequisitionService.generateDisbursement
+        </a>
+        <a href="/StoreClerk/UpdateRetrievalList?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
+            @RequisitionService.update
+        </a>
+    </p>
+
+    <table class="table table-bordered">
         <tr>
             <th rowspan="2">
                 @Html.DisplayNameFor(model => model.Item1.RetrievalListDetails.First().Item.Description)
@@ -58,7 +61,7 @@
                 </td>
                 <td rowspan="@Model.Item1.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
                     @{ var quantity = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.Quantity).Sum(); }
-                    @Html.DisplayFor(x=>quantity)
+                    @Html.DisplayFor(x => quantity)
                 </td>
                 <td rowspan="@Model.Item1.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
                     @{ var quantityOffered = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.QuantityOffered).Sum(); }
@@ -78,13 +81,13 @@
             {
                 <tr>
                     <td>
-                        @Html.DisplayFor(x=>department.Department.DepartmentName)
+                        @Html.DisplayFor(x => department.Department.DepartmentName)
                     </td>
                     <td>
-                        @Html.DisplayFor(x=>department.Quantity)
+                        @Html.DisplayFor(x => department.Quantity)
                     </td>
                     <td>
-                        @Html.DisplayFor(x=>department.QuantityOffered)
+                        @Html.DisplayFor(x => department.QuantityOffered)
                     </td>
                 </tr>
             }
