@@ -1,4 +1,4 @@
-﻿
+﻿@*Author: Stephanie Cheng Sin Yin*@
 @{
     var actingHead = ViewBag.actingHead;
 }
@@ -7,12 +7,9 @@
     @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 dashboard-panel-8">
-            <h3>CANCEL ACTING HEAD</h3>
+<div class="container-fluid body">
+    <h3>CANCEL ACTING HEAD</h3>
 
-            <p>You have successfully cancelled the assignment of <b>@actingHead</b> as acting head.</p>
-        </div>
-    </div>
+    <p class="center">You have successfully cancelled the assignment of <b>@actingHead</b> as acting head.</p>
+
 </div>

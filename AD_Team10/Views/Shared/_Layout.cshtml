@@ -3,51 +3,55 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+    <title>Stationery System - Logic University</title>
+    <link rel="icon"
+          type="image/png"
+          href="https://cdn4.iconfinder.com/data/icons/contact-us-19/48/35-512.png">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     @Styles.Render("~/ Content/fontawesome")
-    @*<script src="https://kit.fontawesome.com/1adf121cc7.js" crossorigin="anonymous"></script>*@
     <script src="~/Scripts/jquery-3.3.1.min.js"></script>
-
     <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css" rel="Stylesheet" type="text/css" />
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.js" crossorigin="anonymous"></script>
-    @*<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        <link href="https://cdn.jsdelivr.net/npm/semantic-ui@2.2.13/dist/semantic.min.css" rel="stylesheet" type="text/css" />
-        <script src="https://cdn.rawgit.com/mdehoog/Semantic-UI/6e6d051d47b598ebab05857545f242caf2b4b48c/dist/semantic.min.js"></script>*@
 </head>
-<body style="margin-top: 110px">
-    <div class="container body-content">
-        @RenderBody()
-        <hr />
+    <body>
+        <div class="container body-content">
+            @RenderBody()
+        </div>
         <footer>
             <p>&copy; @DateTime.Now.Year - Logic University</p>
         </footer>
-    </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+        @RenderSection("scripts", required: false)
 
-  
 
-    <script>
-        $("li>a").on("click", function () {
-            localStorage.setItem("currentUrl", $(this).attr("href"));
-        })
-        $('document').ready(function () {
-            $('li>a').each(function () {
-                if ($(this).attr('href') == localStorage.getItem("currentUrl")) {
-                    if ($(this).parent('li').attr('class') == 'non-dropdown') css($(this));
-                    else css($(this).parent('li').parent('ul').siblings('a'));
+
+        <script>
+            function css(obj) {
+                obj.css("background-color", "#cc9216");
+                obj.css("color", "#fff")
+            }
+
+            $('document').ready(function () {
+                var url = window.location.href;
+                url = url.substring(0, (url.indexOf("#") == -1) ? url.length : url.indexOf("#"));
+                url = url.substring(0, (url.indexOf("?") == -1) ? url.length : url.indexOf("?"));
+                url = url.split("/");
+
+                var currentUrl = "/" + url[url.length - 2] + "/" + url[url.length - 1]
+
+                if (!url[url.length - 3].includes("localhost")) {
+                    currentUrl = "/" + url[url.length - 3] + currentUrl;
                 }
+                $('li>a').each(function () {
+                    if ($(this).attr('href') == currentUrl) {
+                        if ($(this).parent('li').attr('class') == 'non-dropdown') css($(this));
+                        else css($(this).parent('li').parent('ul').siblings('a'));
+                    }
+                });
             })
-        })
-
-        function css(obj) {
-            obj.css("background-color", "#cc9216");
-            obj.css("color", "#fff")
-        }
-    </script>    
-</body >
+        </script>
+    </body>
 </html >

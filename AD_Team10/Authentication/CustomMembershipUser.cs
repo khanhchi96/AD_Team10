@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Security;
 using AD_Team10.Models;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Authentication
 {
     public class CustomMembershipUser : MembershipUser

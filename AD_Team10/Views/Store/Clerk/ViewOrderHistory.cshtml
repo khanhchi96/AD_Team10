@@ -1,89 +1,147 @@
-﻿@model Tuple<List<AD_Team10.Models.PurchaseOrder>, AD_Team10.Models.Supplier>
+﻿@*Author: Wang Wang Wang*@
+
+@model PagedList.IPagedList<AD_Team10.Models.PurchaseOrder>
+@using PagedList.Mvc;
+@using AD_Team10.Models;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "ViewOrderHistory";
+    var statusList = (List<string>)ViewBag.statusList;
+    var supplierList = (List<Supplier>)ViewBag.supplierList;
 }
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-<h3 align="center">Purchase Orders History</h3>
-<hr />
+<div class="container-fluid body">
+    <h3>VIEW ORDER HISTORY</h3>
+    <div class="filter-option">
+        <div class="create">
+            <span class="glyphycon glyphicon-plus plus-sign"></span>
+            <div class="create-link">
+                @Html.ActionLink("Create New Order", "CreatePurchaseOrder")
+            </div>
+        </div>
+        <button id="clear">Clear</button>
+        <div class="filter">
+            <span>Filter by supplier: </span>
+            <select name="filterSupplier" id="filterSupplier">
+                @foreach (var c in supplierList)
+                {
+                    <option value="@Url.Action("ViewOrderHistory", "Clerk", new { supplier = c.SupplierID, status = ViewBag.status, })">@c.SupplierName</option>
+                }
+            </select>
+        </div>
 
-@using (Html.BeginForm())
-{
-    <div class="superDiv">
         <div class="filter">
-            Filter by
-        </div>
-        <div class="filter">
-            @Html.HiddenFor(model => model.Item2.SupplierID, "SupplierID")
-            @Html.DropDownList("SupplierID", ViewBag.SupplierID as SelectList, "Supplier", htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div class="filter">
-            <input type="submit" value="Submit" />
+            <span>Filter by status: </span>
+            <select name="filterStatus" id="filterStatus">
+                @foreach (var s in statusList)
+                {
+                    <option value="@Url.Action("ViewOrderHistory", "Clerk", new { supplier = ViewBag.supplier, status = s })">@s</option>
+                }
+            </select>
         </div>
     </div>
-}
 
-<table class="table table-hover" align="center">
-    <tr class="bg-primary">
-        <th>
-            Order ID
-        </th>
-        <th>
-            Order Date
-        </th>
-        <th>
-            Supplier
-        </th>
-        <th>
-            Status
-        </th>
-        <th>Details</th>
-    </tr>
-    @if (Model.Item1.Count() == 0)
+
+    @if (!Model.Any())
     {
-        <tr>
-            <td colspan="5" align="center">
-                There's nothing you want!
-            </td>
-        </tr>
+        if (ViewBag.status == null)
+        {
+            <p>No order has been created yet.</p>
+        }
+        else
+        {
+            <p>No order matches the condition.</p>
+        }
     }
     else
     {
-        foreach (var item in Model.Item1)
-        {
+        <table class="table table-hover">
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PurchaseOrderID)
-                </td>
-                <td>
-                    @{
-                        string dateValue = item.OrderDate.ToString("dd/MM/yyyy");
-                    }
-                    @Html.DisplayFor(modelItem => dateValue)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderStatus)
-                </td>
-                <td>
-                    @Html.ActionLink("View", "ViewOrderDetails", new { id = item.PurchaseOrderID })
-                </td>
+                <th>
+                    Order ID
+                </th>
+                <th>
+                    Order Date
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Status
+                </th>
+                <th>Details</th>
             </tr>
-        }
+            @if (Model.Count() == 0)
+            {
+                <tr>
+                    <td colspan="5" align="center">
+                        There's nothing you want!
+                    </td>
+                </tr>
+            }
+            else
+            {
+
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PurchaseOrderID)
+                        </td>
+                        <td>
+                            @{
+                                string dateValue = item.OrderDate.ToString("dd/MM/yyyy");
+                            }
+                            @Html.DisplayFor(modelItem => dateValue)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.OrderStatus)
+                        </td>
+                        <td>
+                            @Html.ActionLink("View", "ViewOrderDetails", new { id = item.PurchaseOrderID })
+                        </td>
+                    </tr>
+                }
+            }
+
+        </table>
     }
 
-</table>
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-<style>
-    .superDiv {
-        position: relative;
-        left: 800px;
-    }
+        @Html.PagedListPager(Model, page => Url.Action("ViewOrderHistory",
+            new { page }))
+    </div>
+</div>
+<script>
 
-    .filter {
-        display: inline-block;
-    }
-</style>
+    $(document).ready(function () {
+        var selectedItem = sessionStorage.getItem("SelectedOrder");
+        $('#filterStatus').val(selectedItem);
+        $('#filterSupplier').val(selectedItem);
+    });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedOrder", this.value);
+    });
+
+    $('#filterSupplier').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedOrder", this.value);
+    });
+
+        $("#clear").on('click', function () {
+            sessionStorage.setItem("SelectedOrder", "");
+        location.href = '@Url.Action("ViewOrderHistory", "Clerk")';
+    })
+</script>
+
 

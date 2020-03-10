@@ -4,14 +4,15 @@
     int num = 0;
 }
 
-<script src="~/Scripts/jquery-3.3.1.min.js"></script>
-<script src="~/Scripts/bootstrap.min.js"></script>
-<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
 
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+</div>
+<div class="container-fluid body">
 <h3 align="center">REQUISITION NO. @Html.DisplayFor(model => model.RequisitionID)</h3>
 <hr />
 <div class="detailDiv">
-    <div>
+    
         <dl class="dl-horizontal">
             <dt>
                 Department:
@@ -37,8 +38,7 @@
                 @Html.DisplayFor(model => model.Status)
             </dd>
         </dl>
-    </div>
-    <div>
+
         <dl class="dl-horizontal">
             <dt>
                 Employee Name:
@@ -75,7 +75,7 @@
                 @Html.DisplayFor(model => model.RequisitionDate)
             </dd>
         </dl>
-    </div>
+    
 </div>
 
 @using (Html.BeginForm())
@@ -124,7 +124,7 @@
         <input type="submit" value="Save" class="btn btn-default" />
     </div>
 }
-
+    </div>
 <style>
     .detailDiv {
         display: flex;

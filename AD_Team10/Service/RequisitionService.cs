@@ -4,8 +4,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Data.Entity;
-using System.Web;
 
+
+//Author: Wang Wang Wang, Phung Khanh Chi
 namespace AD_Team10.Service
 {
     public class RequisitionService
@@ -31,8 +32,6 @@ namespace AD_Team10.Service
             return requisitions;
         }
 
-        //public List<Requisition> GetRequisit
-
         public Requisition Find(int? id)
         {
             Requisition requisition = db.Requisitions.Find(id);
@@ -51,7 +50,21 @@ namespace AD_Team10.Service
 
         public List<Requisition> GetPendingRequisitions()
         {
-            return db.Requisitions.Include(x => x.Employee).Where(x => x.Status == Status.Approved).ToList();
+            return db.Requisitions.Include(x => x.Employee).Where(x => x.Status == Status.Approved || x.Status == Status.Incomplete).ToList();
+        }
+
+        public void SequencedRetrievalList(List<Item> items, RetrievalList retrievalList)
+        {
+            List<RetrievalListDetail> newRetrievalListDetails = new List<RetrievalListDetail>();
+            foreach (var item in items)
+            {
+                List<RetrievalListDetail> retrievalListDetails = retrievalList.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).ToList();
+                newRetrievalListDetails.AddRange(retrievalListDetails);
+            }
+            for (int i = 0; i < retrievalList.RetrievalListDetails.Count; i++)
+            {
+                retrievalList.RetrievalListDetails[i] = newRetrievalListDetails[i];
+            }
         }
 
         public Dictionary<Requisition, int> GetRequisitionByItem(Item item, List<RequisitionDetail> pendingRequisitionDetails)
@@ -68,17 +81,6 @@ namespace AD_Team10.Service
             return requisitionQuantity;
         }
 
-        public List<Requisition> GetRequisitionByReqDetails(List<RequisitionDetail> requisitionDetails)
-        {
-            List<Requisition> requisitions = new List<Requisition>();
-            foreach (var reqDetail in requisitionDetails)
-            {
-                Requisition requisition = db.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
-                requisitions.Add(requisition);
-            }
-            return requisitions;
-        }
-
         public List<Item> GetDistinctItem(List<RequisitionDetail> requisitionDetails)
         {
             List<Item> items = new List<Item>();
@@ -90,66 +92,6 @@ namespace AD_Team10.Service
             }
             return items;
         }
-
-        public Dictionary<Item,int> GetItemAndQuantity(List<RequisitionDetail> requisitionDetails)
-        {
-            Dictionary<Item, int> itemQuantity = new Dictionary<Item, int>();
-            int quantity;
-            foreach(var reqDetail in requisitionDetails)
-            {
-                if (!itemQuantity.ContainsKey(reqDetail.Item))
-                {
-                    itemQuantity.Add(reqDetail.Item, reqDetail.Quantity-reqDetail.QuantityReceived);
-                }
-                else
-                {
-                    quantity = reqDetail.Quantity-reqDetail.QuantityReceived;
-                    itemQuantity[reqDetail.Item] += quantity;
-                }
-            }
-            return itemQuantity;
-        }
-
-        public int DepartmentTotalItemQuantity(Item item, Department department)
-        {
-            List<DeptEmployee> depEmployees = db.DeptEmployees.Where(x => x.DepartmentID == department.DepartmentID).ToList();
-            int quantity=0;
-            foreach(var depEmp in depEmployees)
-            {
-                List<Requisition> requisitions = db.Requisitions.Where(x => x.EmployeeID == depEmp.DeptEmployeeID && x.Status != Status.Completed).ToList();
-                foreach(var requisition in requisitions)
-                {
-                    List<RequisitionDetail> requisitionDetails = db.RequisitionDetails.Where(x => x.RequisitionID == requisition.RequisitionID && x.ItemID == item.ItemID).ToList();
-                    foreach(var reqDetail in requisitionDetails)
-                    {
-                        quantity += (reqDetail.Quantity - reqDetail.QuantityReceived);
-                    }
-                }
-            }
-            return quantity;
-        }
-
-        //public int DepartmentCountForItem(Item item, List<RequisitionDetail> pendingRequisitionDetails)
-        //{
-        //    List<RequisitionDetail> requisitionDetails = pendingRequisitionDetails.Where(x => x.ItemID == item.ItemID).ToList();
-        //    List<Requisition> requisitions = new List<Requisition>();
-        //    List<DepEmployee> employees = new List<DepEmployee>();
-        //    foreach(var reqDetail in requisitionDetails)
-        //    {
-        //        Requisition requisition = db.Requisitions.Where(x => x.RequisitionID == reqDetail.RequisitionID).SingleOrDefault();
-        //        DepEmployee depEmployee = db.DepEmployees.Where(x => x.DepEmployeeID == requisition.EmployeeID).SingleOrDefault();
-        //        employees.Add(depEmployee);
-        //    }
-        //    List<Department> departments = new List<Department>();
-        //    foreach(var employee in employees)
-        //    {
-        //        Department department = db.Departments.Where(x => x.DepartmentID == employee.DepartmentID).SingleOrDefault();
-        //        if (!departments.Contains(department))
-        //            departments.Add(department);
-        //    }
-        //    int quantity = departments.Count();
-        //    return quantity;
-        //}
 
         public List<Department> DepartmentsForItem(Item item, List<RequisitionDetail> pendingRequisitionDetails)
         {
@@ -172,21 +114,60 @@ namespace AD_Team10.Service
             return departments;
         }
 
+        public int DepartmentTotalItemQuantity(Item item, Department department)
+        {
+            List<DeptEmployee> depEmployees = db.DeptEmployees.Where(x => x.DepartmentID == department.DepartmentID).ToList();
+            int quantity = 0;
+            foreach (var depEmp in depEmployees)
+            {
+                List<Requisition> requisitions = db.Requisitions.Where(x => x.EmployeeID == depEmp.DeptEmployeeID && x.Status != Status.Completed).ToList();
+                foreach (var requisition in requisitions)
+                {
+                    List<RequisitionDetail> requisitionDetails = db.RequisitionDetails.Where(x => x.RequisitionID == requisition.RequisitionID && x.ItemID == item.ItemID).ToList();
+                    foreach (var reqDetail in requisitionDetails)
+                    {
+                        quantity += (reqDetail.Quantity - reqDetail.QuantityReceived);
+                    }
+                }
+            }
+            return quantity;
+        }
+
+        public Dictionary<Item,int> GetItemAndQuantity(List<RequisitionDetail> requisitionDetails)
+        {
+            Dictionary<Item, int> itemQuantity = new Dictionary<Item, int>();
+            int quantity;
+            foreach(var reqDetail in requisitionDetails)
+            {
+                if (!itemQuantity.ContainsKey(reqDetail.Item))
+                {
+                    itemQuantity.Add(reqDetail.Item, reqDetail.Quantity-reqDetail.QuantityReceived);
+                }
+                else
+                {
+                    quantity = reqDetail.Quantity-reqDetail.QuantityReceived;
+                    itemQuantity[reqDetail.Item] += quantity;
+                }
+            }
+            return itemQuantity;
+        }
+
+
         //Disbursement List
         public Dictionary<Item, int> GetDepartmentItemAndQuantity(Department department)
         {
             Dictionary<Item, int> departmentItemQuantity = new Dictionary<Item, int>();
-            List<RequisitionDetail> approvedRequisitionDetails = this.GetApprovedRequisitionDetail();
-            List<RequisitionDetail> departmentRequisitionDetails = approvedRequisitionDetails.Where(x => x.Requisition.Employee.DepartmentID == department.DepartmentID).ToList();
-            foreach(var detail in departmentRequisitionDetails)
+            RetrievalList retrievalList = FindCurrentRetrievalList();
+            List<RetrievalListDetail> departmentRetrievalDetails = retrievalList.RetrievalListDetails.Where(x => x.DepartmentID == department.DepartmentID).ToList();
+            foreach (var detail in departmentRetrievalDetails)
             {
                 if (!departmentItemQuantity.ContainsKey(detail.Item))
                 {
-                    departmentItemQuantity.Add(detail.Item, detail.QuantityReceived);
+                    departmentItemQuantity.Add(detail.Item, detail.QuantityOffered);
                 }
                 else
                 {
-                    departmentItemQuantity[detail.Item] += detail.QuantityReceived;
+                    departmentItemQuantity[detail.Item] += detail.QuantityOffered;
                 }
             }
             return departmentItemQuantity;
@@ -202,15 +183,9 @@ namespace AD_Team10.Service
             return db.CollectionPoints.ToList();
         }
 
-        public List<RequisitionDetail> GetRequisitionDetailsByRequisitionID(int Id)
+        public List<PurchaseOrder> GetPurchaseOrder()
         {
-            List<RequisitionDetail> requisitionDetails = db.RequisitionDetails.Include(x => x.Item).Include(x => x.Requisition).Where(x => x.RequisitionID == Id).ToList();
-            return requisitionDetails;
-        }
-
-        public List<PurchaseOrder> GetPendingPurchaseOrder()
-        {
-            return db.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).Where(x => x.OrderStatus != OrderStatus.Completed).ToList();
+            return db.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).ToList();
         }
 
         public Requisition GetRequisitionById(int id)
@@ -239,17 +214,6 @@ namespace AD_Team10.Service
             db.SaveChanges();
         }
 
-        //Generate the last Retrieval List
-        public RetrievalList GenerateRetrievalList()
-        {
-            DateTime yesterday = DateTime.Now.AddDays(-1);
-            RetrievalList retrievalList = db.RetrievalLists.Include(x => x.RequisitionRetrievals)
-                                                                  .Include(x => x.RetrievalListDetails)
-                                                                  .Where(x => x.StartDate <= yesterday && x.EndDate >= yesterday)
-                                                                  .SingleOrDefault();
-            return retrievalList;
-        }
-
         ////After update the requisitiondetail, the incompleted requisitions need to transfer to next retrieval list
         public RetrievalList GetRetrievalListForNow()
         {
@@ -270,11 +234,6 @@ namespace AD_Team10.Service
             return items;
         }
 
-        //Get the correspond item quantity for retrieval list
-        //public Dictionary<Item, int> GetTotalQuantityForItem(Item item, RetrievalList retrievalList)
-        //{
-            
-        //}
 
         //Get the incpmpleted requisitionDetails
         public List<RequisitionDetail> GetIncompletedDetails(Requisition requisition)
@@ -301,14 +260,6 @@ namespace AD_Team10.Service
             return contains;
         }
 
-        //check if the retrieval list contain specific Item
-        public bool RetrievalListDetailContainItem(int id, List<RetrievalListDetail> retrievalListDetails)
-        {
-            if (retrievalListDetails.Where(x=>x.ItemID == id) != null)
-                return true;
-            else
-                return false;
-        }
 
         //Incompleted requisitions transfer to next Retrieval list
         public void IncompletedRequisitionTransferToRetrieval(Requisition requisition, RetrievalList retrievalList)
@@ -365,29 +316,34 @@ namespace AD_Team10.Service
             return retrievalList;
         }
 
-
-     
-
-
         //Update retrival list
         public void UpdateRetrievalList(RetrievalList retrievalList)
         {
-            db.Entry(retrievalList).State = EntityState.Modified;
             db.SaveChanges();
         }
 
         //Get retrieval list by retrieval id
         public RetrievalList GetRetrievalListById(int id)
         {
-            return null;
-            //return db.RetrievalLists.Include(x => x.Requisitions).Include(x => x.RetrievalListDetails).Where(x => x.RetrievalListID == id).SingleOrDefault();
+            return db.RetrievalLists.Include(x => x.RetrievalListDetails).Where(x => x.RetrievalListID == id).SingleOrDefault();
         }
 
         public RetrievalList FindCurrentRetrievalList()
         {
             DateTime today = DateTime.Today;
             RetrievalList retrievalList = db.RetrievalLists.SingleOrDefault(r => r.StartDate <= today && r.EndDate >= today);
+
             return retrievalList;
+        }
+
+        public float FindPrice(int itemID, int supplierID)
+        {
+            return db.SupplierItems.SingleOrDefault(s => s.SupplierID == supplierID && s.ItemID == itemID).Price;
+        }
+
+        public DeptEmployee FindRep(int deptId)
+        {
+            return db.DeptUsers.SingleOrDefault(d => d.DeptEmployee.DepartmentID == deptId && d.Role == DepartmentRole.REPRESENTATIVE).DeptEmployee;
         }
     }
 }

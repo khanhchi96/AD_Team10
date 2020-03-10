@@ -1,4 +1,6 @@
-﻿@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
+﻿@*Author: Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
 
 <div id="navigation">
     @Html.Partial("~/Views/Store/_SupervisorManagerNavigation.cshtml")
@@ -10,7 +12,7 @@
         @Html.Partial("~/Views/Store/_AdjustmentVoucher.cshtml", Model)
     </div>
 </div>
-    <script>
+<script>
     $(".action").click(function (e) {
 
             e.preventDefault();
@@ -21,4 +23,4 @@
                 }
             });
         });
-    </script>
+</script>

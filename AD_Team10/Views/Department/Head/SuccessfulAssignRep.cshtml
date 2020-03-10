@@ -1,4 +1,5 @@
-﻿
+﻿@*Author: Stephanie Cheng Sin Yin*@
+
 @{
     var rep = ViewBag.newRep;
 }
@@ -7,13 +8,8 @@
     @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 dashboard-panel-8">
-            <h3>ASSIGN REPRESENTATIVE</h3>
+<div class="container-fluid body">
+    <h3>ASSIGN REPRESENTATIVE</h3>
 
-            <p>You have successfully assigned <b>@rep</b> as the new representative.</p>
-        </div>
-    </div>
+    <p class="center">You have successfully assigned <b>@rep</b> as the new representative.</p>
 </div>
-

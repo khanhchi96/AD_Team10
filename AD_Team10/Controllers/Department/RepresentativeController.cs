@@ -1,72 +1,116 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using AD_Team10.Authentication;
 using AD_Team10.DAL;
 using AD_Team10.Models;
 using AD_Team10.Service;
+using PagedList;
 
+//Author: Phung Khanh Chi, Wang Wang Wang
 namespace AD_Team10.Controllers.Department
 {
     [CustomAuthorize(Roles = "REPRESENTATIVE")]
     public class RepresentativeController : Controller
     {
+        static readonly int PAGE_SIZE = 8;
         private DBContext db = new DBContext();
         private RequisitionService reqService = new RequisitionService();
+        private RepresentativeService repService = new RepresentativeService();
+        private EmployeeController employeeController = new EmployeeController();
+        private EmployeeService employeeService = new EmployeeService();
+
+
+        //Author: Phung Khanh Chi
         public ActionResult Index()
         {
-            int deptID = FindDepartmentId();
-            var collectionPoint = (db.Departments.Where(d => d.DepartmentID == deptID).SingleOrDefault()).CollectionPoint;
+            List<Requisition> employeeRequisitions = repService.GetEmployeeRequisition()
+                                            .Take(PAGE_SIZE).ToList();
+            int retrievalListId = reqService.FindCurrentRetrievalList().RetrievalListID - 1;
+            List<RetrievalListDetail> disbursementList = repService.GetDisbursementList(retrievalListId);
+            List<Requisition> myRequisitions = employeeService.GetRequisitions(); 
 
-            ViewBag.collectionPointName = collectionPoint.CollectionPointName;
-            ViewBag.deptID = deptID;
-            ViewBag.deptName = db.Departments.Find(deptID).DepartmentName;
+            ViewBag.empRequisitions = employeeRequisitions;
+            ViewBag.disbursementList = disbursementList;
+            ViewBag.myRequisitions = myRequisitions;
             return View("~/Views/Department/Representative/Index.cshtml");
-
         }
 
-        private int FindDepartmentId()
+        public ActionResult MyRequisitions(int? page, string status = "")
         {
-            CustomPrincipal user = (CustomPrincipal)System.Web.HttpContext.Current.User;
-            int employeeId = user.UserID;
-            int deptID = (db.DeptEmployees.Where(dE => dE.DeptEmployeeID == employeeId).SingleOrDefault()).DepartmentID;
-            return deptID;
+            return employeeController.Index(page, status);
         }
-        public ActionResult ChangeLocation(string location, string departmentId)
+
+        [HttpGet]
+        public ActionResult MyRequisitionDetails(int requisitionId)
         {
-            var locationId = int.Parse(location);
-            var departmentid = int.Parse(departmentId);
-            var department = db.Departments.Where(x => x.DepartmentID == departmentid).SingleOrDefault();
-            department.CollectionPointID = locationId;
-            db.SaveChanges();
-            var newDp = db.CollectionPoints.Where(
-             x => x.CollectionPointID == locationId).SingleOrDefault();
-            ViewBag.DepartmentName = department.DepartmentName;
-            ViewBag.NewCollectionPoint = newDp.CollectionPointName;
-            var dt = DateTime.Today;
-            ViewBag.CurrentDate = dt;
-            return View("~/Views/Department/Representative/ChangeLocation.cshtml");
+            return employeeController.RequisitionDetails(requisitionId);           
         }
 
 
-        public ActionResult EmployeeRequisitions()
+        [HttpGet]
+        public ActionResult UpdateMyRequisition(int requisitionId)
         {
-            int deptId = FindDepartmentId();
-            var requisitions = db.Requisitions.Where(r => r.Employee.DepartmentID == deptId &&
-                            (r.Status == Status.Approved || r.Status == Status.Incomplete || r.Status == Status.Completed));
-            return View("~/Views/Department/Representative/EmployeeRequisitions.cshtml", requisitions.ToList());
+            return employeeController.UpdateRequisition(requisitionId);
+        }
+
+        [HttpPost]
+        public ActionResult UpdateAndSave(int requisitionId, FormCollection form)
+        {
+            employeeService.UpdateAndSave(requisitionId, form);
+            return RedirectToAction("MyRequisitionDetails", new { requisitionId });
+        }
+
+        public ActionResult CreateMyRequisition()
+        {
+            return employeeController.CreateRequisition();
+        }
+
+        [HttpPost]
+        public ActionResult CreateMyRequisition(Requisition requisition, FormCollection form)
+        {
+            employeeService.CreateRequisition(requisition, form);
+            return RedirectToAction("MyRequisitions");
+        }
+
+        [HttpGet]
+        public ActionResult DeleteMyRequisition(int requisitionId)
+        {
+            employeeService.DeleteRequisition(requisitionId);
+            return RedirectToAction("MyRequisitions");
+        }
+
+        public ActionResult DisbursementList()
+        {
+            RetrievalList retrievalList = reqService.FindCurrentRetrievalList();
+            int retrievalListId = retrievalList.RetrievalListID - 1;
+            List<RetrievalListDetail> disbursementList = repService.GetDisbursementList(retrievalListId);
+            RetrievalList lastRetrievalList = db.RetrievalLists.SingleOrDefault(r => r.RetrievalListID == retrievalListId);
+            ViewBag.startDate = lastRetrievalList.StartDate.ToString("dd/MM/yyyy");
+            ViewBag.endDate = lastRetrievalList.EndDate.ToString("dd/MM/yyyy");
+            return View("~/Views/Department/Representative/DisbursementList.cshtml", disbursementList);
+        }
+
+
+        public ActionResult EmployeeRequisitions(int? page, string status="")
+        {
+            ViewBag.statusList = new List<string> { Status.Approved.ToString(), Status.Incomplete.ToString(), Status.Completed.ToString()};
+            List<Requisition> requisitions = repService.GetEmployeeRequisition();
+            if (status != "") { requisitions = requisitions.Where(r => r.Status.ToString() == status).ToList(); }
+            int pageNumber = (page ?? 1);
+            return View("~/Views/Department/Representative/EmployeeRequisitions.cshtml", requisitions.ToPagedList(pageNumber, PAGE_SIZE));
         }
        
 
         public ActionResult EmployeeRequisitionDetails(int id)
         {
-            var details = db.RequisitionDetails.Where(r => r.RequisitionID == id);
-            return View("~/Views/Department/Representative/EmployeeRequisitionDetails.cshtml", details.ToList());
+            var requisition = db.Requisitions.SingleOrDefault(r => r.RequisitionID == id);
+            return View("~/Views/Department/Representative/EmployeeRequisitionDetails.cshtml", requisition);
         }
 
+
+        //Author: Wang Wang Wang
         public ActionResult UpdateEmployeeRequisition(int id)
         {
             Requisition requisition = reqService.GetRequisitionById(id);
@@ -80,13 +124,11 @@ namespace AD_Team10.Controllers.Department
             if (ModelState.IsValid)
             {
                 Requisition editedRequisition = reqService.GetRequisitionById(requisition.RequisitionID);
-                List<RequisitionDetail> editedDetails = editedRequisition.RequisitionDetails;
-                List<RequisitionDetail> details = requisition.RequisitionDetails;
                 for (int i = 0; i < editedRequisition.RequisitionDetails.Count; i++)
                 {
-                    details[i].QuantityReceived = details[i].QuantityReceived;
+                    editedRequisition.RequisitionDetails[i].QuantityReceived = requisition.RequisitionDetails[i].QuantityReceived;
                 }
-                
+
                 if (reqService.IsCompleted(editedRequisition))
                 {
                     editedRequisition.CompletedDate = DateTime.Now;
@@ -100,88 +142,11 @@ namespace AD_Team10.Controllers.Department
                     reqService.IncompletedRequisitionTransferToRetrieval(editedRequisition, retrievalList);
                     reqService.UpdateRetrievalList(retrievalList);
                 }
-
-                db.SaveChanges();
+                reqService.UpdateRequisition(editedRequisition);
                 return RedirectToAction("EmployeeRequisitionDetails", new { id = requisition.RequisitionID });
             }
-            return View(requisition);
+            return View("~/Views/Department/Representative/UpdateEmployeeRequisition.cshtml", requisition);
         }
-
-        // GET: Pending requisition list
-        public ActionResult GetPendingList()
-        {
-            var requisitions = reqService.GetPendingRequisitions();
-            var department = new Models.Department();
-            var collectionPoint = new CollectionPoint();
-            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName");
-            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName");
-            return View(Tuple.Create(requisitions, department, collectionPoint));
-        }
-
-        [HttpPost]
-        public ActionResult GetPendingList(Models.Department department, CollectionPoint collectionPoint)
-        {
-            var requisitions = reqService.GetPendingRequisitions();
-            ViewBag.CollectionPointID = new SelectList(reqService.GetCollectionPoints(), "CollectionPointID", "CollectionPointName", collectionPoint.CollectionPointID);
-            ViewBag.DepartmentID = new SelectList(reqService.GetDepartments(), "DepartmentID", "DepartmentName", department.DepartmentID);
-            if (department != null)
-            {
-                if (department.DepartmentID == 0)
-                {
-                    if (collectionPoint != null)
-                    {
-                        if (collectionPoint.CollectionPointID == 0)
-                        {
-                            return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
-                        }
-                        else
-                        {
-                            requisitions = requisitions.Where(x => x.Employee.Department.CollectionPointID == collectionPoint.CollectionPointID).ToList();
-                            return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
-                        }
-                    }
-                    else
-                    {
-                        return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions.ToList(), new Models.Department(), new CollectionPoint()));
-                    }
-                }
-                else
-                {
-                    requisitions = requisitions.Where(x => x.Employee.DepartmentID == department.DepartmentID).ToList();
-                    return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
-                }
-            }
-            else
-            {
-                return View("~/Views/Department/Representative/GetPendingList.cshtml", Tuple.Create(requisitions, department, collectionPoint));
-            }
-
-        }
-
-        // GET: View pending requisition detail
-        public ActionResult ViewDetails(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Requisition requisition = reqService.Find(id);
-            List<RequisitionDetail> requisitionDetail = requisition.RequisitionDetails.ToList();
-            if (requisition == null)
-            {
-                return HttpNotFound();
-            }
-            //return View(requisition);
-            return View(Tuple.Create(requisition, requisitionDetail));
-        }
-
-        
-
-    
-
-
-
-
 
     }
 }

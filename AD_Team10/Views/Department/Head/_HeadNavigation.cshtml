@@ -1,4 +1,10 @@
-﻿
+﻿@*Author: Feng Li Ying, Phung Khanh Chi*@
+
+@using AD_Team10.Authentication;
+@using AD_Team10.Models;
+@{
+    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+}
 <div class="navbar navbar-inverse navbar-fixed-top">
 
     @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
@@ -8,8 +14,18 @@
             <ul class="nav navbar-nav">
                 <li class="non-dropdown">@Html.ActionLink("Approve/Reject Requisitions", "RequisitionsToApprove")</li>
                 <li class="non-dropdown">@Html.ActionLink("Assign Representative", "AssignRep")</li>
-                <li class="non-dropdown">@Html.ActionLink("Assign Acting Head", "AssignActingHead")</li>
-                <li class="non-dropdown">@Html.ActionLink("Cancel Acting Head", "CancelActingHead")</li>
+                @if (user.Role == DepartmentRole.HEAD.ToString())
+                {
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Acting Head<span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Assign Acting Head", "AssignActingHead")</li>
+                            <li>@Html.ActionLink("Cancel Acting Head", "CancelActingHead")</li>
+                        </ul>
+                    </li>
+                }
+                <li class="non-dropdown">@Html.ActionLink("Change Collection Point", "ChangeCollectionPoint")</li>
+                <li class="non-dropdown">@Html.ActionLink("Trend Analysis", "ViewReport")</li>
             </ul>
         </div>
     </div>

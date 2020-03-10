@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Authentication
 {
     public class CustomAuthorizeAttribute : AuthorizeAttribute
@@ -17,7 +18,6 @@ namespace AD_Team10.Authentication
         {
             return ((CurrentUser != null && !CurrentUser.IsInRole(Roles)) || CurrentUser == null) ? false : true;
         }
-
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
@@ -48,6 +48,5 @@ namespace AD_Team10.Authentication
 
             filterContext.Result = routeData;
         }
-
     }
 }

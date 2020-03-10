@@ -12,7 +12,7 @@ namespace AD_Team10.Models
         [Key, Column(Order = 0), ForeignKey("Requisition")]
         public int RequisitionID { get; set; }
         [Key, Column(Order = 1), ForeignKey("RetrievalList")]
-        public int RetrievalListD { get; set; }
+        public int RetrievalListID { get; set; }
         public virtual Requisition Requisition { get; set; }
         public virtual RetrievalList RetrievalList { get; set; }
     }

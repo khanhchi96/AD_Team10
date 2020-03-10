@@ -1,4 +1,5 @@
-﻿
+﻿@*Author: Stephanie Cheng Sin Yin*@
+
 @{
     var actingHead = ViewBag.actingHead;
     var start = ViewBag.startDate;
@@ -10,27 +11,22 @@
     @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 dashboard-panel-8">
-            <h3>CANCEL ACTING HEAD</h3>
-            <p></p>
+<div class="container-fluid body">
+    <h3>CANCEL ACTING HEAD</h3>
+    <br /><br />
 
-            @if (actingHeadID != 0)
-            {
-                <b>Current Acting Head:</b>
-                <div>@actingHead (@start - @end)</div>
+    @if (actingHeadID != 0)
+    {
+        <p class="center">Current Acting Head: <b>@actingHead (@start - @end)</b></p>
 
-                using (Html.BeginForm("SuccessfulCancelActingHead", "Head", FormMethod.Post))
-                {
-                    <p></p>
-                    <p><input type="submit" name="cancel" value="Confirm Cancel" /></p>
-                }
-            }
-            else
-            {
-                @actingHead
-            }
-        </div>
-    </div>
+
+        using (Html.BeginForm("SuccessfulCancelActingHead", "Head", FormMethod.Post, new { @class = "center" }))
+        {
+            <input type="submit" name="cancel" value="Confirm Cancel" class="submit center" />
+        }
+    }
+    else
+    {
+        <p class="center">@actingHead</p>
+    }
 </div>

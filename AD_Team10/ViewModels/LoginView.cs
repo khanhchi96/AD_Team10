@@ -13,6 +13,7 @@ namespace AD_Team10.ViewModels
         public string UserName { get; set; }
         [Required]
         [Display(Name = "Password")]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
         public string UserType { get; set; }
     }

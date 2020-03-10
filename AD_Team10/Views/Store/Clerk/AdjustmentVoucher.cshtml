@@ -1,10 +1,11 @@
-﻿@model PagedList.IPagedList<AD_Team10.Models.AdjustmentVoucher>
+﻿@*Author: Phung Khanh Chi*@
+
+@model PagedList.IPagedList<AD_Team10.Models.AdjustmentVoucher>
 @using PagedList.Mvc;
 @using AD_Team10.Models;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "Adjustment Voucher";
     var statusList = (List<string>)ViewBag.statusList;
     var clerkList = (List<StoreEmployee>)ViewBag.clerkList;
 }
@@ -31,7 +32,7 @@
             <select name="filterClerk" id="filterClerk">
                 @foreach (var c in clerkList)
                 {
-                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = ViewBag.status, clerk = c.StoreEmployeeID.ToString()})">@c.ToString()</option>
+                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { clerk = c.StoreEmployeeID, status = ViewBag.status, })">@c.ToString()</option>
                 }
             </select>
         </div>
@@ -41,7 +42,7 @@
             <select name="filterStatus" id="filterStatus">
                 @foreach (var s in statusList)
                 {
-                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { status = s, clerk = ViewBag.clerk })">@s</option>
+                    <option value="@Url.Action("AdjustmentVoucher", "Clerk", new { clerk = ViewBag.clerk, status = s })">@s</option>
                 }
             </select>
         </div>
@@ -60,7 +61,7 @@
     }
     else
     {
-        <table class="table">
+        <table class="table table-hover">
             <tr>
                 <th>
                     @Html.DisplayNameFor(Model => Model.First().AdjustmentVoucherID)
@@ -86,22 +87,15 @@
                     <td>
                         @Html.DisplayFor(modelVoucher => voucher.AdjustmentDate)
                     </td>
-
-                    @if (voucher.Clerk.MiddleName == null)
-                    {
-                        <td>
-                            @Html.DisplayFor(modelVoucher => voucher.Clerk.FirstName) @Html.DisplayFor(modelVoucher => voucher.Clerk.LastName)
-                        </td>
-                    }
-                    else
-                    {
-                        <td>
-                            @Html.DisplayFor(modelVoucher => voucher.Clerk.FirstName) @Html.DisplayFor(modelVoucher => voucher.Clerk.MiddleName) @Html.DisplayFor(modelVoucher => voucher.Clerk.LastName)
-                        </td>
-                    }
+                    <td>
+                        @{
+                            string name = voucher.Clerk.ToString();
+                        }
+                        @Html.DisplayFor(modelVoucher => name)
+                    </td>
 
                     <td>
-                        @Html.DisplayFor(modelVoucher => voucher.Status)
+                        @voucher.Status.ToString().Replace("_", " ")
                     </td>
                     <td>
                         @Html.ActionLink("View", "VoucherDetails", new { id = voucher.AdjustmentVoucherID }, new { @class = "view-detail" })

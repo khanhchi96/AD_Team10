@@ -1,19 +1,93 @@
-﻿@{
-    ViewBag.Title = "Home Page";
-}
+﻿<style>
+body { background-image: url("https://images.pexels.com/photos/373076/pexels-photo-373076.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260"); 
+       height: 100%; 
+       background-attachment: fixed; 
+       background-position: center; 
+       background-repeat: no-repeat; 
+       background-size: cover; }
+    .navbar-inverse {
+        border-bottom-color: #381272 !important;
+        border-bottom-width: 10px !important;
+    }
 
-<div>
-    @Html.ActionLink(
-    "Department Login",
-    "Login",
-    "Home",
-    new { userType = "Department"},
-    null)
+    .welcome_info {
+        max-width: 100%;
+        overflow: hidden;
+        border-bottom-color: #c7c7c7 !important;
+        margin-top: 20px;
+    }
 
-    @Html.ActionLink(
-    "Store Login",
-    "Login",
-    "Home",
-    new { userType = "Store"},
-    null)
+    .choose_usertype {
+        margin-top: 50px;
+        text-align: center;
+    }
+
+    .user {
+        display: block;
+        width: 60%;
+        margin: auto;
+        background-color: #381272;
+    }
+
+    .user:first-child{
+        margin-top: 60px;
+        margin-bottom: 40px;
+    }
+    
+    .user_link {
+        color: white;
+        font-size: 20px;
+    }
+
+    .wrap{
+        padding: 10px 0;
+        background-color: #fff;
+        max-width: 700px;
+        height: 350px;
+        width: 60%;
+        position: absolute;
+        top: 55%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: #fff;
+    }
+
+    footer{
+        background-color: #fff;
+        border-top: none;
+    }
+</style>
+
+
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="logo">
+        @Html.ActionLink("LU", "Index", null, new { @class = "short-name" })
+        @Html.ActionLink("Logic University", "Index", null, new { @class = "full-name" })
+    </div>
+</div>
+<div class="wrap">
+<div class="navbar welcome_info">
+    <h3>Welcome to the Logic University Stationery System</h3>
+</div>
+
+<div class="choose_usertype">
+    <div class="btn user">
+        @Html.ActionLink(
+        "Department User Login",
+        "Login",
+        "Home",
+        new { userType = "Department" },
+        new { @class = "user_link" })
+    </div>
+    <div class="btn user">
+        @Html.ActionLink(
+        "Store User Login",
+        "Login",
+        "Home",
+        new { userType = "Store" },
+        new { @class = "user_link" })
+    </div>
+
+</div>
 </div>

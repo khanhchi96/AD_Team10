@@ -1,5 +1,7 @@
-﻿@model AD_Team10.Models.RetrievalList
-@using AD_Team10.DataService
+﻿@*Author: Wang Wang Wang*@
+
+@model AD_Team10.Models.RetrievalList
+@using AD_Team10.Service
 @using AD_Team10.Models
 @{
     ViewBag.Title = "UpdateRetrievalList";
@@ -7,27 +9,30 @@
 
 @{
     List<Item> items = (List<Item>)ViewData["items"];
+    int lastRows = 0;
 }
 
-<h3 align="center">@RequisitionService.retrievalList</h3>
-<p></p>
-<h4 align="center">
-    From @Model.StartDate.ToString("dd/MM/yyyy") to @Model.EndDate.ToString("dd/MM/yyyy")
-</h4>
-<p></p>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.RetrievalListID)
+<div class="container-fluid body">
+    <h3 align="center">@RequisitionService.retrievalList</h3>
+    <h4 align="center">
+        From @Model.StartDate.ToString("dd/MM/yyyy") to @Model.EndDate.ToString("dd/MM/yyyy")
+    </h4>
+    <hr />
 
-    <p align="right">
-        <button class="btn btn-default" type="submit">@RequisitionService.save</button>
-    </p>
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.RetrievalListID)
 
-    <div class="container">
-        <table class="table">
+        <p align="right">
+            <button class="btn btn-default" type="submit">@RequisitionService.save</button>
+        </p>
+        <table class="table table-bordered">
             <tr>
                 <th rowspan="2">
                     @Html.DisplayNameFor(model => model.RetrievalListDetails.First().Item.Description)
@@ -56,52 +61,60 @@
                     @RequisitionService.retrieved
                 </th>
             </tr>
-            @foreach (var item in items)
+            @for (int i = 0; i < items.Count; i++)
             {
-                List<RetrievalListDetail> value = Model.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).ToList();
+                int rows = Model.RetrievalListDetails.Where(x => x.ItemID == items[i].ItemID).ToList().Count;
+
+                if (i == 0)
+                {
+                    lastRows = 0;
+                }
+                else
+                {
+                    lastRows = lastRows + Model.RetrievalListDetails.Where(x => x.ItemID == items[i - 1].ItemID).ToList().Count;
+                }
+
                 <tr>
-                    <td rowspan="@Model.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                        @Html.DisplayFor(x => item.Description)
+                    <td rowspan="@rows">
+                        @Html.DisplayFor(x => items[i].Description)
                     </td>
-                    <td rowspan="@Model.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                        @{ var quantity = Model.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.Quantity).Sum(); }
+                    <td rowspan="@rows">
+                        @{ var quantity = Model.RetrievalListDetails.Where(m => m.ItemID == items[i].ItemID).Select(y => y.Quantity).Sum(); }
                         @Html.DisplayFor(x => quantity)
                     </td>
-                    <td rowspan="@Model.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                        @{ var quantityOffered = Model.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.QuantityOffered).Sum(); }
+                    <td rowspan="@rows">
+                        @{ var quantityOffered = Model.RetrievalListDetails.Where(m => m.ItemID == items[i].ItemID).Select(y => y.QuantityOffered).Sum(); }
                         @Html.DisplayFor(x => quantityOffered)
                     </td>
-
                     <td>
-                        @value[0].Department.DepartmentName
+                        @Model.RetrievalListDetails[lastRows].Department.DepartmentName
                     </td>
                     <td>
-                        @value[0].Quantity
+                        @Model.RetrievalListDetails[lastRows].Quantity
                     </td>
                     <td>
-                        @Html.EditorFor(model => value[0].QuantityOffered)
-                        @Html.ValidationMessageFor(model => value[0].QuantityOffered, "", new { @class = "form-control" })
+                        @Html.EditorFor(model => model.RetrievalListDetails[lastRows].QuantityOffered, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.RetrievalListDetails[lastRows].QuantityOffered, "", new { @class = "text-danger" })
                     </td>
                 </tr>
-                for (int i = 1; i < value.Count; i++)
+                for (int j = 1; j < rows; j++)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(x => value[i].Department.DepartmentName)
+                            @Html.DisplayFor(model => model.RetrievalListDetails[lastRows + j].Department.DepartmentName)
                         </td>
                         <td>
-                            @Html.DisplayFor(x => value[i].Quantity)
+                            @Html.DisplayFor(model => model.RetrievalListDetails[lastRows + j].Quantity)
                         </td>
                         <td>
-                            @Html.EditorFor(x => value[i].QuantityOffered)
-                            @Html.ValidationMessageFor(x => value[i].QuantityOffered, "", new { @class = "text-danger" })
+                            @Html.EditorFor(model => model.RetrievalListDetails[lastRows + j].QuantityOffered, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.RetrievalListDetails[lastRows + j].QuantityOffered, "", new { @class = "text-danger" })
                         </td>
                     </tr>
                 }
-                Model.RetrievalListDetails.AddRange(value);
             }
         </table>
-    </div>
-}
+    }
+</div>
 
 

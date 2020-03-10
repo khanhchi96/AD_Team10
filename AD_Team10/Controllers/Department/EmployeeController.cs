@@ -7,7 +7,9 @@ using AD_Team10.Authentication;
 using AD_Team10.DAL;
 using AD_Team10.Models;
 using PagedList;
+using AD_Team10.Service;
 
+//Author: Feng Li Ying
 namespace AD_Team10.Controllers.Department
 {
     [CustomAuthorize(Roles = "EMPLOYEE")]
@@ -15,17 +17,16 @@ namespace AD_Team10.Controllers.Department
     {
         static readonly int PAGE_SIZE = 8;
         DBContext db = new DBContext();
+        private EmployeeService employeeService = new EmployeeService();
         public ActionResult Index(int? page, string status = "")
         {
-            CustomPrincipal user = (CustomPrincipal)System.Web.HttpContext.Current.User;
-            int employeeId = user.UserID;
             ViewBag.statusList = new List<string> { Status.Pending.ToString(), Status.Approved.ToString(),
                     Status.Rejected.ToString(), Status.Incomplete.ToString(), Status.Completed.ToString()};
-            var requisitions = db.Requisitions.Where(r => r.EmployeeID == employeeId).OrderByDescending(r => r.RequisitionDate).ToList();
+            var requisitions = employeeService.GetRequisitions();
             if (status != "") { requisitions = requisitions.Where(r => r.Status.ToString() == status).ToList(); }
             ViewBag.status = status;
             ViewBag.Requisitions = requisitions;
-            ViewBag.employeeID = employeeId;
+            ViewBag.employeeID = employeeService.GetEmployeeID();
             int pageNumber = (page ?? 1);
             return View("~/Views/Department/Employee/Index.cshtml", requisitions.ToPagedList(pageNumber, PAGE_SIZE));
         }
@@ -65,36 +66,7 @@ namespace AD_Team10.Controllers.Department
         [HttpPost]
         public ActionResult UpdateAndSave(int requisitionId, FormCollection form)
         {
-
-            var rds = (from rqDetail in db.RequisitionDetails
-                       where rqDetail.RequisitionID == requisitionId
-                       select rqDetail).ToList();
-
-            foreach (var rd in rds)
-            {
-                db.RequisitionDetails.Remove(rd);
-                db.SaveChanges();
-            }
-
-            var Items = form.GetValues("Item");
-            var Quantities = form.GetValues("Quantity");
-
-            for (int i = 0; i < Items.Count(); i++)
-            {
-                RequisitionDetail newReqDetail = new RequisitionDetail
-                {
-                    RequisitionID = requisitionId,
-                    ItemID = Int32.Parse(Items[i]),
-                    Quantity = Int32.Parse(Quantities[i]),
-                    QuantityReceived = 0
-                };
-
-
-                db.RequisitionDetails.Add(newReqDetail);
-                db.SaveChanges();
-
-            }
-
+            employeeService.UpdateAndSave(requisitionId, form);       
             return RedirectToAction("RequisitionDetails", new { requisitionId });
         }
 
@@ -114,66 +86,14 @@ namespace AD_Team10.Controllers.Department
         [HttpPost]
         public ActionResult CreateRequisition(Requisition requisition, FormCollection form)
         {
-            CustomPrincipal user = (CustomPrincipal)System.Web.HttpContext.Current.User;
-            int departmentId = db.DeptUsers.SingleOrDefault(d => d.DeptUserID == user.UserID).DeptEmployee.DepartmentID;
-
-            /*
-            RetrievalList retrievalList = db.RetrievalLists.SingleOrDefault(r => r.StartDate <= DateTime.Today && r.EndDate >= DateTime.Today);
-            if (retrievalList == null)
-            {
-                DateTime today = DateTime.Today;
-                int daysUntilFriday = ((int)DayOfWeek.Friday - (int)today.DayOfWeek + 7) % 7;
-                DateTime nextFriday = today.AddDays(daysUntilFriday);
-                DateTime lastSaturday = nextFriday.AddDays(-6);
-                retrievalList = new RetrievalList { StartDate = lastSaturday, EndDate = nextFriday };
-                db.RetrievalLists.Add(retrievalList);
-                db.SaveChanges();
-            }
-            int retrievalListId = retrievalList.RetrievalListID;
-            */
-            Requisition newReq = new Requisition
-            {
-                RequisitionDate = requisition.RequisitionDate,
-                Status = requisition.Status,
-                EmployeeID = user.UserID
-            };
-            //newReq.RetrievalListID = retrievalListId;
-
-            db.Requisitions.Add(newReq);
-
-            var ItemDescriptions = form.GetValues("ItemDescription");
-            var ItemQuantitys = form.GetValues("ItemQuantity");
-
-            for (int i = 0; i < ItemDescriptions.Count(); i++)
-            {
-                var temp = ItemDescriptions[i];
-
-                int itemID = (from item in db.Items
-                              where item.Description == temp
-                              select item.ItemID).FirstOrDefault();
-
-
-                RequisitionDetail newReqDetail = new RequisitionDetail
-                {
-                    RequisitionID = newReq.RequisitionID,
-                    ItemID = itemID,
-                    Quantity = Int32.Parse(ItemQuantitys[i]),
-                    QuantityReceived = 0
-                };
-
-                db.RequisitionDetails.Add(newReqDetail);
-                db.SaveChanges();
-            }
-
+            employeeService.CreateRequisition(requisition, form);
             return RedirectToAction("Index");
         }
 
         [HttpGet]
         public ActionResult DeleteRequisition(int requisitionId)
         {
-            var Requisition = db.Requisitions.Find(requisitionId);
-            db.Requisitions.Remove(Requisition);
-            db.SaveChanges();
+            employeeService.DeleteRequisition(requisitionId);
             return RedirectToAction("Index");
         }
     }

@@ -1,0 +1,25 @@
+﻿@*Author: Ettiya Premalatha, Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.CollectionPoint>
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>CHANGE COLLECTION POINT</h3>
+    <h5> Department of @ViewBag.deptName</h5>
+    <p class="center">Current collection point: <b>@ViewBag.collectionPointName</b></p>
+    <form method="POST" action=@Url.Action("ChangeCollectionPoint", "Head") class="center">
+        <label>New Collection Point: </label>
+        <select name="location" class="select">
+            @foreach (var d in Model)
+            {
+                <option value="@d.CollectionPointID">@d.CollectionPointName</option>
+            }
+
+        </select>
+        <input type="hidden" value="@ViewBag.deptID" name="departmentId" />
+        <input type="submit" value="Confirm" class="submit center" />
+    </form>
+</div>

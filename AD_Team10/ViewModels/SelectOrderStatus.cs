@@ -7,19 +7,6 @@ namespace AD_Team10.ViewModels
 {
     public class SelectOrderStatus
     {
-        //public string Status { get; set; }
-        //public List<SelectListItem> GetSelectList()
-        //{
-        //    List<SelectListItem> listItems = new List<SelectListItem>
-        //    {
-        //        new SelectListItem{Text="Status", Value="-1"},
-        //        new SelectListItem{Text="Pending", Value="0"},
-        //        new SelectListItem{Text="Delivering", Value="1" },
-        //        new SelectListItem{Text="Incompleted", Value="2" },
-        //        new SelectListItem{Text="Completed", Value="3" }
-        //    };
-        //    return listItems;
-        //}
         public int OrderStatusId { get; set; }
         public string OrderStatusName { get; set; }
 

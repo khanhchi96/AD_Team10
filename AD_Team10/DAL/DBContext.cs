@@ -1,9 +1,6 @@
 namespace AD_Team10.DAL
 {
-    using System;
     using System.Data.Entity;
-    using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
     using AD_Team10.Models;
 
     public partial class DBContext : DbContext

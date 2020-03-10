@@ -1,4 +1,6 @@
-﻿@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
+﻿@*Author: Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.AdjustmentVoucher>
 
 @if (Model == null || !Model.Any())
 {
@@ -25,43 +27,43 @@ else
 
         @foreach (var item in Model)
         {
-        <tr>
-            @if (item.Clerk.MiddleName == null)
-            {
+            <tr>
+                @if (item.Clerk.MiddleName == null)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                    </td>
+                }
+                else
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.MiddleName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                    </td>
+                }
                 <td>
-                    @Html.DisplayFor(modelItem => item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                    @Html.DisplayFor(modelItem => item.AdjustmentDate)
                 </td>
-            }
-            else
-            {
                 <td>
-                    @Html.DisplayFor(modelItem=> item.Clerk.FirstName) @Html.DisplayFor(modelItem => item.Clerk.MiddleName) @Html.DisplayFor(modelItem => item.Clerk.LastName)
+                    @Html.DisplayFor(modelItem => item.Status)
                 </td>
-            }
-            <td>
-                @Html.DisplayFor(modelItem => item.AdjustmentDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Remark)
-            </td>
-            <td>
-                <a href=@Url.Action("ApproveVoucher", new { voucherId = item.AdjustmentVoucherID}) class="approve action">
-                    Approve
-                </a>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Remark)
+                </td>
+                <td>
+                    <a href=@Url.Action("ApproveVoucher", new { voucherId = item.AdjustmentVoucherID}) class="approve action">
+                        Approve
+                    </a>
 
-                <a href=@Url.Action("RejectVoucher", new { voucherId = item.AdjustmentVoucherID}) class="reject action">
-                    Reject
-                </a>
+                    <a href=@Url.Action("RejectVoucher", new { voucherId = item.AdjustmentVoucherID}) class="reject action">
+                        Reject
+                    </a>
 
-                <a href=@Url.Action("Details", new { voucherId = item.AdjustmentVoucherID})>
-                    Detail
-                </a>
+                    <a href=@Url.Action("Details", new { voucherId = item.AdjustmentVoucherID})>
+                        Detail
+                    </a>
 
-            </td>
-        </tr>
+                </td>
+            </tr>
         }
 
     </table>

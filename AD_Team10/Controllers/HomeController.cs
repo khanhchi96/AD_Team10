@@ -9,6 +9,8 @@ using AD_Team10.Models;
 using Newtonsoft.Json;
 using AD_Team10.Authentication;
 
+
+//Author: Phung Khanh Chi
 namespace AD_Team10.Controllers
 {
     public class HomeController : Controller
@@ -20,7 +22,8 @@ namespace AD_Team10.Controllers
             else
             {
                 CustomPrincipal user = (CustomPrincipal) System.Web.HttpContext.Current.User;
-                string controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
+                string role = user.Role.ToString().Replace("ACTING", "");
+                string controller = role[0] + role.Substring(1).ToLower();
                 return RedirectToAction("Index", controller);
             }
         }
@@ -66,20 +69,24 @@ namespace AD_Team10.Controllers
                         string enTicket = FormsAuthentication.Encrypt(authTicket);
                         HttpCookie faCookie = new HttpCookie("Cookie1", enTicket);
                         Response.Cookies.Add(faCookie);
-                        controller = user.Role.ToString()[0] + user.Role.ToString().Substring(1).ToLower();
+                        string role = user.Role.ToString().Replace("ACTING", "");
+                        controller = role[0] + role.Substring(1).ToLower();
                     }
                     return RedirectToAction("Index", controller);
                 }
             }
             ModelState.AddModelError("", "Something Wrong : Username or Password invalid");
+            ViewBag.UserType = loginView.UserType;
             return View(loginView);
         }
 
 
         public ActionResult LogOut()
         {
-            HttpCookie cookie = new HttpCookie("Cookie1", "");
-            cookie.Expires = DateTime.Now.AddYears(-1);
+            HttpCookie cookie = new HttpCookie("Cookie1", "")
+            {
+                Expires = DateTime.Now.AddYears(-1)
+            };
             Response.Cookies.Add(cookie);
 
             FormsAuthentication.SignOut();

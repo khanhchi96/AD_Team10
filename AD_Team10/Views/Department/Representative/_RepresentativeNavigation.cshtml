@@ -1,0 +1,22 @@
+﻿@*Author: Phung Khanh Chi*@
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+
+    @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
+
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">My Requisitions <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>@Html.ActionLink("View Requisition", "MyRequisitions", "Representative")</li>
+                        <li>@Html.ActionLink("Create Requisition", "CreateMyRequisition", "Representative")</li>
+                    </ul>
+                </li>
+                <li class="non-dropdown">@Html.ActionLink("Employee Requisitions", "EmployeeRequisitions", "Representative")</li>
+                <li class="non-dropdown">@Html.ActionLink("Disbursement List", "DisbursementList", "Representative")</li>
+            </ul>
+        </div>
+    </div>
+</div>

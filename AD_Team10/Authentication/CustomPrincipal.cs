@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Security.Principal;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Authentication
 {
     public class CustomPrincipal : IPrincipal
@@ -25,7 +26,7 @@ namespace AD_Team10.Authentication
         
         public bool IsInRole(string role)
         {
-            if (Role.Equals(role))
+            if (role.Contains(Role))
             {
                 return true;
             }

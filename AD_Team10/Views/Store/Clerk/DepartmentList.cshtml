@@ -1,0 +1,69 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.Department>
+@using AD_Team10.Models;
+@using AD_Team10.Service;
+
+<h3>DEPARTMENT LIST</h3>
+
+@functions{
+    DeptEmployee FindRep(int depId)
+    {
+        RequisitionService service = new RequisitionService();
+        return service.FindRep(depId);
+    }
+}
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+<div class="container-fluid body">
+    <h3>DEPARTMENT LIST</h3>
+    <table class="table table-hover">
+        <tr>
+            <th>
+                No
+            </th>
+            <th>
+                Department Code
+            </th>
+            <th>
+                Department Name
+            </th>
+            <th>Collection Point</th>
+            <th>Representative</th>
+            <th>Representative Email</th>
+            <th>Representative Mobile</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @{
+                    DeptEmployee rep = FindRep(item.DepartmentID);
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DepartmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CollectionPoint.CollectionPointName)
+                </td>
+                <td>
+                    @rep.ToString()
+                </td>
+                <td>
+                    @rep.Email
+                </td>
+                <td>
+                    @rep.Phone
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

@@ -1,27 +1,32 @@
-﻿@model Tuple<AD_Team10.Models.RetrievalList, List<AD_Team10.Models.Item>>
-@using  AD_Team10.DataService
+﻿@*Author: Wang Wang Wang*@
+
+@model Tuple<AD_Team10.Models.RetrievalList, List<AD_Team10.Models.Item>>
+@using AD_Team10.Service
 @{
     ViewBag.Title = "NewViewRetrievalList";
 }
 
-<h3 align="center">@RequisitionService.retrievalList</h3>
-<p></p>
-<h4 align="center">
-    From @Model.Item1.StartDate.ToString("dd/MM/yyyy") to @Model.Item1.EndDate.ToString("dd/MM/yyyy")
-</h4>
-<p></p>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-<p align="right">
-    <a href="/StoreClerk/GenerateDisbursement" class="btn btn-default">
-        @RequisitionService.generateDisbursement
-    </a>
-    <a href="/StoreClerk/UpdateRetrievalList?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
-        @RequisitionService.update
-    </a>
-</p>
+<div class="container-fluid body">
+    <h3 align="center">@RequisitionService.retrievalList</h3>
+    <h4 align="center">
+        From @Model.Item1.StartDate.ToString("dd/MM/yyyy") to @Model.Item1.EndDate.ToString("dd/MM/yyyy")
+    </h4>
+    <hr />
 
-<div class="container">
-    <table class="table">
+    <p align="right">
+        <a href="/Clerk/GenerateDisbursement?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
+            @RequisitionService.generateDisbursement
+        </a>
+        <a href="/Clerk/UpdateRetrievalList?id_retrieval=@Model.Item1.RetrievalListID" class="btn btn-default">
+            @RequisitionService.update
+        </a>
+    </p>
+
+    <table class="table table-bordered table-hover">
         <tr>
             <th rowspan="2">
                 @Html.DisplayNameFor(model => model.Item1.RetrievalListDetails.First().Item.Description)
@@ -50,43 +55,52 @@
                 @RequisitionService.retrieved
             </th>
         </tr>
-        @foreach (var item in Model.Item2)
+        @if (Model.Item2.Count == 0)
         {
             <tr>
-                <td rowspan="@Model.Item1.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                    @Html.DisplayFor(x => item.Description)
-                </td>
-                <td rowspan="@Model.Item1.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                    @{ var quantity = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.Quantity).Sum(); }
-                    @Html.DisplayFor(x=>quantity)
-                </td>
-                <td rowspan="@Model.Item1.RetrievalListDetails.Where(x=>x.ItemID == item.ItemID).Count()">
-                    @{ var quantityOffered = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.QuantityOffered).Sum(); }
-                    @Html.DisplayFor(x => quantityOffered)
-                </td>
-                <td>
-                    @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().Department.DepartmentName
-                </td>
-                <td>
-                    @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().Quantity
-                </td>
-                <td>
-                    @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().QuantityOffered
-                </td>
+                <td colspan="6">There's nothing in Retrieval List.</td>
             </tr>
-            foreach (var department in Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).Skip(1).ToList())
+        }
+        else
+        {
+            foreach (var item in Model.Item2)
             {
                 <tr>
-                    <td>
-                        @Html.DisplayFor(x=>department.Department.DepartmentName)
+                    <td rowspan="@Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).Count()">
+                        @Html.DisplayFor(x => item.Description)
+                    </td>
+                    <td rowspan="@Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).Count()">
+                        @{ var quantity = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.Quantity).Sum(); }
+                        @Html.DisplayFor(x => quantity)
+                    </td>
+                    <td rowspan="@Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).Count()">
+                        @{ var quantityOffered = Model.Item1.RetrievalListDetails.Where(m => m.ItemID == item.ItemID).Select(y => y.QuantityOffered).Sum(); }
+                        @Html.DisplayFor(x => quantityOffered)
                     </td>
                     <td>
-                        @Html.DisplayFor(x=>department.Quantity)
+                        @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().Department.DepartmentName
                     </td>
                     <td>
-                        @Html.DisplayFor(x=>department.QuantityOffered)
+                        @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().Quantity
+                    </td>
+                    <td>
+                        @Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).First().QuantityOffered
                     </td>
                 </tr>
+                foreach (var department in Model.Item1.RetrievalListDetails.Where(x => x.ItemID == item.ItemID).Skip(1).ToList())
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(x => department.Department.DepartmentName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(x => department.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(x => department.QuantityOffered)
+                        </td>
+                    </tr>
+                }
             }
         }
     </table>

@@ -1,0 +1,102 @@
+﻿@model System.Data.DataTable
+
+@using AD_Team10.ViewModels;
+@{
+    var report = ViewBag.report;
+    var tableName = ViewBag.tableName;
+    int[] catSize = new int[0];
+    int[] rowSpan = new int[0];
+    if (ViewBag.catSize != null)
+    {
+        catSize = (int[])ViewBag.catSize;
+        rowSpan = new int[catSize.Length];
+        rowSpan[0] = 0;
+        for (int i = 1; i < catSize.Length; i++)
+        {
+            rowSpan[i] = rowSpan[i - 1] + catSize[i - 1];
+        }
+    }
+}
+
+@if (report != null)
+{
+    if (Model == null)
+    {
+        <h5 class="center">@ViewBag.message</h5>
+    }
+    else
+    {
+        <h4>@tableName</h4>
+        <div class="download">
+         @if(report.GetType() == typeof(RequisitionReport))
+         {
+             @Html.ActionLink("Download Excel", "ExportReqDataTable", new { report = Json.Encode(report)})
+         }
+             else
+         {
+              @Html.ActionLink("Download Excel", "ExportReqDataTable", new { report = Json.Encode(report)})
+         }
+         </div>
+        <div class="table-wrap">
+            <table border="1" cellpadding="5" class="table">
+
+                <tr>
+                    @foreach (System.Data.DataColumn col in Model.Columns)
+                {
+                        <th>@col.Caption</th>
+                    }
+                </tr>
+
+                <tbody>
+
+                    @for (int j = 0; j < Model.Rows.Count; j++)
+                    {
+                        <tr>
+
+                            @if (rowSpan.Contains(j))
+                {
+                    var index = Array.FindIndex(rowSpan, row => row == j);
+                    if (@catSize[index] > 1)
+                    {
+                                    <td rowspan=@catSize[index]>@Model.Rows[j].ItemArray[0].ToString()</td>
+                                }
+                    else
+                    {
+                                    <td>@Model.Rows[j].ItemArray[0].ToString()</td>
+                                }
+
+                }
+
+                @for (int i = 1; i < Model.Rows[j].ItemArray.Length; i++)
+                            {
+                                <td>@Model.Rows[j].ItemArray[i].ToString()</td>
+                            }
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+        if (report.GetType() == typeof(RequisitionReport))
+        {
+            //@Html.ActionLink("Download Excel", "ExportReqDataTable", new { report = Json.Encode(report), @class = "download" })
+
+            <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "Column", groupBy = "time" })" class="chart"/>
+
+            <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "Line", groupBy = "time" })" class="chart"/>
+
+            <img src="@Url.Action("ShowRequisitionChart", new { report = Json.Encode(report), type = "StackedColumn", groupBy = "cat" })" class="chart"/>
+        }
+
+        if (report.GetType() == typeof(OrderReport))
+        {
+            @*@Html.ActionLink("Download", "ExportOrderDataTable", new { report = Json.Encode(report) })*@
+
+            <img src="@Url.Action("ShowOrderChart", new { report = Json.Encode(report), type = "Column", groupBy = "time" })" class="chart"/>
+
+            <img src="@Url.Action("ShowOrderChart", new { report = Json.Encode(report), type = "Line", groupBy = "time" })" class="chart"/>
+        }
+    }
+}
+
+

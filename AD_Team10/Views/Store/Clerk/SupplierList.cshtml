@@ -1,0 +1,74 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model PagedList.IPagedList<AD_Team10.Models.Supplier>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+<div class="container-fluid body">
+    <h3>SUPPLIER LIST</h3>
+    <div class="create" style="margin-bottom: 10px">
+        <div class="create-link">
+            @Html.ActionLink("Create New Supplier", "CreateSupplier")
+        </div>
+    </div>
+    <table class="table table-hover">
+        <tr>
+            <th>
+                No
+            </th>
+            <th>
+                Supplier Code
+            </th>
+            <th>
+                Supplier Name
+            </th>
+            <th style="width: 30%">Address</th>
+            <th>Contact Number</th>
+            <th>GST Number</th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierCode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.SupplierName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GSTNumber)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "SupplierDetails", new { id = item.SupplierID }) <span> | </span>
+                    @Html.ActionLink("Edit", "EditSupplier", new { id = item.SupplierID }) <span> | </span>
+                    @Html.ActionLink("Delete", "DeleteSupplier", new { supplierId = item.SupplierID, page = (Model.PageCount < Model.PageNumber) ? 0 : Model.PageNumber })
+                </td>
+            </tr>
+        }
+
+    </table>
+
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("SupplierList",
+            new { page }))
+
+    </div>
+</div>

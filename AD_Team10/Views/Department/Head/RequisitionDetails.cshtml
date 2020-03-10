@@ -1,4 +1,5 @@
-﻿
+﻿@*Author: Stephanie Cheng Sin Yin*@
+
 @{
     var reqDetail = ViewBag.reqDetail;
     var req = ViewBag.req;
@@ -23,51 +24,46 @@
     @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 dashboard-panel-8">
-            <h3>REQUISITION DETAILS</h3>
+<div class="container-fluid body">
+    <h3>REQUISITION DETAILS</h3>
 
-            <h4>Date: @date </h4>
-            <h4>Employee: @empName </h4>
-            <h4>Status: @req.Status </h4>
+    <p class="center">Date: @date </p>
+    <p class="center">Employee: @empName </p>
+    <p class="center">Status: @req.Status </p>
 
-            <hr />
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @for (int i = 0; i < reqDetail.Count; i++)
-                    {
-                        <tr>
-                            <td>@itemNames[i]</td>
-                            <td>@reqDetail[i].Quantity</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <table class="table">
 
-            @if (message == null)
+        <tr>
+            <th>Item</th>
+            <th>Quantity</th>
+        </tr>
+
+        <tbody>
+            @for (int i = 0; i < reqDetail.Count; i++)
             {
-                <p></p>
-                <p>Remarks:</p>
-                using (Html.BeginForm("Decision", "Head", FormMethod.Post))
-                {
-                    <input type="text" name="remarks" class="remarks">
-                    <input type="hidden" name="reqID" value="@req.RequisitionID" />
-                    <p></p>
-                    <p>
-                        <input type="submit" name="button" value="Approve" />
-                        <input type="submit" name="button" value="Reject" />
-                    </p>
-                }
+                <tr>
+                    <td>@itemNames[i]</td>
+                    <td>@reqDetail[i].Quantity</td>
+                </tr>
             }
-        </div>
-    </div>
+        </tbody>
+    </table>
+
+    @if (message == null)
+    {
+        <p></p>
+        <p>Remarks:</p>
+        using (Html.BeginForm("Decision", "Head", FormMethod.Post))
+        {
+            <input type="text" name="remarks" class="remarks">
+            <input type="hidden" name="reqID" value="@req.RequisitionID" />
+            <p></p>
+            <p>
+                <input type="submit" name="button" value="Approve" class="button approve" />
+                <input type="submit" name="button" value="Reject" class="button reject" />
+            </p>
+        }
+    }
 </div>
 
 

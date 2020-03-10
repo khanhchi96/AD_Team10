@@ -8,6 +8,7 @@ using AD_Team10.Authentication;
 using AD_Team10.DAL;
 using AD_Team10.Models;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Controllers.Store
 {
     [CustomAuthorize(Roles = "SUPERVISOR")]

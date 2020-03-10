@@ -1,5 +1,8 @@
-﻿@model List<AD_Team10.Models.RequisitionDetail>
+﻿@*Author: Feng Li Ying, Phung Khanh Chi*@
+
+@model List<AD_Team10.Models.RequisitionDetail>
 @using AD_Team10.Models
+@using AD_Team10.Authentication;
 
 @{
     ViewBag.Title = "Update Requisition";
@@ -11,35 +14,51 @@
     {
         itemNames.Add(item.Description);
     }
+
+    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+    bool isEmployee = true;
+    string controller = "Employee";
+    if (user.Role == DepartmentRole.REPRESENTATIVE.ToString())
+    {
+        isEmployee = false;
+        controller = "Representative";
+    }
 }
-  
-    <div id="navigation">
+
+<div id="navigation">
+    @if (isEmployee)
+    {
         @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
-    </div>
+    }
+    else
+    {
+        @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+    }
 
-    <div class="container-fluid body">
-        <h3>UPDATE REQUISITION</h3>
-        <h4>Requisition ID: @ViewBag.rqID</h4>
+</div>
 
-        @using (@Html.BeginForm("updateAndSave", "Employee", FormMethod.Post))
-        {
-            <table class="table" id="tblRD">
-                <tr>
-                    <th></th>
-                    <th></th>
-                    <th>
-                        Item
-                    </th>
-                    <th>
-                        Quantity Requested
-                    </th>
-                    <th>
-                        Delete
-                    </th>
-                </tr>
-                <tbody class="tbody">
-                    @for (int i = 0; i < Model.Count; i++)
-                    {
+<div class="container-fluid body">
+    <h3>UPDATE REQUISITION</h3>
+    <h4>Requisition ID: @ViewBag.rqID</h4>
+    @using (@Html.BeginForm("updateAndSave", controller, FormMethod.Post))
+    {
+        <table class="table table-hover" id="tblRD">
+            <tr>
+                <th></th>
+                <th></th>
+                <th>
+                    Item
+                </th>
+                <th>
+                    Quantity Requested
+                </th>
+                <th>
+                    Delete
+                </th>
+            </tr>
+            <tbody class="tbody">
+                @for (int i = 0; i < Model.Count; i++)
+                {
                     <tr class="tblRow">
                         <td>@Html.HiddenFor(model => model[i].RequisitionID)</td>
                         <td>@Html.HiddenFor(model => model[i].QuantityReceived)</td>
@@ -47,67 +66,67 @@
                         <td>
                             @Html.EditorFor(model => model[i].Quantity, new { htmlAttributes = new { @type = "number", @min = "1", @step = "1", @class = "Quantity", @Name = "Quantity" } })
                         </td>
-                        
+
                         <td> <a class="remove" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i></a></td>
-                        
+
                     </tr>
-                    }
+                }
 
-                </tbody>
+            </tbody>
 
-            </table>
-
-            
-                <input type="hidden" name="requisitionId" value="@ViewBag.rqID" />
-
-                <div class="create">
-                    <span class="glyphycon glyphicon-plus plus-sign"></span>
-                    <div class="create-link">
-                        <a href="javascript:void(0)" class="addItem">Add more item</a>
-                    </div>
-                </div>
-
-               
-                <input type="submit" id="btnSubmit" value="Update & Submit" onclick="conf()" class="submit" />
-           
-        }
-
-    </div>
+        </table>
 
 
+        <input type="hidden" name="requisitionId" value="@ViewBag.rqID" />
 
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-        <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+        <div class="create">
+            <span class="glyphycon glyphicon-plus plus-sign"></span>
+            <div class="create-link">
+                <a href="javascript:void(0)" class="addItem">Add more item</a>
+            </div>
+        </div>
 
-        <script type="text/javascript">
 
-            $(".addItem").on('click', function () {
-                var row = $('.tblRow').first().clone();
-                row.each(function () {
-                    $(this).find('.Item').val("");
-                    $(this).find('.Quantity').val(1);
-                    $(this).find('.remove').html();
-                });
+        <input type="submit" id="btnSubmit" value="Update & Submit" onclick="conf()" class="submit" />
 
-                $('.tbody').append(row);
-            });
+    }
 
-            function conf() {
-                var con = confirm("Do you want to update for sure?");
-            }
+</div>
 
-            function Remove(button) {
-                //Determine the reference of the Row using the Button.
-                var row = $(button).closest("TR");
-                var table = $("#tblRD")[0];
-                table.deleteRow(row[0].rowIndex);
-            };
 
-                      $("body").on("click", ".remove", function () {
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+
+<script type="text/javascript">
+
+    $(".addItem").on('click', function () {
+        var row = $('.tblRow').first().clone();
+        row.each(function () {
+            $(this).find('.Item').val("");
+            $(this).find('.Quantity').val(1);
+            $(this).find('.remove').html();
+        });
+
+        $('.tbody').append(row);
+    });
+
+    function conf() {
+        var con = confirm("Do you want to update for sure?");
+    }
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var table = $("#tblRD")[0];
+        table.deleteRow(row[0].rowIndex);
+    };
+
+    $("body").on("click", ".remove", function () {
         if ($(".remove").length == 1) alert("Requisition must have at least 1 item")
-              else $(this).parent('td').parent('.tblRow').remove();
+        else $(this).parent('td').parent('.tblRow').remove();
 
-          });
+    });
 
-        </script>
+</script>
 

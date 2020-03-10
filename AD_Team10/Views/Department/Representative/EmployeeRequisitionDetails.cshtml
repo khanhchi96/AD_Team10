@@ -1,32 +1,116 @@
-﻿@model IEnumerable<AD_Team10.Models.RequisitionDetail>
+﻿@*Author: Phung Khanh Chi*@
+@model AD_Team10.Models.Requisition
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Item.Description)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.QuantityReceived)
-        </th>
-        <th></th>
-    </tr>
+@{
+    var num = 0;
+}
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+</div>
+<div class="container-fluid body">
+    <h3 align="center">REQUISITION NO. @Html.DisplayFor(model => model.RequisitionID)</h3>
+    <hr />
+    <div class="detailDiv">
 
-    @foreach (var item in Model)
-    {
+        <dl class="dl-horizontal">
+            <dt>
+                Department:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Employee.Department.DepartmentName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Employee.Department.DepartmentCode):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Employee.Department.DepartmentCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status):
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Status)
+            </dd>
+        </dl>
+
+        <dl class="dl-horizontal">
+            <dt>
+                Employee Name:
+            </dt>
+
+            <dd>
+                @{
+                    string nameValue = Model.Employee.ToString();
+                }
+                @Html.DisplayFor(model => nameValue)
+            </dd>
+
+            <dt>
+                Employee Phone:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Employee.Phone)
+            </dd>
+
+            <dt>
+                Employee Email:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Employee.Email)
+            </dd>
+
+            <dt>
+                Time:
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.RequisitionDate)
+            </dd>
+        </dl>
+
+    </div>
+
+
+    <table class="table">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityReceived)
-            </td>
+        <tr class="bg-primary">
+            <th>Item No.</th>
+            <th>Description</th>
+            <th>Quantity Requested</th>
+            <th>Quantity Received</th>
+            <th>Quantity Remaining</th>
         </tr>
-    }
 
-</table>
+        @for (int i = 0; i < Model.RequisitionDetails.Count; i++)
+        {
+
+            <tr>
+                <td>
+                    @(num + 1)
+                </td>
+                <td>
+                    @Model.RequisitionDetails[i].Item.Description
+                </td>
+                <td>
+                    @Model.RequisitionDetails[i].Quantity
+                </td>
+                <td>
+                    @Model.RequisitionDetails[i].QuantityReceived
+                </td>
+                <td>
+                    @(Model.RequisitionDetails[i].Quantity - Model.RequisitionDetails[i].QuantityReceived)
+                </td>
+            </tr>
+            num++;
+        }
+
+    </table>
+    <a class="submit" href="@Url.Action("UpdateEmployeeRequisition", "Representative", new { id = Model.RequisitionID})">Update</a>
+</div>

@@ -1,107 +1,137 @@
-﻿@model Tuple<List<AD_Team10.Models.Requisition>, AD_Team10.Models.Department, AD_Team10.Models.CollectionPoint>
-@*@model IEnumerable<AD_Team10.Models.Requisition>*@
+﻿@*Author: Wang Wang Wang*@
+
+@model PagedList.IPagedList<AD_Team10.Models.Requisition>
+@using PagedList.Mvc;
+@using AD_Team10.Models;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
-    ViewBag.Title = "ViewRequisitionHistory";
+    var departmentList = ViewBag.departments;
+    var collectionPoints = ViewBag.collectionPoints;
 }
 
-<h3 align="center">Requisition History</h3>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
 
-@using (Html.BeginForm())
-{
-    <div class="superDiv">
+<div class="container-fluid body">
+    <h3 align="center">REQUISITION HISTORY</h3>
+
+    <div class="filter-option">
+        <button id="clear">Clear</button>
         <div class="filter">
-            Filter by
+            <span>Filter by collection point: </span>
+            <select name="filterClerk" id="filterCollectionPoint">
+                @foreach (var c in collectionPoints)
+                {
+                    <option value="@Url.Action("ViewRequisitionHistory", "Clerk", new { department = ViewBag.department, collectionPoint = c.CollectionPointID})">@c.CollectionPointName</option>
+                }
+            </select>
         </div>
+
         <div class="filter">
-            @*@Html.Label(null, null, htmlAttributes: new { @class = "control-label col-md-2" })*@
-            @Html.HiddenFor(m => m.Item2.DepartmentID, "DepartmentID")
-            @Html.DropDownList("DepartmentID", ViewBag.DepartmentID as SelectList, "Department", htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div class="filter">
-            @Html.HiddenFor(m => m.Item3.CollectionPointID)
-            @Html.DropDownList("CollectionPointID", ViewBag.CollectionPointID as SelectList, "CollectionPoint", htmlAttributes: new { @class = "form-control" })
-        </div>
-        <div class="filter">
-            <input type="submit" value="Submit" />
+            <span>Filter by department: </span>
+            <select name="filterStatus" id="filterDepartment">
+                @foreach (var d in departmentList)
+                {
+                    <option value="@Url.Action("ViewRequisitionHistory", "Clerk", new { department = d.DepartmentID, collectionPoint = ViewBag.collectionPoint })">@d.DepartmentName</option>
+                }
+            </select>
         </div>
     </div>
-}
-<hr />
 
-<table class="table table-hover row mx-0" align="center">
-    <!--Why cannot change the width of the table?-->
-    @*<thead class="w-50">*@
-    <tr class="row mx-0 bg-primary">
-        <th class="col-3">
-            @*@Html.DisplayNameFor(model => model.RequisitionDate)*@
-            Requisition Date
-        </th>
-        <th class="col-3">
-            @*@Html.DisplayNameFor(model => model.Employee.Department.DepartmentName)*@
-            Department Name
-        </th>
-        <th>
-            @*@Html.DisplayNameFor(model => model.Employee.Department.CollectionPoint.CollectionPointName)*@
-            Collection Point Name
-        </th>
-        <th class="col-3">
-            @*@Html.DisplayNameFor(model => model.Status)*@
-            Status
-        </th>
-
-        <th class="col-3">Details</th>
-    </tr>
-    @*</thead>*@
-
-    @if (Model.Item1.Count() == 0)
+    @if (!Model.Any())
     {
-        <tr>
-            <td colspan="6" align="center">
-                There's nothing you want!
-            </td>
-        </tr>
+        if (ViewBag.status == null)
+        {
+            <p>No requisition exists.</p>
+        }
+        else
+        {
+            <p>No requisition matches the condition.</p>
+        }
     }
     else
     {
+        <table class="table table-hover">
+            <tr>
+                <th>
+                    Requisition Date
+                </th>
+                <th>
+                    Department Name
+                </th>
+                <th>
+                    Collection Point Name
+                </th>
+                <th>
+                    Status
+                </th>
 
-        foreach (var item in Model.Item1)
-        {
-            @*<tbody class="w-50">*@
-            <tr class="row mx-0">
-                <td class="col-3">
-                    @{
-                        string dateValue = item.RequisitionDate.ToString("dd/MM/yyyy");
-                    }
-                    @Html.DisplayFor(modelItem => dateValue)
-                </td>
-                <td class="col-3">
-                    @Html.DisplayFor(modelItem => item.Employee.Department.DepartmentName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Employee.Department.CollectionPoint.CollectionPointName)
-                </td>
-                <td class="col-3">
-                    @Html.DisplayFor(modelItem => item.Status)
-                </td>
-                <td class="col-3">
-                    @Html.ActionLink("View", "ViewDetails", new { id = item.RequisitionID })
-                </td>
+                <th>Details</th>
             </tr>
-            @*</tbody>*@
-        }
+
+
+
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @{
+                            string dateValue = item.RequisitionDate.ToString("dd/MM/yyyy");
+                        }
+                        @Html.DisplayFor(modelItem => dateValue)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee.Department.DepartmentName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Employee.Department.CollectionPoint.CollectionPointName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status)
+                    </td>
+                    <td>
+                        @Html.ActionLink("View", "ViewDetails", new { id = item.RequisitionID })
+                    </td>
+                </tr>
+
+            }
+        </table>
     }
 
-</table>
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-<style>
-    .superDiv {
-        position: relative;
-        left: 600px;
-    }
+        @Html.PagedListPager(Model, page => Url.Action("ViewRequisitionHistory",
+            new { page }))
+    </div>
+</div>
+<script>
 
-    .filter {
-        display: inline-block;
-    }
-</style>
+    $(document).ready(function () {
+        var selectedItem = sessionStorage.getItem("SelectedRequisition");
+        $('#filterCollectionPoint').val(selectedItem);
+        $('#filterDepartment').val(selectedItem);
+    });
+
+    $('#filterDepartment').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedRequisition", this.value);
+    });
+
+    $('#filterCollectionPoint').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedRequisition", this.value);
+    });
+
+        $("#clear").on('click', function () {
+            sessionStorage.setItem("SelectedRequisition", "");
+        location.href = '@Url.Action("ViewRequisitionHistory", "Clerk")';
+    })
+</script>
+
+
+
+
 

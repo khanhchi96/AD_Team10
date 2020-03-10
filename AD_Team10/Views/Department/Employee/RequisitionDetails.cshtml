@@ -1,15 +1,32 @@
-﻿
+﻿@*Author: Feng Li Ying, Phung Khanh Chi*@
+
+@using AD_Team10.Authentication;
+@using AD_Team10.Models;
 @{
     ViewBag.Title = "rqDetails";
     var requisitionDetails = ViewBag.rqDetails;
     var Requisition = ViewBag.Requisition;
     var requisitionId = ViewBag.rqID;
+    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+    bool isEmployee = true;
+    if (user.Role == DepartmentRole.REPRESENTATIVE.ToString())
+    {
+        isEmployee = false;
+    }
+    int num = 1;
 }
 
-
 <div id="navigation">
-    @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+    @if (isEmployee)
+    {
+        @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+    }
+    else
+    {
+        @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+    }
 </div>
+
 
 <div class="container-fluid body">
     <h3>REQUISITION DETAILS</h3>
@@ -18,8 +35,11 @@
 
 
 
-    <table class="table">
+    <table class="table table-hover">
         <tr>
+            <th>
+                No
+            </th>
             <th>
                 Item
             </th>
@@ -39,6 +59,9 @@
         {
             <tr>
                 <td>
+                    @(num)
+                </td>
+                <td>
                     @rqDetail.Item.Description
                 </td>
                 <td>
@@ -52,12 +75,22 @@
                 </td>
 
             </tr>
+            num++;
         }
 
     </table>
 
     <div>
-        @Html.ActionLink("Back to List", "Index", new { @class = "btn btn-primary" })
+        @if (isEmployee)
+        {
+            @Html.ActionLink("Back to List", "Index", new { @class = "btn btn-primary" })
+            <a class="submit" href="@Url.Action("UpdateRequisition", "Employee", new { requisitionId = requisitionId})">Update</a>
+        }
+        else
+        {
+            @Html.ActionLink("Back to Requisition List", "MyRequisitions", new { @class = "btn btn-primary" })
+            <a class="submit" href="@Url.Action("UpdateMyRequisition", "Representative", new { requisitionId = requisitionId})">Update</a>
+        }
     </div>
 
 </div>

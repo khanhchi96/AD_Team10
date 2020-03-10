@@ -1,0 +1,51 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.RetrievalListDetail>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>DISBURSEMENT LIST</h3>
+    <h5>From @ViewBag.startDate to @ViewBag.endDate</h5>
+    <table class="table table-hover">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Item.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuantityReceived)
+            </th>
+            <th>
+                Quantity Remaining
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityReceived)
+                </td>
+                <td>
+                    @(item.Quantity - item.QuantityReceived)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>

@@ -1,4 +1,6 @@
-﻿@using AD_Team10.Models;
+﻿@*Author: Phung Khanh Chi*@
+
+@using AD_Team10.Models;
 
 @{
     ViewBag.Title = "Create Adjustment Voucher";
@@ -9,9 +11,9 @@
 <div id="navigation">
     @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
 </div>
-<div class="container-fluid body"> 
-<h3>NEW ADJUSTMENT VOUCHER</h3>
-<table class="table" id="voucherTable">
+<div class="container-fluid body">
+    <h3>NEW ADJUSTMENT VOUCHER</h3>
+    <table class="table" id="voucherTable">
         <tr>
             <th>Item Code</th>
             <th>Description</th>
@@ -19,68 +21,60 @@
             <th>Reason</th>
             <th></th>
         </tr>
-    <tbody id="tbody">
-        <tr class="tblRow">
-            <td class="itemCode"></td>
-            <td>
-                @Html.DropDownList("Item Name", new SelectList(itemList, "ItemID", "Description"),
-                "Choose item", new{ @class = "itemName"})
-                 <span class="nameError"></span>
-                @*<select class="ui fluid search selection dropdown itemName">
-                    <option value="">Choose Item</option>
-                    @foreach (var i in itemList)
-                    {
-                        <option value="@i.ItemID">@i.Description</option>
-                    }
+        <tbody id="tbody">
+            <tr class="tblRow">
+                <td class="itemCode"></td>
+                <td>
+                    @Html.DropDownList("Item Name", new SelectList(itemList, "ItemID", "Description"),
+                    "Choose item", new{ @class = "itemName"})
+                    <span class="nameError"></span>
+                </td>
+                <td>
+                    <select class="operator">
+                        <option>+</option>
+                        <option>-</option>
+                    </select>
+                    <input type="number" class="quantity" value="1" />
+                </td>
+                <td>
+                    <select class="reason">
+                        <option>Lost item(s)</option>
+                        <option>Broken/expired item(s)</option>
+                        <option>Wrong check when receiving from suppliers</option>
+                        <option>Others</option>
+                    </select>
+                    <br />
+                    <span class="otherReason">
+                        Specified: <input type='text' />
+                    </span>
+                    <span class="reasonError"></span>
+                </td>
+                <td> <a class="remove" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i></a></td>
+            </tr>
+        </tbody>
+    </table>
 
-                </select>*@
-            </td>
-            <td>
-                <select class="operator">
-                    <option>+</option>
-                    <option>-</option>
-                </select>
-                <input type="number" class="quantity" value="1" />
-            </td>
-            <td>
-                <select class="reason">
-                    <option>Lost item(s)</option>
-                    <option>Broken/expired item(s)</option>
-                    <option>Wrong check when receiving from suppliers</option>
-                    <option>Others</option>
-                </select>
-                <br />
-                <span class="otherReason">
-                    Specified: <input type='text' />
-                </span>
-                <span class="reasonError"></span>
-            </td>
-            <td> <a class="remove" href="javascript:void(0)"><i class="glyphicon glyphicon-trash"></i></a></td>
-        </tr>
-    </tbody>
-</table>
+    <div class="create">
+        <span class="glyphycon glyphicon-plus plus-sign"></span>
+        <div class="create-link">
+            <a href="javascript:void(0)" class="addItem">Add more item</a>
+        </div>
+    </div>
+    <input type="button" class="submitVoucher submit" value="Submit" />
 
-<div class="create">
-    <span class="glyphycon glyphicon-plus plus-sign"></span>
-    <div class="create-link">
-        <a href="javascript:void(0)" class="addItem">Add more item</a>
+
+    <div class="back-to-list">
+        @Html.ActionLink("Back to List", "AdjustmentVoucher")
     </div>
 </div>
-<input type="button" class="submitVoucher submit" value="Submit" />
-
-    
-<div class="back-to-list">
-    @Html.ActionLink("Back to List", "AdjustmentVoucher")
-</div>
-    </div>
 <script>
 
     $(".addItem").on('click', function () {
-        var row = $('.tblRow').first().clone(true, true);
+        var row = $('.tblRow').first().clone();
         row.each(function () {
             $(this).find('.itemCode').text("");
             $(this).find('.quantity').val(1);
-            $(this).find('.otherReason').text("");
+            $(this).find('.otherReason > input').text("");
             $(this).find('.error').text("");
         })
         $('#tbody').append(row);
@@ -94,10 +88,22 @@
     $("body").on("change", ".reason", function () {
         $(this).siblings(".reasonError").html("");
         if ($(this).val() == 'Others') {
-            $(this).siblings(".otherReason").show();
+            console.log("a");
+            $(this).parent().find(".otherReason").show();
         } else {
-            $(this).siblings(".otherReason").hide();
+            $(this).parent().find(".otherReason").hide();
         }
+    })
+
+    $('.reason').each(function () {
+        $(this).on('change', function () {
+            if ($(this).val() == 'Others') {
+                console.log("a");
+                $(this).parent().find(".otherReason").show();
+            } else {
+                $(this).parent().find(".otherReason").hide();
+            }
+        })
     })
 
     $("body").on("keydown", ".otherReason>input", function () {

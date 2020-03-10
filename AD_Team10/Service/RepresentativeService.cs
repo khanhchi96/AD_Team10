@@ -5,43 +5,43 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Data.Entity;
+using AD_Team10.Authentication;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Service
 {
     public class RepresentativeService
     {
-        public static string stringCurrentCollection = "Your current collection point is:";
-        public static string changeCollection = "Change Collection Point";
 
-        private DBContext dB = new DBContext();
+        private DBContext db = new DBContext();
 
-        //Get the department by department id
-        public Department GetDepartmentById(int id)
+        public List<Requisition> GetEmployeeRequisition()
         {
-            return dB.Departments.Include(x => x.CollectionPoint)
-                                 .Include(x => x.Employees)
-                                 .Where(x => x.DepartmentID == id)
-                                 .SingleOrDefault();
+            int deptId = FindDepartmentId();
+            List<Requisition> requisitions = db.Requisitions.Where(r => r.Employee.DepartmentID == deptId &&
+                            (r.Status == Status.Approved || r.Status == Status.Incomplete || r.Status == Status.Completed))
+                            .OrderByDescending(r => r.RequisitionID).ToList();
+            return requisitions;
         }
 
-        public CollectionPoint GetCollectionPointById(int id)
+        public int FindDepartmentId()
         {
-            return dB.CollectionPoints.Include(x => x.Departments)
-                                      .Where(x => x.CollectionPointID == id)
-                                      .SingleOrDefault();
+            CustomPrincipal user = (CustomPrincipal)HttpContext.Current.User;
+            int employeeId = user.UserID;
+            int deptID = (db.DeptEmployees.Where(dE => dE.DeptEmployeeID == employeeId).SingleOrDefault()).DepartmentID;
+            return deptID;
         }
 
-        public List<CollectionPoint> GetCollectionPointsList()
+        public List<RetrievalListDetail> GetDisbursementList(int retrievalListId)
         {
-            return dB.CollectionPoints.Include(x => x.Departments)
-                                      .ToList();
+            int deptId = FindDepartmentId();
+            List<RetrievalListDetail> retrievalListDetails = db.RetrievalListDetails
+                                                            .Where(r => r.RetrievalListID == retrievalListId &&
+                                                             r.DepartmentID == deptId).ToList();
+            return retrievalListDetails;
         }
 
-        //Update collection point
-        public void UpdateDepartment(Department department)
-        {
-            dB.Entry(department).State = EntityState.Modified;
-            dB.SaveChanges();
-        }
+        
+
     }
 }

@@ -1,4 +1,6 @@
-﻿@model PagedList.IPagedList<AD_Team10.Models.Item>
+﻿@*Author: Phung Khanh Chi*@
+
+@model PagedList.IPagedList<AD_Team10.Models.Item>
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
@@ -48,7 +50,7 @@
             </select>
         </div>
     </div>
-    <table class="table" id="table">
+    <table class="table table-hover" id="table">
         <tr>
             <th>
                 @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)

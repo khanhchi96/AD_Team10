@@ -27,6 +27,6 @@ namespace AD_Team10.Models
         public OrderStatus OrderStatus { get; set; }
 
         public virtual Supplier Supplier { get; set; }
-        public virtual ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public virtual List<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
     }
 }

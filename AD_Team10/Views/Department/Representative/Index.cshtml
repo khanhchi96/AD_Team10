@@ -1,20 +1,97 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@*Author: Phung Khanh Chi*@
 
-<h2> @ViewBag.deptName</h2>
-<p>Current collection point : @ViewBag.collectionPointName</p>
-<form method="GET" action="/Representative/ChangeLocation">
-    <label>New Collection Point:</label>
-    <select name="location">
-        <option value="1">Stationery Store - Administration Building</option>
-        <option value="2">Management School</option>
-        <option value="3">Medical School</option>
-        <option value="4">Engineering School</option>
-        <option value="5">Science School</option>
-        <option value="6">University Hospital</option>
-    </select>
-    <input type="hidden" value="@ViewBag.deptID" name="departmentId" />
-    <input type="submit" value="Confirm" />
-</form>
+@using AD_Team10.Models;
+@{
+    var empRequisitions = (List<Requisition>)ViewBag.empRequisitions;
+    var myRequisitions = (List<Requisition>)ViewBag.myRequisitions;
+    var disbursementList = (List<RetrievalListDetail>)ViewBag.disbursementList;
+}
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+</div>
+
+<div class="container-fluid home">
+    <div class="row">
+        <div class="col-lg-8 dashboard-panel-8">
+            <h3>DISBURSEMENT LIST</h3>
+            <table class="table table-hover">
+                <tr>
+                    <th>Description</th>
+                    <th>Quantity Requested</th>
+                    <th>Quantity Received</th>
+                    <th>Quantity Remaining</th>
+                </tr>
+                @foreach (var r in disbursementList)
+                {
+                    <tr>
+                        <td>@r.Item.Description</td>
+                        <td>@r.Quantity</td>
+                        <td>@r.QuantityReceived</td>
+                        <td>@(r.Quantity - r.QuantityReceived)</td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "DisbursementList", "Representative", new { @class = "view-more" })
+        </div>
+        <div class="col-lg-4 dashboard-panel-4">
+            <h3>MY REQUISITIONs </h3>
+            <table class="table table-hover">
+                <tr>
+                    <th>Requisition Date</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                </tr>
+                @foreach (var r in myRequisitions)
+                {
+                    <tr>
+                        <td>@r.RequisitionDate.ToString("dd/MM/yyyy")</td>
+                        <td>@r.Status.ToString()</td>
+                        <td>
+                            @Html.ActionLink("View", "MyRequisitionDetails", "Representative", new { id = r.RequisitionID }, new { @class = "view-detail" })
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "MyRequisitions", "Representative", new { @class = "view-more" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h3>EMPLOYEE REQUISITIONS</h3>
+            <table class="table table-hover">
+                <tr>
+                    <th>Requested By</th>
+                    <th>Requisition Date</th>
+                    <th>Status</th>
+                    <th>Details</th>
+                    <th>Update</th>
+                </tr>
+                @foreach (var r in empRequisitions)
+                {
+                    <tr>
+                        <td>
+                            @(r.Employee.MiddleName == null ? (r.Employee.FirstName + " " + r.Employee.LastName)
+                                                                             : (r.Employee.FirstName + " " + r.Employee.MiddleName + " " + r.Employee.LastName))
+                        </td>
+                        <td>@r.RequisitionDate.ToString("dd/MM/yyyy")</td>
+                        <td>@r.Status.ToString()</td>
+                        <td>
+                            @Html.ActionLink("View", "EmployeeRequisitionDetails", "Representative", new { id = r.RequisitionID }, new { @class = "view-detail" })
+                        </td>
+                        <td>
+                            @if (r.Status != Status.Completed)
+                            {
+                                @Html.ActionLink("Update", "UpdateEmployeeRequisition", "Representative", new { id = r.RequisitionID }, new { @class = "view-detail" })
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+            @Html.ActionLink("View more...", "EmployeeRequisitions", "Representative", new { @class = "view-more" })
+
+        </div>
+
+    </div>
+
+
+</div>

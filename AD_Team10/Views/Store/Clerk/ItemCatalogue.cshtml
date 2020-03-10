@@ -1,0 +1,148 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model PagedList.IPagedList<AD_Team10.Models.Item>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    string searchStr = (string)ViewBag.searchStr;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>ITEM CATALOGUE</h3>
+    <div class="filter-option">
+        <div class="search">
+            <div class="create">
+                <div class="create-link">
+                    @Html.ActionLink("Create New Item", "CreateItem")
+                </div>
+            </div>
+            <input id="searchBox" value="@searchStr" placeholder="Search" />
+        </div>
+        <button id="clear">Clear</button>
+        <div class="sort">
+            <span>Sort by: </span>
+            <select name="sortOrder" id="sortOrder">
+                <option value="@Url.Action("ItemCatalogue", "Clerk", new { sort = "reorderAsc", searchStr = searchStr})">
+                    Reorder level low to high
+                </option>
+                <option value="@Url.Action("ItemCatalogue", "Clerk", new { sort = "reorderDesc", searchStr = searchStr})">
+                    Reorder level high to low
+                </option>
+            </select>
+        </div>
+    </div>
+    <table class="table table-hover" id="table">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().UnitOfMeasure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderLevel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(Model => Model.First().ReorderQuantity)
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderLevel)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ReorderQuantity)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "ItemDetails", new { id = item.ItemID })<span> | </span>
+                    @Html.ActionLink("Edit", "EditItem", new { id = item.ItemID }) <span> | </span>
+                    @Html.ActionLink("Delete", "DeleteItem", new { itemId = item.ItemID, page = (Model.PageCount < Model.PageNumber) ? 0 : Model.PageNumber })
+                </td>
+
+            </tr>
+        }
+
+    </table>
+
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("ItemCatalogue",
+            new { page }))
+    </div>
+</div>
+<style>
+    .create {
+        margin-right: 10px;
+    }
+</style>
+
+<script>
+    $(document).ready(function () {
+        onLoad();
+        var selectedItem = sessionStorage.getItem("SelectedItem");
+        $('#sortOrder').val(selectedItem);
+    });
+
+
+    $('#sortOrder').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedItem", this.value);
+    });
+
+    $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedItem", "");
+        location.href = '@Url.Action("ItemCatalogue", "Clerk")';
+    })
+    function onLoad() {
+        var searchBox = document.getElementById("searchBox");
+        searchBox.addEventListener("keypress", function (e) {
+            var key = e.which || e.keyCode;
+            if (key === 13) {
+                var data = { searchStr: searchBox.value };
+                doPOST(data);
+            }
+
+        });
+        if (window.location.href.indexOf('page_y') != -1) {
+            var match = window.location.href.split('?')[1].split("&")[0].split("=");
+            document.getElementsByTagName("body")[0].scrollTop = match[1];
+        }
+    }
+
+
+    function doPOST(data) {
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+            if (ajax.readyState == 4) {
+                document.open();
+                document.write(ajax.response);
+                document.close();
+            }
+        }
+        ajax.open("POST", "@Url.Action("ItemCalalogue", "Clerk")", true);
+        ajax.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+        ajax.send(JSON.stringify(data));
+    }
+</script>

@@ -1,0 +1,156 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model IEnumerable<AD_Team10.Models.Item>
+@using AD_Team10.Service;
+@{
+    ViewBag.Title = "Inventory";
+    string searchStr = (string)ViewBag.searchStr;
+}
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+@functions{
+    float Price(int itemId, int supplierId)
+    {
+        RequisitionService requisitionService = new RequisitionService();
+        return requisitionService.FindPrice(itemId, supplierId);
+    }
+}
+<div class="container-fluid body">
+    <h3>NEW PURCHASE ORDER</h3>
+    <br />
+    @if (!Model.Any())
+    {
+        <p class="center">No item is in low stock</p>
+    }
+    else
+    {
+        <input type="checkbox" id="select-all" /> <span id="select-all-label">Select All</span>
+        <table class="table table-hover" id="orderTable">
+            <tr>
+                <th></th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().Category.CategoryName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().UnitOfMeasure)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(Model => Model.First().UnitsInStock)
+                </th>
+                <th>
+                    Order Quantity
+                </th>
+                <th>
+                    Supplier
+                </th>
+                <th>
+                    Unit Price (SG$)
+                </th>
+            </tr>
+            <tbody id="tbody">
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        @Html.HiddenFor(modelItem => item.ItemID, new { @class = "itemId" })
+                        <td>
+                            <input type="checkbox" class="check" />
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitOfMeasure)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.UnitsInStock)
+                        </td>
+                        <td>
+                            <input type="number" value="@item.ReorderQuantity" class="quantity" />
+                        </td>
+                        <td>
+                            @{
+                                var suppliers = item.SupplierItems.ToList();
+                            }
+                            <select class="supplier">
+                                @for (int i = 0; i < suppliers.Count(); i++)
+                                {
+                                    <option value=@suppliers[i].SupplierID
+                                            data-price=@Price(item.ItemID, suppliers[i].SupplierID)>
+                                        @suppliers[i].Supplier.SupplierName
+                                    </option>
+                                }
+                            </select>
+                        </td>
+                        <td class="price"></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <button class="submit" id="submit">Submit</button>
+    }
+</div>
+
+<script>
+
+    $('#select-all').on('change', function () {
+        if ($(this).is(':checked')) {
+            $('#select-all-label').text('Unselect all');
+            $('.check').each(function () {
+                $(this).prop("checked", true);
+            })
+        } else {
+            $('#select-all-label').text('Select all');
+            $('.check').each(function () {
+                $(this).prop("checked", false);
+            })
+        }
+    })
+
+    $('document').ready(function () {
+        $('.price').each(function () {
+            $(this).text($(this).parent().find(".supplier option:selected").attr("data-price"));
+    });
+    })
+
+    $('.supplier').on('change', function () {
+        $(this).parent().siblings(".price").text($(this).attr("data-price"));
+    })
+    $('#submit').on('click', function () {
+        var newPurchaseOrders = new Array();
+        $("#orderTable #tbody TR").each(function () {
+            var row = $(this);
+            if (row.find(".check").is(':checked')) {
+                var newPurchaseOrder = {};
+                newPurchaseOrder.itemID = row.find(".itemId").val();
+                newPurchaseOrder.quantity = row.find(".quantity").val();
+                newPurchaseOrder.supplierID = row.find(".supplier option:selected").val();
+                newPurchaseOrder.price = row.find(".price").text();
+                newPurchaseOrders.push(newPurchaseOrder);
+            }
+        });
+        console.log(newPurchaseOrders);
+        if (newPurchaseOrders.length > 0) {
+            $.ajax({
+                 type: "POST",
+                url: "@Url.Action("CreatePurchaseOrder", "Clerk")",
+                data: JSON.stringify(newPurchaseOrders),
+                 contentType: "application/json; charset=utf-8",
+                 dataType: "json",
+                 success: function () {
+                     var url = '@Url.Action("ViewOrderHistory", "Clerk")';
+                     window.location.href = url;
+                 }
+             });
+        }
+    })
+</script>

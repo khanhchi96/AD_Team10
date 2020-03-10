@@ -8,27 +8,35 @@
     Dictionary<Item, int> itemAndQuantity = (Dictionary<Item, int>)ViewData["departmentItemAndQuantity"];
 }
 
-<div class="container">
-    <table class="table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(x => itemAndQuantity.First().Key.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(x => itemAndQuantity.First().Key.RequisitionDetails.First().Quantity)
-            </th>
-        </tr>
-        @foreach (var item in itemAndQuantity)
-        {
+
+    @if (itemAndQuantity.Count == 0)
+    {
+        <p align="center">There's nothing for this department!</p>
+    }
+    else
+    {
+
+        <table class="table">
             <tr>
-                <td>
-                    @Html.DisplayFor(x => item.Key.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(x => item.Value)
-                </td>
+                <th>
+                    @Html.DisplayNameFor(x => itemAndQuantity.First().Key.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(x => itemAndQuantity.First().Key.RequisitionDetails.First().Quantity)
+                </th>
             </tr>
-        }
-    </table>
-</div>
+            @foreach (var item in itemAndQuantity)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(x => item.Key.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(x => item.Value)
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+
 

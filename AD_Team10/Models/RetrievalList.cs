@@ -14,7 +14,7 @@ namespace AD_Team10.Models
         public DateTime EndDate { get; set; }
 
         public virtual ICollection<RequisitionRetrieval> RequisitionRetrievals { get; set; }
-        public virtual ICollection<RetrievalListDetail> RetrievalListDetails { get; set; }
+        public virtual List<RetrievalListDetail> RetrievalListDetails { get; set; }
 
     }
 }

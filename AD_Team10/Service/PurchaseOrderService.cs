@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 
+//Author: Wang Wang Wang
 namespace AD_Team10.Service
 {
     public class PurchaseOrderService
@@ -29,7 +30,7 @@ namespace AD_Team10.Service
 
         public List<PurchaseOrder> GetPurchaseOrderHistory()
         {
-            return db.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).Where(x => x.OrderStatus == OrderStatus.Completed).ToList();
+            return db.PurchaseOrders.Include(x => x.Supplier).Include(x => x.PurchaseOrderDetails).ToList();
         }
 
         public bool IsComoleted(PurchaseOrder purchaseOrder)

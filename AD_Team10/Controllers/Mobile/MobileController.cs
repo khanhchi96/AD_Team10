@@ -11,6 +11,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
+//Author: Phung Khanh Chi
 namespace AD_Team10.Controllers.Mobile
 {
     public class MobileController : ApiController
@@ -48,7 +49,7 @@ namespace AD_Team10.Controllers.Mobile
 
         public IHttpActionResult GetPurchaseOrders()
         {
-            List<CustomPurchaseOrder> orders = db.PurchaseOrders.OrderBy(p => p.OrderDate)
+            List<CustomPurchaseOrder> orders = db.PurchaseOrders.OrderByDescending(p => p.OrderDate)
                         .Select(p => new CustomPurchaseOrder
                         {
                             OrderID = p.PurchaseOrderID,
@@ -142,7 +143,8 @@ namespace AD_Team10.Controllers.Mobile
                              ItemID = r.Key.ItemID,
                              Description = r.Key.Description,
                              Quantity = r.Sum(i => i.Quantity),
-                             QuantityReceived = r.Sum(i => i.QuantityReceived)
+                             QuantityReceived = r.Sum(i => i.QuantityReceived),
+                             QuantityOffered = r.Sum(i => i.QuantityOffered)
                          }).ToList();
 
                 if (retrieval == null) return NotFound();
@@ -191,8 +193,9 @@ namespace AD_Team10.Controllers.Mobile
                                              r.ItemID == itemId &&
                                              r.DepartmentID == customDetail.DepartmentID);
                 detail.QuantityOffered = customDetail.QuantityOffered ;
-                db.SaveChanges();
+              
             }
+            db.SaveChanges();
             return Ok();
         }
 
@@ -239,10 +242,7 @@ namespace AD_Team10.Controllers.Mobile
                           .Select(r => new CustomDepartment {
                               DepartmentID = r.DepartmentID,
                               DepartmentName = r.Department.DepartmentName,
-                              CollectionPoint= new CollectionPoint
-                              {
-                                  CollectionPointName = r.Department.CollectionPoint.CollectionPointName
-                              }
+                              CollectionPoint = r.Department.CollectionPoint
                           }).Distinct().ToList();
             for(int i=0; i<departments.Count(); i++)
             {
@@ -308,7 +308,7 @@ namespace AD_Team10.Controllers.Mobile
             int deptId = requisition.Employee.DepartmentID;
             List<RequisitionDetail> details = requisition.RequisitionDetails.ToList();
             int retrievalListId = FindCurrentRetrievalList().RetrievalListID;
-            db.RequisitionRetrievals.Add(new RequisitionRetrieval { RequisitionID = requisition.RequisitionID, RetrievalListD = retrievalListId });
+            db.RequisitionRetrievals.Add(new RequisitionRetrieval { RequisitionID = requisition.RequisitionID, RetrievalListID = retrievalListId });
             db.SaveChanges();
             for(int i=0; i<details.Count(); i++)
             {
@@ -374,7 +374,7 @@ namespace AD_Team10.Controllers.Mobile
                     }
                     else retrievalListDetail.Quantity += (detail.Quantity - item.QuantityReceived);
                     RequisitionRetrieval requisitionRetrieval = db.RequisitionRetrievals.SingleOrDefault(r => r.RequisitionID == requisitionId);
-                    requisitionRetrieval.RetrievalListD = retrievalListId;
+                    requisitionRetrieval.RetrievalListID = retrievalListId;
                 }
             }
             db.SaveChanges();
@@ -426,6 +426,7 @@ namespace AD_Team10.Controllers.Mobile
             return Ok(collectionPoints);
         }
 
+        [HttpPut]
         public IHttpActionResult ChangeCollectionPoint(CustomDepartment customDepartment)
         {
             Models.Department dept = db.Departments.SingleOrDefault(d => d.DepartmentID == customDepartment.DepartmentID);
@@ -460,19 +461,6 @@ namespace AD_Team10.Controllers.Mobile
                               Quantity = r.Quantity,
                               QuantityReceived = r.QuantityReceived
                           }).ToList();
-            //if (disbursement == null) return NotFound();
-            //for(int i=0; i<disbursement.Count(); i++)
-            //{
-            //    CustomItem item = disbursement[i];
-            //    List<Requisition> requisitions = db.RequisitionRetrievals.Where(r => r.RetrievalListD == retrievalListId).Select(r => r.Requisition).ToList();
-
-            //    List<RequisitionDetail> details = db.RequisitionDetails.Where(r => r.Requisition.ApprovalDate <= retrievalList.EndDate &&
-            //                                    r.Requisition.ApprovalDate >= retrievalList.StartDate &&
-            //                                    r.ItemID == item.ItemID && r.Requisition.Employee.DepartmentID == id).ToList();
-            //    int quantityReceived = 0;
-            //    if (details != null) quantityReceived = details.Select(r => r.QuantityReceived).Sum();
-            //    disbursement[i].QuantityReceived = quantityReceived;
-            //}
 
             return Ok(disbursement);
         }
@@ -480,7 +468,7 @@ namespace AD_Team10.Controllers.Mobile
         public IHttpActionResult GetDisbursementDetailByItem(int departmentId, int itemId)
         {
             int retrievalListId = FindCurrentRetrievalList().RetrievalListID - 1;
-            List<int> requisitionIDs = db.RequisitionRetrievals.Where(r => r.RetrievalListD == retrievalListId)
+            List<int> requisitionIDs = db.RequisitionRetrievals.Where(r => r.RetrievalListID == retrievalListId)
                                                 .Select(r => r.Requisition.RequisitionID).ToList();
             List<CustomRequisition> details = db.RequisitionDetails.Where(r => r.ItemID == itemId &&
                                         requisitionIDs.Contains(r.RequisitionID) &&
@@ -489,6 +477,7 @@ namespace AD_Team10.Controllers.Mobile
                                         .Select(r => new CustomRequisition
                                         {
                                             RequisitionID = r.RequisitionID,
+                                            RequisitionDate = r.Requisition.RequisitionDate.ToString("dd/MM/yyyy"),
                                             EmployeeName = r.Requisition.Employee.ToString(),
                                             CustomItems = new CustomItem[]
                                             {

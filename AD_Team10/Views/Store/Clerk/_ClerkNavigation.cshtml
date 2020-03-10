@@ -1,15 +1,16 @@
-﻿
+﻿@*Author: Phung Khanh Chi*@
 <div class="navbar navbar-inverse navbar-fixed-top">
-    
-        @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
-    
+
+    @Html.Partial("~/Views/Shared/_BasicInfo.cshtml")
+
     <div class="container">
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Requisitions <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("View Requisition", "GetPendingList", "Clerk")</li>
+                        <li>@Html.ActionLink("Pending Requisition", "GetPendingList", "Clerk")</li>
+                        <li>@Html.ActionLink("Requisition History", "ViewRequisitionHistory", "Clerk")</li>
                         <li>@Html.ActionLink("Retrieval List", "ViewRetrievalList", "Clerk")</li>
                     </ul>
                 </li>
@@ -35,6 +36,10 @@
                         <li>@Html.ActionLink("Purchase Order Report", "OrderReport", "Clerk")</li>
                     </ul>
                 </li>
+
+                <li class="non-dropdown">@Html.ActionLink("Item Catalogue", "ItemCatalogue", "Clerk")</li>
+                <li class="non-dropdown">@Html.ActionLink("Department List", "DepartmentList", "Clerk")</li>
+                <li class="non-dropdown">@Html.ActionLink("Supplier List", "SupplierList", "Clerk")</li>
             </ul>
         </div>
     </div>

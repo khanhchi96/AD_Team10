@@ -1,4 +1,6 @@
-﻿@using AD_Team10.Models;
+﻿@*Author: Phung Khanh Chi*@
+
+@using AD_Team10.Models;
 @{
     ViewBag.Title = "OrderReport";
     var categories = (List<Category>)ViewBag.categories;
@@ -53,7 +55,7 @@
     </div>
 
     <div id="chart">
-        @Html.Partial("~/Views/Store/Clerk/_Report.cshtml")
+        @Html.Partial("~/Views/Shared/_Report.cshtml")
     </div>
 </div>
 <script>
@@ -99,7 +101,7 @@
         report.endDate = endDate.toISOString();
         report.categoryList = categoryList;
 
-        
+
         $.ajax({
             type: "POST",
             url: "@Url.Action("OrderReport", "Clerk")",
@@ -107,9 +109,9 @@
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             success: function () {
-                $("#report").load("@Url.Action("ShowOrderReport", "Clerk")", {}, function () {
+                $("#chart").load("@Url.Action("ShowOrderReport", "Clerk")", {}, function () {
                     $('.loading-container').hide();
-                }); 
+                });
             }
         });
     })

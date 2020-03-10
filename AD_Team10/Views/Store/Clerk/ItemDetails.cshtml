@@ -1,0 +1,76 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model AD_Team10.Models.Item
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>ITEM NO @Model.ItemID</h3>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Category.CategoryName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Category.CategoryName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UnitOfMeasure)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UnitOfMeasure)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReorderLevel)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReorderLevel)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReorderQuantity)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReorderQuantity)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.UnitsInStock)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.UnitsInStock)
+            </dd>
+
+        </dl>
+    </div>
+    <p class="submit">
+        @Html.ActionLink("Edit", "EditItem", new { id = Model.ItemID })
+    </p>
+</div>
+
+<style>
+    .dl-horizontal {
+        float: left;
+        width: 100%;
+        padding-left: 400px;
+    }
+</style>

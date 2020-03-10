@@ -1,0 +1,84 @@
+﻿@*Author: Phung Khanh Chi*@
+
+@model AD_Team10.Models.Supplier
+
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
+</div>
+
+<div class="container-fluid body">
+    <h3>SUPPLIER NO @Model.SupplierID</h3>
+
+    <div>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.SupplierCode)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SupplierCode)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SupplierName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SupplierName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ContactName)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ContactName)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Phone)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Phone)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Fax)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Fax)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Address)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Address)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.GSTNumber)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.GSTNumber)
+            </dd>
+
+        </dl>
+    </div>
+    <p class="submit">
+        @Html.ActionLink("Edit", "EditSupplier", new { id = Model.SupplierID })
+    </p>
+</div>
+
+<style>
+    .dl-horizontal {
+        float: left;
+        width: 100%;
+        padding-left: 400px;
+    }
+</style>

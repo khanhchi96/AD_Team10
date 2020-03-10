@@ -1,4 +1,6 @@
-﻿@model List<AD_Team10.Models.PurchaseOrderDetail>
+﻿@*Author: Wang Wang Wang*@
+
+@model List<AD_Team10.Models.PurchaseOrderDetail>
 @using AD_Team10.Models
 @{
     ViewBag.Title = "ViewOrderDetails";
@@ -8,100 +10,91 @@
     PurchaseOrder order = (PurchaseOrder)ViewData["purchaseOrder"];
 }
 
-<h3 align="center">ORDER NO. @order.PurchaseOrderID</h3>
-<hr />
-
-
-<div class="superdiv">
-    <div class="div1">
-        <div>
-            Supplier: @order.Supplier.SupplierName
-        </div>
-        <div>
-            Deliver to: Logic University Stationery Store
-        </div>
-        <div>
-            Total amount: @totalPrice()
-        </div>
-        @if(order.OrderStatus == OrderStatus.Completed)
-        {
-    <div>
-        Completed Time: @order.CompletedDate.ToString("dd/MM/yyyy")
-    </div>
-        }
-    </div>
-    <div class="div2">
-        @if (order.OrderStatus != OrderStatus.Completed)
-        {
-            <div>
-                <a href="/StoreClerk/UpdatePurchaseOrder?orderID=@order.PurchaseOrderID" class="btn btn-warning" role="button">Update</a>
-            </div>
-        }
-    </div>
+<div id="navigation">
+    @Html.Partial("~/Views/Store/Clerk/_ClerkNavigation.cshtml")
 </div>
 
-<table class="table table-hover w-auto" align="center">
-    <tr class="bg-primary">
-        <th>
-            Description
-        </th>
-        <th>
-            Quantity Requested
-        </th>
-        <th>
-            Price
-        </th>
-        <th>
-            Quantity Received
-        </th>
-        <th>Quantity Remaining</th>
-    </tr>
-    @foreach (var item in Model)
-    {
+<div class="container-fluid body">
+    <h3 align="center">ORDER NO. @order.PurchaseOrderID</h3>
+    <hr />
+
+    <div class="orderDetail">
+        <div class="div1">
+            <div>
+                <span style="font-weight: bold">Supplier: </span>@order.Supplier.SupplierName
+            </div>
+            <div>
+                <span style="font-weight: bold">Deliver to: </span>Logic University Stationery Store
+            </div>
+            <div>
+                <span style="font-weight: bold">Total amount: </span>@totalPrice()
+            </div>
+            @if (order.OrderStatus == OrderStatus.Completed)
+            {
+                <div>
+                    <span style="font-weight: bold">Completed Time: </span>@order.CompletedDate.Value.ToString("dd/MM/yyyy")
+                </div>
+            }
+        </div>
+        <div class="div2">
+            @if (order.OrderStatus != OrderStatus.Completed)
+            {
+                <div>
+                    <a href="@Url.Action("UpdatePurchaseOrder", "Clerk", new { orderID = @order.PurchaseOrderID })" class="update">Update</a>
+                </div>
+            }
+        </div>
+    </div>
+
+    <table class="table table-hover">
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.QuantityReceived)
-            </td>
-            <td>
-                @(item.Quantity-item.QuantityReceived)
-            </td>
+            <th>
+                Description
+            </th>
+            <th>
+                Quantity Requested
+            </th>
+            <th>
+                Price
+            </th>
+            <th>
+                Quantity Received
+            </th>
+            <th>Quantity Remaining</th>
         </tr>
-    }
-</table>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuantityReceived)
+                </td>
+                <td>
+                    @(item.Quantity - item.QuantityReceived)
+                </td>
+            </tr>
+        }
+    </table>
+</div>
 
 
 @functions{
     float totalPrice()
     {
         float sum = 0;
-        foreach(var item in Model)
+        foreach (var item in Model)
         {
             sum += item.Price * item.Quantity;
         }
         return sum;
     }
 }
-
-<style>
-    /*.div1{
-        float:left;
-    }
-    .div2{
-        float:right;
-    }*/
-    .superdiv{
-        display:flex;
-        justify-content: space-between;
-    }
-</style>
-
 

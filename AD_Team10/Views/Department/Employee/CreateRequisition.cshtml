@@ -1,5 +1,8 @@
-﻿@model AD_Team10.Models.Requisition
+﻿@*Author: Feng Li Ying, Phung Khanh Chi*@
+
+@model AD_Team10.Models.Requisition
 @using AD_Team10.Models
+@using AD_Team10.Authentication;
 
 @{
     ViewBag.Title = "createRequisition";
@@ -10,16 +13,32 @@
     {
         itemNames.Add(item.Description);
     }
+
+    var user = (CustomPrincipal)System.Web.HttpContext.Current.User;
+    bool isEmployee = true;
+    var url = Url.Action("CreateRequisition", "Employee");
+    if (user.Role == DepartmentRole.REPRESENTATIVE.ToString())
+    {
+        isEmployee = false;
+        url = Url.Action("CreateMyRequisition", "Representative");
+    }
 }
 
 <div id="navigation">
-    @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+    @if (isEmployee)
+    {
+        @Html.Partial("~/Views/Department/Employee/_EmployeeNavigation.cshtml")
+    }
+    else
+    {
+        @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+    }
 </div>
 
 <div class="container-fluid body">
     <h3>CREATE REQUISITION</h3>
-
-    <form action="/Employee/CreateRequisition" method="post">
+    <br />
+    <form action=@url method="post">
         <div>
             @Html.HiddenFor(m => m.RequisitionDate, new { @Value = @DateTime.Now })
         </div>
@@ -30,7 +49,7 @@
             @Html.HiddenFor(m => m.EmployeeID, new { @Value = employee.DeptEmployeeID })
         </div>
 
-        <table id="tblRD" class="table">
+        <table id="tblRD" class="table table-hover">
             <tr>
                 <th class="form-group">Item</th>
                 <th class="form-group">Quantity</th>
@@ -40,8 +59,8 @@
             <tbody class="tbody">
                 <tr class="tblRow">
                     <td>
-                        @Html.DropDownList("ItemDescription", new SelectList(itemNames), new { @class = "itemName"})
-                        
+                        @Html.DropDownList("ItemDescription", new SelectList(itemNames), new { @class = "itemName" })
+
                     </td>
                     <td>
                         @Html.Editor("ItemQuantity", new { htmlAttributes = new { @type = "number", @min = "1", @step = "1", @Value = "1", @class = "quantity" } })
@@ -59,47 +78,47 @@
             </div>
         </div>
 
-        <input type="submit" id="btnSubmit"  value="Submit" class="submit" onclick="conf()" />
+        <input type="submit" id="btnSubmit" value="Submit" class="submit" onclick="conf()" />
 
 
     </form>
-    </div>
+</div>
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.cdnjs.com/ajax/libs/json2/20110223/json2.js"></script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
 
-        $(".addItem").on('click', function () {
-            var row = $('.tblRow').first().clone();
-            row.each(function () {
-                $(this).find('#ItemDescription').val("");
-                $(this).find('#ItemQuantity').val(1);
-                $(this).find('#remove').html();
-            });
-
-            $('.tbody').append(row);
+    $(".addItem").on('click', function () {
+        var row = $('.tblRow').first().clone();
+        row.each(function () {
+            $(this).find('#ItemDescription').val("");
+            $(this).find('#ItemQuantity').val(1);
+            $(this).find('#remove').html();
         });
 
+        $('.tbody').append(row);
+    });
 
-        function Remove(button) {
-            //Determine the reference of the Row using the Button.
-            var row = $(button).closest("TR");
-            var table = $("#tblRD")[0];
-            table.deleteRow(row[0].rowIndex);
-        };
 
-          $("body").on("click", ".remove", function () {
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        var table = $("#tblRD")[0];
+        table.deleteRow(row[0].rowIndex);
+    };
+
+    $("body").on("click", ".remove", function () {
         if ($(".remove").length == 1) alert("Requisition must have at least 1 item")
-              else $(this).parent('td').parent('.tblRow').remove();
+        else $(this).parent('td').parent('.tblRow').remove();
 
-          });
+    });
 
 
-        
-         function conf() {
-                var con = confirm("Do you want to submit for sure?");
-                }
+
+    function conf() {
+        var con = confirm("Do you want to submit for sure?");
+    }
 
 
       /*  $("#btnSubmit").on("click", function () {
@@ -112,16 +131,23 @@
                 }
             })
             if (!isValid) {
-               
+
         });
-        
+
         */
 
 
 
 
-    </script>
+</script>
 
-    <div class="back-to-list">
+<div class="back-to-list">
+    @if (isEmployee)
+    {
         @Html.ActionLink("Back to List", "Index")
-    </div>
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "MyRequisition")
+    }
+</div>

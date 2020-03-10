@@ -1,4 +1,6 @@
-﻿@using AD_Team10.Models;
+﻿@*Author: Phung Khanh Chi*@
+
+@using AD_Team10.Models;
 @{
     ViewBag.Title = "RequisitionReport";
     var departments = (List<Department>)ViewBag.departments;
@@ -65,7 +67,7 @@
         <div id="loading-text">loading</div>
     </div>
     <div id="chart">
-        @Html.Partial("~/Views/Store/Clerk/_Report.cshtml")
+        @Html.Partial("~/Views/Shared/_Report.cshtml")
     </div>
 </div>
 <script>
@@ -124,7 +126,7 @@
             success: function () {
                 $("#chart").load("@Url.Action("ShowReqReport", "Clerk")", {}, function () {
                     $('.loading-container').hide();
-                }); 
+                });
             },
         });
     })

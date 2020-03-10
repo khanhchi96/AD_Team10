@@ -1,67 +1,125 @@
-﻿@model IEnumerable<AD_Team10.Models.Requisition>
+﻿@*Author: Phung Khanh Chi*@
+@model PagedList.IPagedList<AD_Team10.Models.Requisition>
+@using PagedList.Mvc;
 @using AD_Team10.Models;
-<div class="container-fluid body"> 
-<table class="table">
-    <tr>
-        <th>
-            Employee
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ApprovalDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.RequisitionDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CompletedDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Status)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Remark)
-        </th>
-        <th></th>
-    </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        @if (item.Employee.MiddleName == null)
-        {
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.LastName)
-            </td>
-        }
-        else
-        {
-            <td>
-                @Html.DisplayFor(modelItem => item.Employee.FirstName) @Html.DisplayFor(modelItem => item.Employee.MiddleName) @Html.DisplayFor(modelItem => item.Employee.LastName)
-            </td>
-        }
-        <td>
-            @Html.DisplayFor(modelItem => item.ApprovalDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.RequisitionDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.CompletedDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Status)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Remark)
-        </td>
-        <td>
-            @if (item.Status != Status.Completed)
-            {
-                @Html.ActionLink("Update", "UpdateEmployeeRequisition", new { id = item.RequisitionID }) 
-            }
-            @Html.ActionLink("Details", "EmployeeRequisitionDetails", new { id = item.RequisitionID })
-        </td>
-    </tr>
-}
-
-</table>
+<div id="navigation">
+    @Html.Partial("~/Views/Department/Representative/_RepresentativeNavigation.cshtml")
+</div>
+<div class="container-fluid body">
+    <h3>EMPLOYEE REQUISITIONS</h3>
+    <div class="filter-option">
+        <button id="clear">Clear</button>
+        <div class="filter">
+            <span>Filter by status: </span>
+            <select name="filterStatus" id="filterStatus">
+                <option value=""></option>
+                @foreach (var s in ViewBag.statusList)
+                {
+                    <option value="@Url.Action("EmployeeRequisitions", "Representative", new { status = s})">@s</option>
+                }
+            </select>
+        </div>
     </div>
+
+    <table class="table table-hover">
+        <tr>
+            <th>
+                Employee
+            </th>
+            <th>
+                Approval Date
+            </th>
+            <th>
+                Requisition Date
+            </th>
+            <th>
+                Completed Date
+            </th>
+            <th>
+                Status
+            </th>
+            <th>
+                Remark
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                @{ 
+                    var name = item.Employee.MiddleName == null ? (item.Employee.FirstName + " " + item.Employee.LastName) :
+                                                 (item.Employee.FirstName + " " + item.Employee.MiddleName + " " + item.Employee.LastName);
+                }
+                
+                    <td>
+                        @Html.DisplayFor(modelItem => name) 
+                    </td>
+                
+                <td>
+                    @if (!@item.ApprovalDate.Value.ToString().Contains("1900"))
+                    {
+                        @item.ApprovalDate.Value.ToString("dd/MM/yyyy")
+                    }
+
+                </td>
+                <td>
+                    @item.RequisitionDate.ToString("dd/MM/yyyy")
+                </td>
+                <td>
+                    @if (!@item.CompletedDate.Value.ToString().Contains("1900"))
+                    {
+                        @item.CompletedDate.Value.ToString("dd/MM/yyyy")
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @if (item.Remark != null && item.Remark.Length > 20)
+                    {
+                        @Html.DisplayFor(modelItem => item.Remark) <span> ...</span>
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.Remark)
+                    }
+
+                </td>
+                <td>
+                    @if (item.Status != Status.Completed)
+                    {
+                        @Html.ActionLink("Update", "UpdateEmployeeRequisition", new { id = item.RequisitionID }) <span> | </span>
+                    }
+                    @Html.ActionLink("Details", "EmployeeRequisitionDetails", new { id = item.RequisitionID })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <div class="pagedlist">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+        @Html.PagedListPager(Model, page => Url.Action("EmployeeRequisitions",
+            new { page }))
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        var selectedItem = sessionStorage.getItem("SelectedEmpRequisition");
+        $('#filterStatus').val(selectedItem);
+    });
+
+    $('#filterStatus').on('change', function () {
+        location.href = this.value;
+        sessionStorage.setItem("SelectedEmpRequisition", this.value);
+    });
+
+        $("#clear").on('click', function () {
+        sessionStorage.setItem("SelectedEmpRequisition", "");
+        location.href = '@Url.Action("EmployeeRequisitions", "Representative")';
+    })
+</script>

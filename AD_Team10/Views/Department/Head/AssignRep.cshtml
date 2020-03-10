@@ -1,4 +1,6 @@
-﻿@using AD_Team10.Models
+﻿@*Author: Stephanie Cheng Sin Yin*@
+
+@using AD_Team10.Models
 @model DeptEmployee
 
 @{
@@ -9,22 +11,17 @@
     @Html.Partial("~/Views/Department/Head/_HeadNavigation.cshtml")
 </div>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-lg-8 dashboard-panel-8">
-            <h3>ASSIGN REPRESENTATIVE</h3>
+<div class="container-fluid body">
+    <h3>ASSIGN REPRESENTATIVE</h3>
 
-            <p></p>
-            <b>Current Representative:</b>
-            <p>@rep</p>
+    <br /><br />
+    <p class="center">Current Representative: <b>@rep</b></p>
 
-            @using (Html.BeginForm("SuccessfulAssignRep", "Head", FormMethod.Post))
-            {
-                <p></p>
-                <p><b>New Representative:</b> @Html.DropDownListFor(m => m.DeptEmployeeID, (IEnumerable<SelectListItem>)ViewBag.depEmployees, "Select Employee", new { @class = "form-control" })</p>
-                <p></p>
-                <p><input type="submit" name="submit" value="Submit and Update" /></p>
-            }
-        </div>
-    </div>
+    @using (Html.BeginForm("SuccessfulAssignRep", "Head", FormMethod.Post, new { @class = "center" }))
+    {
+        <p></p>
+        <label>New Representative:</label>
+        @Html.DropDownListFor(m => m.DeptEmployeeID, (IEnumerable<SelectListItem>)ViewBag.depEmployees, "Select Employee", new { @class = "select" })
+        <p><input type="submit" name="submit" value="Submit and Update" class="submit center" /></p>
+    }
 </div>
